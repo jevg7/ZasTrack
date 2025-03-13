@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Alex\\Desktop\\ALL\\ZasTrack\\ZasTrack.csproj": {}
+    "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Alex\\Desktop\\ALL\\ZasTrack\\ZasTrack.csproj": {
+    "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Alex\\Desktop\\ALL\\ZasTrack\\ZasTrack.csproj",
+        "projectUniqueName": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
         "projectName": "ZasTrack",
-        "projectPath": "C:\\Users\\Alex\\Desktop\\ALL\\ZasTrack\\ZasTrack.csproj",
+        "projectPath": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
         "packagesPath": "C:\\Users\\Alex\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Alex\\Desktop\\ALL\\ZasTrack\\obj\\",
+        "outputPath": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

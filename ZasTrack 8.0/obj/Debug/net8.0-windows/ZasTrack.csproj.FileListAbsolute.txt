@@ -37,3 +37,27 @@ C:\Users\Alex\Desktop\ALL\ZasTrack\bin\Debug\net8.0-windows\Microsoft.Extensions
 C:\Users\Alex\Desktop\ALL\ZasTrack\bin\Debug\net8.0-windows\Npgsql.dll
 C:\Users\Alex\Desktop\ALL\ZasTrack\obj\Debug\net8.0-windows\ZasTrack.csproj.AssemblyReference.cache
 C:\Users\Alex\Desktop\ALL\ZasTrack\obj\Debug\net8.0-windows\ZasTrack.csproj.Up2Date
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\ZasTrack.exe
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\ZasTrack.deps.json
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\ZasTrack.runtimeconfig.json
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\ZasTrack.dll
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\ZasTrack.pdb
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\Npgsql.dll
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.csproj.AssemblyReference.cache
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.wAgregarEstudiante.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.wEstudiantes.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.wMain.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.csproj.GenerateResource.cache
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.AssemblyInfoInputs.cache
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.AssemblyInfo.cs
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.csproj.CoreCompileInputs.cache
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.sourcelink.json
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.csproj.Up2Date
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.dll
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\refint\ZasTrack.dll
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.pdb
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.genruntimeconfig.cache
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ref\ZasTrack.dll

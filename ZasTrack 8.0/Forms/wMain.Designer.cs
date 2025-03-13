@@ -36,6 +36,7 @@
             btnExamenes = new Button();
             btnEstudiantes = new Button();
             pnlContenedor = new Panel();
+            button1 = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -44,6 +45,7 @@
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panel1.BackColor = Color.FromArgb(27, 27, 27);
+            panel1.Controls.Add(button1);
             panel1.Controls.Add(btnProbar);
             panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(btnProyecto);
@@ -59,9 +61,9 @@
             // 
             // btnProbar
             // 
-            btnProbar.Location = new Point(13, 540);
+            btnProbar.Location = new Point(3, 521);
             btnProbar.Name = "btnProbar";
-            btnProbar.Size = new Size(158, 119);
+            btnProbar.Size = new Size(154, 49);
             btnProbar.TabIndex = 7;
             btnProbar.Text = "Probar Conexion";
             btnProbar.UseVisualStyleBackColor = true;
@@ -156,6 +158,16 @@
             pnlContenedor.Size = new Size(1184, 792);
             pnlContenedor.TabIndex = 2;
             // 
+            // button1
+            // 
+            button1.Location = new Point(13, 611);
+            button1.Name = "button1";
+            button1.Size = new Size(158, 119);
+            button1.TabIndex = 8;
+            button1.Text = "Probar Conexion";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
+            // 
             // wMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -182,6 +194,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel pnlContenedor;
         private Button btnProbar;
+        private Button button1;
     }
 }
 

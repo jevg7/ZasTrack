@@ -124,6 +124,28 @@ namespace ZasTrack
                 return false;
             }
         }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            using (var conn = new NpgsqlConnection(DatabaseConfig.ConnectionString))
+            {
+                conn.Open();
+
+                string insertQuery = @"
+        INSERT INTO persona (nombres, apellidos, cedula) 
+        VALUES ('Jairo', 'Paola', '001-030906-1032V')
+        RETURNING id_persona;
+    ";
+                using (var cmd = new NpgsqlCommand(insertQuery, conn))
+                {
+                    cmd.CommandTimeout = 60; // Increase timeout to 60 seconds
+                    int id = (int)cmd.ExecuteScalar();
+                    Console.WriteLine($"Persona insertada con ID: {id}");
+                }
+
+            }
+
+        }
     }
 
 }
