@@ -28,60 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.agregarEstudiantesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editarEliminarEstudiantesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnlCntEstudiantes = new System.Windows.Forms.Panel();
-            this.menuStrip1.SuspendLayout();
-            this.SuspendLayout();
+            menuStrip1 = new MenuStrip();
+            agregarEstudiantesToolStripMenuItem = new ToolStripMenuItem();
+            editarEliminarEstudiantesToolStripMenuItem = new ToolStripMenuItem();
+            pnlCntEstudiantes = new Panel();
+            menuStrip1.SuspendLayout();
+            SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.agregarEstudiantesToolStripMenuItem,
-            this.editarEliminarEstudiantesToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            menuStrip1.Items.AddRange(new ToolStripItem[] { agregarEstudiantesToolStripMenuItem, editarEliminarEstudiantesToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Padding = new Padding(7, 2, 0, 2);
+            menuStrip1.Size = new Size(933, 24);
+            menuStrip1.TabIndex = 0;
+            menuStrip1.Text = "menuStrip1";
             // 
             // agregarEstudiantesToolStripMenuItem
             // 
-            this.agregarEstudiantesToolStripMenuItem.Name = "agregarEstudiantesToolStripMenuItem";
-            this.agregarEstudiantesToolStripMenuItem.Size = new System.Drawing.Size(124, 20);
-            this.agregarEstudiantesToolStripMenuItem.Text = "Agregar estudiantes";
-            this.agregarEstudiantesToolStripMenuItem.Click += new System.EventHandler(this.agregarEstudiantesToolStripMenuItem_Click);
+            agregarEstudiantesToolStripMenuItem.Name = "agregarEstudiantesToolStripMenuItem";
+            agregarEstudiantesToolStripMenuItem.Size = new Size(124, 20);
+            agregarEstudiantesToolStripMenuItem.Text = "Agregar estudiantes";
+            agregarEstudiantesToolStripMenuItem.Click += agregarEstudiantesToolStripMenuItem_Click;
             // 
             // editarEliminarEstudiantesToolStripMenuItem
             // 
-            this.editarEliminarEstudiantesToolStripMenuItem.Name = "editarEliminarEstudiantesToolStripMenuItem";
-            this.editarEliminarEstudiantesToolStripMenuItem.Size = new System.Drawing.Size(160, 20);
-            this.editarEliminarEstudiantesToolStripMenuItem.Text = "Editar/Eliminar estudiantes";
+            editarEliminarEstudiantesToolStripMenuItem.Name = "editarEliminarEstudiantesToolStripMenuItem";
+            editarEliminarEstudiantesToolStripMenuItem.Size = new Size(160, 20);
+            editarEliminarEstudiantesToolStripMenuItem.Text = "Editar/Eliminar estudiantes";
             // 
             // pnlCntEstudiantes
             // 
-            this.pnlCntEstudiantes.Location = new System.Drawing.Point(0, 27);
-            this.pnlCntEstudiantes.Name = "pnlCntEstudiantes";
-            this.pnlCntEstudiantes.Size = new System.Drawing.Size(800, 424);
-            this.pnlCntEstudiantes.TabIndex = 1;
+            pnlCntEstudiantes.Location = new Point(0, 31);
+            pnlCntEstudiantes.Margin = new Padding(4, 3, 4, 3);
+            pnlCntEstudiantes.Name = "pnlCntEstudiantes";
+            pnlCntEstudiantes.Size = new Size(1184, 792);
+            pnlCntEstudiantes.TabIndex = 1;
             // 
             // wEstudiantes
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.pnlCntEstudiantes);
-            this.Controls.Add(this.menuStrip1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MainMenuStrip = this.menuStrip1;
-            this.Name = "wEstudiantes";
-            this.Text = "wEstudiantes";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(933, 519);
+            Controls.Add(pnlCntEstudiantes);
+            Controls.Add(menuStrip1);
+            FormBorderStyle = FormBorderStyle.None;
+            MainMenuStrip = menuStrip1;
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "wEstudiantes";
+            Text = "wEstudiantes";
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

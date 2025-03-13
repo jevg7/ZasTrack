@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZasTrack.Class;
 
 namespace ZasTrack
 {
@@ -43,6 +45,44 @@ namespace ZasTrack
             txtaEdad.Text = edad.ToString();
         }
 
-        
+        CConexion conexion = new CConexion();
+        private void btnGuardarPaciente_Click(object sender, EventArgs e)
+        {
+            if (txtAnombreApellido.Text == "" || txtAcodigo.Text == "")
+            {
+                MessageBox.Show("Por favor, llene todos los campos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                DialogResult dr = MessageBox.Show("¿Está seguro de que desea guardar los datos del estudiante?", "Guardar datos", MessageBoxButtons.YesNo, MessageBoxIcon.Question); ;
+                if (dr == DialogResult.Yes)
+                {
+                    string codigo = txtAcodigo.Text;
+                    string nombre = txtAnombreApellido.Text;
+                    string genero = cmbAgenero.SelectedText;
+                    DateTime fechanac = dateTimePicker1.Value;
+                    int edad = 0;
+
+                    try
+                    {
+                        edad = int.Parse(txtaEdad.Text);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    string observaciones = txtAobservacion.Text;
+
+                   
+
+
+                }
+            }
+        }
+
+        private void txtAcodigo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
