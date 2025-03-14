@@ -58,7 +58,7 @@ namespace ZasTrack.Forms.wProyectos
         {
             // Abrir el formulario wAñadirProyecto como un diálogo
             using (var form = new wAñadirProyecto()) ;
-           
+
         }
 
         private void splitContainer1_Panel1_Paint_2(object sender, PaintEventArgs e)
@@ -202,9 +202,15 @@ namespace ZasTrack.Forms.wProyectos
             }
         }
 
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
 
+        }
 
-
+        private void flpProyList_Paint(object sender, PaintEventArgs e)
+        {
+            pnlProyList.AutoScroll = true;
+        }
     }
 
 }

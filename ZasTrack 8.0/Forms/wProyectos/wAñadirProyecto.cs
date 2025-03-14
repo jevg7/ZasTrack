@@ -52,6 +52,8 @@ namespace ZasTrack.Forms
             {
                 MessageBox.Show("Error al guardar el proyecto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            
         }
     }
 }

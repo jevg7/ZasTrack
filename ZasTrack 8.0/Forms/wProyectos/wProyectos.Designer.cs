@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             pnlProyChildren = new Panel();
+            vScrollBar1 = new VScrollBar();
             splProyectos = new SplitContainer();
             pnlProyFather = new Panel();
-            pnlAggProy = new Panel();
             pnlProyList = new Panel();
             flpProyList = new FlowLayoutPanel();
             panel1 = new Panel();
@@ -47,12 +47,20 @@
             // 
             // pnlProyChildren
             // 
-            pnlProyChildren.Dock = DockStyle.Fill;
+            pnlProyChildren.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             pnlProyChildren.Location = new Point(0, 0);
             pnlProyChildren.Name = "pnlProyChildren";
             pnlProyChildren.Size = new Size(1021, 734);
             pnlProyChildren.TabIndex = 1;
             pnlProyChildren.Paint += pnlProyectos_Paint;
+            // 
+            // vScrollBar1
+            // 
+            vScrollBar1.Location = new Point(319, 0);
+            vScrollBar1.Name = "vScrollBar1";
+            vScrollBar1.Size = new Size(22, 867);
+            vScrollBar1.TabIndex = 0;
+            vScrollBar1.Scroll += vScrollBar1_Scroll;
             // 
             // splProyectos
             // 
@@ -75,7 +83,6 @@
             // 
             // pnlProyFather
             // 
-            pnlProyFather.Controls.Add(pnlAggProy);
             pnlProyFather.Controls.Add(pnlProyList);
             pnlProyFather.Dock = DockStyle.Fill;
             pnlProyFather.Location = new Point(0, 0);
@@ -83,18 +90,10 @@
             pnlProyFather.Size = new Size(341, 734);
             pnlProyFather.TabIndex = 1;
             // 
-            // pnlAggProy
-            // 
-            pnlAggProy.BackColor = SystemColors.ActiveCaption;
-            pnlAggProy.Dock = DockStyle.Top;
-            pnlAggProy.Location = new Point(0, 0);
-            pnlAggProy.Name = "pnlAggProy";
-            pnlAggProy.Size = new Size(341, 24);
-            pnlAggProy.TabIndex = 2;
-            // 
             // pnlProyList
             // 
             pnlProyList.BackColor = SystemColors.ActiveCaption;
+            pnlProyList.Controls.Add(vScrollBar1);
             pnlProyList.Controls.Add(flpProyList);
             pnlProyList.Dock = DockStyle.Fill;
             pnlProyList.Location = new Point(0, 0);
@@ -104,11 +103,11 @@
             // 
             // flpProyList
             // 
-            flpProyList.Dock = DockStyle.Bottom;
-            flpProyList.Location = new Point(0, 30);
+            flpProyList.Location = new Point(0, 3);
             flpProyList.Name = "flpProyList";
-            flpProyList.Size = new Size(341, 704);
+            flpProyList.Size = new Size(341, 731);
             flpProyList.TabIndex = 0;
+            flpProyList.Paint += flpProyList_Paint;
             // 
             // panel1
             // 
@@ -116,14 +115,14 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1366, 45);
+            panel1.Size = new Size(1366, 28);
             panel1.TabIndex = 3;
             panel1.Paint += panel1_Paint;
             // 
             // lblAdmProyec
             // 
             lblAdmProyec.AutoSize = true;
-            lblAdmProyec.Location = new Point(15, 16);
+            lblAdmProyec.Location = new Point(12, 9);
             lblAdmProyec.Name = "lblAdmProyec";
             lblAdmProyec.Size = new Size(154, 15);
             lblAdmProyec.TabIndex = 0;
@@ -158,8 +157,8 @@
         private Panel panel1;
         private Panel pnlProyFather;
         private Label lblAdmProyec;
-        private Panel pnlAggProy;
         private Panel pnlProyList;
         private FlowLayoutPanel flpProyList;
+        private VScrollBar vScrollBar1;
     }
 }

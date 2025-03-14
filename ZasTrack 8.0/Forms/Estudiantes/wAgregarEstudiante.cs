@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZasTrack.Class;
+
 using ZasTrack.Models;
 using ZasTrack.Repositories;
 
@@ -35,6 +35,7 @@ namespace ZasTrack
             cmbGenero.Items.Add("Masculino");
             cmbGenero.Items.Add("Femenino");
             cmbGenero.SelectedIndex = 0;
+            CargarProyectos();
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -53,9 +54,10 @@ namespace ZasTrack
 
         private void btnGuardarPaciente_Click(object sender, EventArgs e)
         {
-           guardarPaciente();
+            guardarPaciente();
+            LimpiarCampos();
         }
-        
+
 
         private void txtAcodigo_TextChanged(object sender, EventArgs e)
         {
@@ -108,7 +110,9 @@ namespace ZasTrack
                 genero = cmbGenero.SelectedItem.ToString(),
                 codigo_beneficiario = txtCodigoBen.Text,
                 fecha_nacimiento = dtpFechaNac.Value,
-                observacion = txtObservacion.Text
+                id_proyecto = (int)cmbProyecto.SelectedValue,
+                observacion = txtObservacion.Text,
+
             };
 
             try
@@ -117,13 +121,15 @@ namespace ZasTrack
 
                 pacienteRepository.GuardarPaciente(nuevoPaciente);
                 MessageBox.Show("Paciente guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LimpiarCampos();
+                
             }
+
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar el paciente: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al guardar el paciente frm: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }   
+            LimpiarCampos();
+        }
         private string CapitalizarTexto(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto))
@@ -132,6 +138,18 @@ namespace ZasTrack
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
             return textInfo.ToTitleCase(texto.ToLower());
         }
+
+        private void CargarProyectos()
+        {
+            ProyectoRepository proyectoRepository = new ProyectoRepository();
+            List<Proyecto> proyectos = proyectoRepository.ObtenerProyectos();
+            cmbProyecto.DataSource = proyectos;
+            cmbProyecto.DisplayMember = "nombre";
+            cmbProyecto.ValueMember = "id_proyecto";
+            cmbProyecto.SelectedIndex = -1;
+        }
         #endregion
+
+
     }
 }

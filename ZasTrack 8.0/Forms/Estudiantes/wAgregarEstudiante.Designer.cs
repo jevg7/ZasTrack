@@ -44,12 +44,15 @@
             btnExcel = new Button();
             txtApellidos = new TextBox();
             lblApellido = new Label();
+            panel1 = new Panel();
+            label1 = new Label();
+            cmbProyecto = new ComboBox();
             SuspendLayout();
             // 
             // lblCodigoBen
             // 
             lblCodigoBen.AutoSize = true;
-            lblCodigoBen.Location = new Point(70, 55);
+            lblCodigoBen.Location = new Point(70, 123);
             lblCodigoBen.Margin = new Padding(4, 0, 4, 0);
             lblCodigoBen.Name = "lblCodigoBen";
             lblCodigoBen.Size = new Size(130, 15);
@@ -59,7 +62,7 @@
             // 
             // txtCodigoBen
             // 
-            txtCodigoBen.Location = new Point(205, 52);
+            txtCodigoBen.Location = new Point(205, 120);
             txtCodigoBen.Margin = new Padding(4, 3, 4, 3);
             txtCodigoBen.Name = "txtCodigoBen";
             txtCodigoBen.Size = new Size(238, 23);
@@ -69,7 +72,7 @@
             // lblNombres
             // 
             lblNombres.AutoSize = true;
-            lblNombres.Location = new Point(131, 97);
+            lblNombres.Location = new Point(131, 165);
             lblNombres.Margin = new Padding(4, 0, 4, 0);
             lblNombres.Name = "lblNombres";
             lblNombres.Size = new Size(59, 15);
@@ -78,7 +81,7 @@
             // 
             // txtNombres
             // 
-            txtNombres.Location = new Point(205, 94);
+            txtNombres.Location = new Point(205, 162);
             txtNombres.Margin = new Padding(4, 3, 4, 3);
             txtNombres.Name = "txtNombres";
             txtNombres.Size = new Size(515, 23);
@@ -88,7 +91,7 @@
             // lblGenero
             // 
             lblGenero.AutoSize = true;
-            lblGenero.Location = new Point(142, 181);
+            lblGenero.Location = new Point(142, 249);
             lblGenero.Margin = new Padding(4, 0, 4, 0);
             lblGenero.Name = "lblGenero";
             lblGenero.Size = new Size(48, 15);
@@ -98,7 +101,7 @@
             // lblFechaNac
             // 
             lblFechaNac.AutoSize = true;
-            lblFechaNac.Location = new Point(75, 243);
+            lblFechaNac.Location = new Point(75, 311);
             lblFechaNac.Margin = new Padding(4, 0, 4, 0);
             lblFechaNac.Name = "lblFechaNac";
             lblFechaNac.Size = new Size(122, 15);
@@ -107,7 +110,7 @@
             // 
             // dtpFechaNac
             // 
-            dtpFechaNac.Location = new Point(205, 237);
+            dtpFechaNac.Location = new Point(205, 305);
             dtpFechaNac.Margin = new Padding(4, 3, 4, 3);
             dtpFechaNac.Name = "dtpFechaNac";
             dtpFechaNac.Size = new Size(238, 23);
@@ -117,7 +120,7 @@
             // lblEdad
             // 
             lblEdad.AutoSize = true;
-            lblEdad.Location = new Point(490, 240);
+            lblEdad.Location = new Point(483, 252);
             lblEdad.Margin = new Padding(4, 0, 4, 0);
             lblEdad.Name = "lblEdad";
             lblEdad.Size = new Size(36, 15);
@@ -127,7 +130,7 @@
             // lblObservacion
             // 
             lblObservacion.AutoSize = true;
-            lblObservacion.Location = new Point(370, 292);
+            lblObservacion.Location = new Point(370, 360);
             lblObservacion.Margin = new Padding(4, 0, 4, 0);
             lblObservacion.Name = "lblObservacion";
             lblObservacion.Size = new Size(73, 15);
@@ -136,7 +139,7 @@
             // 
             // txtObservacion
             // 
-            txtObservacion.Location = new Point(142, 319);
+            txtObservacion.Location = new Point(142, 387);
             txtObservacion.Margin = new Padding(4, 3, 4, 3);
             txtObservacion.Name = "txtObservacion";
             txtObservacion.Size = new Size(549, 148);
@@ -147,7 +150,7 @@
             // txtEdad
             // 
             txtEdad.Enabled = false;
-            txtEdad.Location = new Point(551, 237);
+            txtEdad.Location = new Point(556, 249);
             txtEdad.Margin = new Padding(4, 3, 4, 3);
             txtEdad.Name = "txtEdad";
             txtEdad.ReadOnly = true;
@@ -158,7 +161,7 @@
             // cmbGenero
             // 
             cmbGenero.FormattingEnabled = true;
-            cmbGenero.Location = new Point(205, 178);
+            cmbGenero.Location = new Point(205, 246);
             cmbGenero.Margin = new Padding(4, 3, 4, 3);
             cmbGenero.Name = "cmbGenero";
             cmbGenero.Size = new Size(174, 23);
@@ -168,7 +171,7 @@
             // btnGuardarPaciente
             // 
             btnGuardarPaciente.Cursor = Cursors.Hand;
-            btnGuardarPaciente.Location = new Point(603, 497);
+            btnGuardarPaciente.Location = new Point(603, 565);
             btnGuardarPaciente.Margin = new Padding(4, 3, 4, 3);
             btnGuardarPaciente.Name = "btnGuardarPaciente";
             btnGuardarPaciente.Size = new Size(147, 32);
@@ -180,7 +183,7 @@
             // btnExcel
             // 
             btnExcel.Cursor = Cursors.Hand;
-            btnExcel.Location = new Point(59, 497);
+            btnExcel.Location = new Point(59, 565);
             btnExcel.Margin = new Padding(4, 3, 4, 3);
             btnExcel.Name = "btnExcel";
             btnExcel.Size = new Size(147, 32);
@@ -190,7 +193,7 @@
             // 
             // txtApellidos
             // 
-            txtApellidos.Location = new Point(205, 136);
+            txtApellidos.Location = new Point(205, 204);
             txtApellidos.Margin = new Padding(4, 3, 4, 3);
             txtApellidos.Name = "txtApellidos";
             txtApellidos.Size = new Size(515, 23);
@@ -199,20 +202,49 @@
             // lblApellido
             // 
             lblApellido.AutoSize = true;
-            lblApellido.Location = new Point(131, 139);
+            lblApellido.Location = new Point(131, 207);
             lblApellido.Margin = new Padding(4, 0, 4, 0);
             lblApellido.Name = "lblApellido";
             lblApellido.Size = new Size(59, 15);
             lblApellido.TabIndex = 16;
             lblApellido.Text = "Apellidos:";
             // 
+            // panel1
+            // 
+            panel1.BackColor = SystemColors.ActiveCaptionText;
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(905, 100);
+            panel1.TabIndex = 17;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(474, 311);
+            label1.Name = "label1";
+            label1.Size = new Size(54, 15);
+            label1.TabIndex = 18;
+            label1.Text = "Proyecto";
+            // 
+            // cmbProyecto
+            // 
+            cmbProyecto.FormattingEnabled = true;
+            cmbProyecto.Location = new Point(556, 305);
+            cmbProyecto.Name = "cmbProyecto";
+            cmbProyecto.Size = new Size(121, 23);
+            cmbProyecto.TabIndex = 19;
+            // 
             // wAgregarEstudiante
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(901, 751);
+            ClientSize = new Size(905, 768);
             ControlBox = false;
+            Controls.Add(cmbProyecto);
+            Controls.Add(label1);
+            Controls.Add(panel1);
             Controls.Add(lblApellido);
             Controls.Add(txtApellidos);
             Controls.Add(btnExcel);
@@ -256,5 +288,8 @@
         private System.Windows.Forms.Button btnExcel;
         private TextBox txtApellidos;
         private Label lblApellido;
+        private Panel panel1;
+        private Label label1;
+        private ComboBox cmbProyecto;
     }
 }

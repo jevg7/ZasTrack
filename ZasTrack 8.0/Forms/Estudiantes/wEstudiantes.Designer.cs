@@ -31,13 +31,14 @@
             menuStrip1 = new MenuStrip();
             agregarEstudiantesToolStripMenuItem = new ToolStripMenuItem();
             editarEliminarEstudiantesToolStripMenuItem = new ToolStripMenuItem();
+            verEstudiantesToolStripMenuItem = new ToolStripMenuItem();
             pnlCntEstudiantes = new Panel();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { agregarEstudiantesToolStripMenuItem, editarEliminarEstudiantesToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { agregarEstudiantesToolStripMenuItem, editarEliminarEstudiantesToolStripMenuItem, verEstudiantesToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(7, 2, 0, 2);
@@ -57,6 +58,14 @@
             editarEliminarEstudiantesToolStripMenuItem.Name = "editarEliminarEstudiantesToolStripMenuItem";
             editarEliminarEstudiantesToolStripMenuItem.Size = new Size(160, 20);
             editarEliminarEstudiantesToolStripMenuItem.Text = "Editar/Eliminar estudiantes";
+            editarEliminarEstudiantesToolStripMenuItem.Click += editarEliminarEstudiantesToolStripMenuItem_Click;
+            // 
+            // verEstudiantesToolStripMenuItem
+            // 
+            verEstudiantesToolStripMenuItem.Name = "verEstudiantesToolStripMenuItem";
+            verEstudiantesToolStripMenuItem.Size = new Size(98, 20);
+            verEstudiantesToolStripMenuItem.Text = "Ver estudiantes";
+            verEstudiantesToolStripMenuItem.Click += verEstudiantesToolStripMenuItem_Click;
             // 
             // pnlCntEstudiantes
             // 
@@ -91,5 +100,6 @@
         private System.Windows.Forms.ToolStripMenuItem agregarEstudiantesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editarEliminarEstudiantesToolStripMenuItem;
         private System.Windows.Forms.Panel pnlCntEstudiantes;
+        private ToolStripMenuItem verEstudiantesToolStripMenuItem;
     }
 }

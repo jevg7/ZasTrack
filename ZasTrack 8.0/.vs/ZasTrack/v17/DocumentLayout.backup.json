@@ -1,14 +1,46 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\",
+  "WorkspaceRootPath": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wproyectos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wproyectos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\forms\\estudiantes\\weditareliminarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\estudiantes\\weditareliminarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\forms\\estudiantes\\weditareliminarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\estudiantes\\weditareliminarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\forms\\estudiantes\\wagregarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\estudiantes\\wagregarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\repositorios\\proyectorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositorios\\proyectorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\repositorios\\pacienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositorios\\pacienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\forms\\estudiantes\\wagregarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\estudiantes\\wagregarestudiante.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\models\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\databaseconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:databaseconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo vega\\desktop\\zastrack\\zastrack 8.0\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,67 +50,138 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ProyectoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Repositorios\\ProyectoRepository.cs",
+              "RelativeDocumentMoniker": "Repositorios\\ProyectoRepository.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Repositorios\\ProyectoRepository.cs",
+              "RelativeToolTip": "Repositorios\\ProyectoRepository.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAgwCYAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T15:17:13.875Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "wProyectos.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wProyectos.cs",
-              "RelativeDocumentMoniker": "Forms\\wProyectos\\wProyectos.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wProyectos.cs [Dise\u00F1o]*",
-              "RelativeToolTip": "Forms\\wProyectos\\wProyectos.cs [Dise\u00F1o]*",
+              "Title": "wEditarEliminarEstudiante.cs",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wEditarEliminarEstudiante.cs",
+              "RelativeDocumentMoniker": "Forms\\Estudiantes\\wEditarEliminarEstudiante.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wEditarEliminarEstudiante.cs*",
+              "RelativeToolTip": "Forms\\Estudiantes\\wEditarEliminarEstudiante.cs*",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAQwIEAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T06:08:05.117Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2025-03-14T15:01:32.251Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "wMain.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
-              "RelativeDocumentMoniker": "Forms\\wMain.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs [Dise\u00F1o]",
-              "RelativeToolTip": "Forms\\wMain.cs [Dise\u00F1o]",
+              "Title": "wEditarEliminarEstudiante.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wEditarEliminarEstudiante.cs",
+              "RelativeDocumentMoniker": "Forms\\Estudiantes\\wEditarEliminarEstudiante.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wEditarEliminarEstudiante.cs [Design]*",
+              "RelativeToolTip": "Forms\\Estudiantes\\wEditarEliminarEstudiante.cs [Design]*",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-14T06:08:04Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2025-03-14T15:01:18.169Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PacienteRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Repositorios\\PacienteRepository.cs",
+              "RelativeDocumentMoniker": "Repositorios\\PacienteRepository.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Repositorios\\PacienteRepository.cs",
+              "RelativeToolTip": "Repositorios\\PacienteRepository.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAswC0AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T14:33:39.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Pacientes.cs",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Models\\Pacientes.cs",
+              "RelativeDocumentMoniker": "Models\\Pacientes.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Models\\Pacientes.cs",
+              "RelativeToolTip": "Models\\Pacientes.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T14:39:58.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "wAgregarEstudiante.cs",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wAgregarEstudiante.cs",
+              "RelativeDocumentMoniker": "Forms\\Estudiantes\\wAgregarEstudiante.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wAgregarEstudiante.cs",
+              "RelativeToolTip": "Forms\\Estudiantes\\wAgregarEstudiante.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T14:16:02.851Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "wAgregarEstudiante.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wAgregarEstudiante.cs",
+              "RelativeDocumentMoniker": "Forms\\Estudiantes\\wAgregarEstudiante.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Estudiantes\\wAgregarEstudiante.cs [Design]",
+              "RelativeToolTip": "Forms\\Estudiantes\\wAgregarEstudiante.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T14:13:36.101Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "DatabaseConnection.cs",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\DatabaseConnection.cs",
+              "RelativeDocumentMoniker": "DatabaseConnection.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\DatabaseConnection.cs",
+              "RelativeToolTip": "DatabaseConnection.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAADxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T14:15:36.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T14:10:12.089Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "wMain.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
+              "RelativeDocumentMoniker": "Forms\\wMain.cs",
+              "ToolTip": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs [Design]",
+              "RelativeToolTip": "Forms\\wMain.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T14:10:05.19Z",
+              "EditorCaption": " [Design]"
             }
           ]
         },
@@ -89,14 +192,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             }
           ]
         }

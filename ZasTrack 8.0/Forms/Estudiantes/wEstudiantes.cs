@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZasTrack.Forms.Estudiantes;
 
 namespace ZasTrack
 {
@@ -40,6 +41,16 @@ namespace ZasTrack
         private void pnlCntEstudiantes_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void editarEliminarEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new wEditarEliminarEstudiante());
+        }
+
+        private void verEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new wVerEstudiantes());
         }
     }
 }

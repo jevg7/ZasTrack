@@ -30,13 +30,13 @@ namespace ZasTrack.Repositories
             }
             catch (NpgsqlException ex)
             {
-                Console.WriteLine("Error de PostgreSQL: " + ex.Message);
-                throw; // Relanzar la excepción para manejarla en el formulario
+                Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
+                Console.WriteLine($"Código de error: {ex.SqlState}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error inesperado: " + ex.Message);
-                throw; // Relanzar la excepción para manejarla en el formulario
+                Console.WriteLine($"Error general: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
