@@ -65,6 +65,7 @@
             pnlCntEstudiantes.Name = "pnlCntEstudiantes";
             pnlCntEstudiantes.Size = new Size(1184, 792);
             pnlCntEstudiantes.TabIndex = 1;
+            pnlCntEstudiantes.Paint += pnlCntEstudiantes_Paint;
             // 
             // wEstudiantes
             // 

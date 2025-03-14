@@ -85,3 +85,7 @@ C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\refin
 C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.pdb
 C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.genruntimeconfig.cache
 C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ref\ZasTrack.dll
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wAñadirProyecto.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wEditarProyecto.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wEliminarProyecto.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wProyectos.resources

@@ -36,5 +36,10 @@ namespace ZasTrack
             this.pnlCntEstudiantes.Tag = fh; // Establece la propiedad Tag del panel contenedor como el formulario.
             fh.Show(); // Muestra el formulario.
         }
+
+        private void pnlCntEstudiantes_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

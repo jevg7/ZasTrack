@@ -78,6 +78,7 @@ namespace ZasTrack
         private void btnProyecto_Click(object sender, EventArgs e)
         {
             actButton(sender, Colores.color1);
+            Abrir_Form(new Forms.wProyectos.wProyectos());
         }
 
 
@@ -96,8 +97,10 @@ namespace ZasTrack
             fh.Show(); // Muestra el formulario.
         }
 
-       
+        private void pnlContenedor_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
     }
 
 }

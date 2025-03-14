@@ -1,3 +1,5 @@
+using ZasTrack.Forms;
+
 namespace ZasTrack
 {
     internal static class Program

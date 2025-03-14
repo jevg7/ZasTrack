@@ -74,7 +74,7 @@
             btnProyecto.FlatStyle = FlatStyle.Flat;
             btnProyecto.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnProyecto.ForeColor = SystemColors.ControlLightLight;
-            btnProyecto.Location = new Point(0, 457);
+            btnProyecto.Location = new Point(2, 257);
             btnProyecto.Margin = new Padding(2);
             btnProyecto.Name = "btnProyecto";
             btnProyecto.Size = new Size(197, 78);
@@ -91,7 +91,7 @@
             btnReportes.FlatStyle = FlatStyle.Flat;
             btnReportes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnReportes.ForeColor = SystemColors.ControlLightLight;
-            btnReportes.Location = new Point(0, 362);
+            btnReportes.Location = new Point(3, 513);
             btnReportes.Margin = new Padding(2);
             btnReportes.Name = "btnReportes";
             btnReportes.Size = new Size(197, 78);
@@ -108,7 +108,7 @@
             btnExamenes.FlatStyle = FlatStyle.Flat;
             btnExamenes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnExamenes.ForeColor = SystemColors.ControlLightLight;
-            btnExamenes.Location = new Point(0, 270);
+            btnExamenes.Location = new Point(1, 421);
             btnExamenes.Margin = new Padding(2);
             btnExamenes.Name = "btnExamenes";
             btnExamenes.Size = new Size(197, 78);
@@ -125,7 +125,7 @@
             btnEstudiantes.FlatStyle = FlatStyle.Flat;
             btnEstudiantes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnEstudiantes.ForeColor = SystemColors.ControlLightLight;
-            btnEstudiantes.Location = new Point(-2, 187);
+            btnEstudiantes.Location = new Point(-2, 339);
             btnEstudiantes.Margin = new Padding(2);
             btnEstudiantes.Name = "btnEstudiantes";
             btnEstudiantes.Size = new Size(197, 78);
@@ -143,6 +143,7 @@
             pnlContenedor.Name = "pnlContenedor";
             pnlContenedor.Size = new Size(1184, 792);
             pnlContenedor.TabIndex = 2;
+            pnlContenedor.Paint += pnlContenedor_Paint;
             // 
             // wMain
             // 
