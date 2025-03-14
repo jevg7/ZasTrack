@@ -97,3 +97,5 @@ C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTr
 C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Properties.Resources.resources
 C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Estudiantes.wEditarEliminarEstudiante.resources
 C:\Users\Jairo Vega\Desktop\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Estudiantes.wVerEstudiantes.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Estudiantes.wEditarEliminarEstudiante.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Estudiantes.wVerEstudiantes.resources

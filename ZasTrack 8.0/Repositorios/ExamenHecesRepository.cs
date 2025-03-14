@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZasTrack.Repositorios
+namespace ZasTrack.Repositories
 {
     internal class ExamenHecesRepository
     {

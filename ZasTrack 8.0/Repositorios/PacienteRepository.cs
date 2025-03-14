@@ -26,9 +26,8 @@ namespace ZasTrack.Repositories
                         cmd.Parameters.AddWithValue("genero", paciente.genero);
                         cmd.Parameters.AddWithValue("codigo_beneficiario", paciente.codigo_beneficiario);
                         cmd.Parameters.AddWithValue("fecha_nacimiento", paciente.fecha_nacimiento);
-                        cmd.Parameters.AddWithValue("id_proyecto", paciente.id_proyecto); 
+                        cmd.Parameters.AddWithValue("id_proyecto", paciente.id_proyecto);
                         cmd.Parameters.AddWithValue("observacion", paciente.observacion);
-                       
 
                         cmd.ExecuteNonQuery();
                     }
@@ -38,18 +37,20 @@ namespace ZasTrack.Repositories
             {
                 Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
                 Console.WriteLine($"Código de error: {ex.SqlState}");
+                throw; // Relanza la excepción para que el llamador pueda manejarla
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error general: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
+                throw; // Relanza la excepción para que el llamador pueda manejarla
             }
         }
 
         public List<pacientes> ObtenerPacientes()
         {
             var pacientes = new List<pacientes>();
-            string query = "SELECT id_paciente, nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, observacion FROM pacientes";
+            string query = "SELECT id_paciente, nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, id_proyecto, observacion FROM pacientes";
 
             using (var conn = DatabaseConnection.GetConnection())
             {
@@ -69,7 +70,8 @@ namespace ZasTrack.Repositories
                                 genero = reader.GetString(4),
                                 codigo_beneficiario = reader.GetString(5),
                                 fecha_nacimiento = reader.GetDateTime(6),
-                                observacion = reader.IsDBNull(7) ? null : reader.GetString(7)
+                                id_proyecto = reader.GetInt32(7),
+                                observacion = reader.IsDBNull(8) ? null : reader.GetString(8)
                             });
                         }
                     }
@@ -78,12 +80,14 @@ namespace ZasTrack.Repositories
 
             return pacientes;
         }
-        public void BuscarPacientePorCodigo(string codigo)
+
+        public pacientes BuscarPacientePorCodigo(string codigo)
         {
             string query = "SELECT * FROM pacientes WHERE codigo_beneficiario = @codigo";
 
             using (var conn = DatabaseConnection.GetConnection())
             {
+                conn.Open();
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@codigo", codigo);
@@ -91,7 +95,7 @@ namespace ZasTrack.Repositories
                     {
                         if (reader.Read())
                         {
-                            pacientes pacientes = new pacientes
+                            return new pacientes
                             {
                                 id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
                                 nombres = reader.GetString(reader.GetOrdinal("nombres")),
@@ -108,43 +112,51 @@ namespace ZasTrack.Repositories
                 }
             }
 
-            
+            return null; // Si no se encuentra el paciente, retorna null
         }
+
         public void EditarPaciente(pacientes paciente)
         {
             string query = @"UPDATE pacientes SET 
-                        nombres = @nombres,
-                        apellidos = @apellidos,
-                        edad = @edad,
-                        genero = @genero,
-                        fecha_nacimiento = @fecha_nacimiento,
-                        id_proyecto = @id_proyecto,
-                        observacion = @observacion
-                     WHERE codigo_beneficiario = @codigo_beneficiario";
+                    nombres = @nombres,
+                    apellidos = @apellidos,
+                    edad = @edad,
+                    genero = @genero,
+                    fecha_nacimiento = @fecha_nacimiento,
+                    id_proyecto = @id_proyecto,
+                    observacion = @observacion
+                 WHERE codigo_beneficiario = @codigo_beneficiario";
 
-            using (var conexion = DatabaseConnection.GetConnection())
+            try
             {
-                using (var cmd = new NpgsqlCommand(query, conexion))
+                using (var conexion = DatabaseConnection.GetConnection())
                 {
-                    cmd.Parameters.AddWithValue("@nombres", paciente.nombres);
-                    cmd.Parameters.AddWithValue("@apellidos", paciente.apellidos);
-                    cmd.Parameters.AddWithValue("@edad", paciente.edad);
-                    cmd.Parameters.AddWithValue("@genero", paciente.genero);
-                    cmd.Parameters.AddWithValue("@fecha_nacimiento", paciente.fecha_nacimiento);
-                    cmd.Parameters.AddWithValue("@id_proyecto", paciente.id_proyecto);
-                    cmd.Parameters.AddWithValue("@observacion", paciente.observacion ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@codigo_beneficiario", paciente.codigo_beneficiario);
-
-                    int filasAfectadas = cmd.ExecuteNonQuery();
-
-                    if (filasAfectadas == 0)
+                    conexion.Open();
+                    using (var cmd = new NpgsqlCommand(query, conexion))
                     {
-                        throw new Exception("No se encontró el paciente a editar.");
+                        cmd.Parameters.AddWithValue("@nombres", paciente.nombres);
+                        cmd.Parameters.AddWithValue("@apellidos", paciente.apellidos);
+                        cmd.Parameters.AddWithValue("@edad", paciente.edad);
+                        cmd.Parameters.AddWithValue("@genero", paciente.genero);
+                        cmd.Parameters.AddWithValue("@fecha_nacimiento", paciente.fecha_nacimiento);
+                        cmd.Parameters.AddWithValue("@id_proyecto", paciente.id_proyecto);
+                        cmd.Parameters.AddWithValue("@observacion", paciente.observacion ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@codigo_beneficiario", paciente.codigo_beneficiario);
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+
+                        if (filasAfectadas == 0)
+                        {
+                            throw new Exception("No se encontró el paciente a editar.");
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al editar el paciente: {ex.Message}");
+                throw; // Relanza la excepción para que el llamador pueda manejarla
+            }
         }
-
-
     }
 }

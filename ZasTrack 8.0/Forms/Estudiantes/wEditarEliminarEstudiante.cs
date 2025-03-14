@@ -21,7 +21,7 @@ namespace ZasTrack.Forms.Estudiantes
         {
             InitializeComponent();
             pacienteRepository = new PacienteRepository();
-            
+
 
 
         }
@@ -56,14 +56,13 @@ namespace ZasTrack.Forms.Estudiantes
 
             try
             {
-                PacienteRepository pacienteRepository = new PacienteRepository();
-
                 // Verifica si el paciente existe
                 pacientes pacienteExistente = pacienteRepository.BuscarPacientePorCodigo(txtCodigoBen.Text);
+
                 if (pacienteExistente != null)
                 {
                     // Si existe, actualiza la información del paciente
-                    pacienteEditado.id = pacienteExistente.id; // Asumiendo que 'id' es el identificador único del paciente
+                    pacienteEditado.id_paciente = pacienteExistente.id_paciente;
                     pacienteRepository.EditarPaciente(pacienteEditado);
                     MessageBox.Show("Paciente actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -76,9 +75,6 @@ namespace ZasTrack.Forms.Estudiantes
             {
                 MessageBox.Show("Error al actualizar el paciente: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
-
         }
 
         private void CargarProyectos()
@@ -91,7 +87,7 @@ namespace ZasTrack.Forms.Estudiantes
             cmbProyecto.SelectedIndex = -1;
         }
 
-        
+
 
 
         private string CapitalizarTexto(string texto)
@@ -184,9 +180,9 @@ namespace ZasTrack.Forms.Estudiantes
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            string codigo = txtCodigoBen.Text;
+            string codigo = txtBusqueda.Text; // oe jairo sos baboso, habias puesto el txt de abajo no el de arriba, con razon no servia
 
-            pacientes pacienteEncontrado = BuscarPacientePorCodigo(codigo);
+            pacientes pacienteEncontrado = pacienteRepository.BuscarPacientePorCodigo(codigo);
 
             if (pacienteEncontrado != null)
             {
@@ -202,8 +198,13 @@ namespace ZasTrack.Forms.Estudiantes
             else
             {
                 MessageBox.Show("Paciente no encontrado. Ingrese los datos para registrarlo.", "Nuevo Paciente", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
             }
+        }
+
+        private void txtBusqueda_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

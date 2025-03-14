@@ -185,23 +185,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Jairo Vega\\.nuget\\packages\\": {},
+    "C:\\Users\\Alex\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
+      "projectUniqueName": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
       "projectName": "ZasTrack",
-      "projectPath": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
-      "packagesPath": "C:\\Users\\Jairo Vega\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jairo Vega\\Desktop\\ZasTrack\\ZasTrack 8.0\\obj\\",
+      "projectPath": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
+      "packagesPath": "C:\\Users\\Alex\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Jairo Vega\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Alex\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -210,7 +210,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

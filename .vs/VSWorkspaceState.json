@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\ZasTrack 8.0",
-    "\\ZasTrack 8.0\\Forms"
+    "\\ZasTrack 8.0\\Forms",
+    "\\ZasTrack 8.0\\Forms\\Estudiantes"
   ],
-  "SelectedNode": "\\ZasTrack 8.0\\Forms\\wMain.cs",
+  "SelectedNode": "\\ZasTrack 8.0\\Forms\\Estudiantes\\wEditarEliminarEstudiante.cs",
   "PreviewInSolutionExplorer": false
 }
