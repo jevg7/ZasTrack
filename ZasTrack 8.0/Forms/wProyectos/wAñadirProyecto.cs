@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZasTrack.Models;
 using ZasTrack.Repositories;
 
 namespace ZasTrack.Forms
@@ -24,17 +25,33 @@ namespace ZasTrack.Forms
         }
         private void btnGuardarProyecto_Click(object sender, EventArgs e)
         {
-            var proyecto = new Models.Poyecto
+            if (string.IsNullOrEmpty(txtNombreProyecto.Text))
+            {
+                MessageBox.Show("El nombre del proyecto es requerido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var proyecto = new Proyecto
             {
                 nombre = txtNombreProyecto.Text,
-                fecha_inicio = dtpFechaFin.Value,
+                fecha_inicio = dtpFechaInicio.Value,
                 fecha_fin = dtpFechaFin.Checked ? dtpFechaFin.Value : (DateTime?)null
             };
 
             var proyectoRepository = new ProyectoRepository();
-            proyectoRepository.GuardarProyecto(proyecto);
+            try
+            {
+                proyectoRepository.GuardarProyecto(proyecto);
+                MessageBox.Show("Proyecto guardado correctamente.");
 
-            MessageBox.Show("Proyecto guardado correctamente.");
+                // Cerrar el formulario después de guardar
+                this.DialogResult = DialogResult.OK; // Indica que el formulario se cerró correctamente
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar el proyecto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

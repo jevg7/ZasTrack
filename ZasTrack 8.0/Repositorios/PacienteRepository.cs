@@ -10,24 +10,31 @@ namespace ZasTrack.Repositories
         public void GuardarPaciente(pacientes paciente)
         {
             string query = @"
-                INSERT INTO pacientes (nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, observacion)
-                VALUES (@nombres, @apellidos, @edad, @genero, @codigo_beneficiario, @fecha_nacimiento, @observacion)";
+        INSERT INTO pacientes (nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, observacion)
+        VALUES (@nombres, @apellidos, @edad, @genero, @codigo_beneficiario, @fecha_nacimiento, @observacion)";
 
-            using (var conn = DatabaseConnection.GetConnection())
+            try
             {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var conn = DatabaseConnection.GetConnection())
                 {
-                    cmd.Parameters.AddWithValue("nombres", paciente.nombres);
-                    cmd.Parameters.AddWithValue("apellidos", paciente.apellidos);
-                    cmd.Parameters.AddWithValue("edad", paciente.edad);
-                    cmd.Parameters.AddWithValue("genero", paciente.genero);
-                    cmd.Parameters.AddWithValue("codigo_beneficiario", paciente.codigo_beneficiario);
-                    cmd.Parameters.AddWithValue("fecha_nacimiento", paciente.fecha_nacimiento);
-                    cmd.Parameters.AddWithValue("observacion", paciente.observacion ?? (object)DBNull.Value);
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("nombres", paciente.nombres);
+                        cmd.Parameters.AddWithValue("apellidos", paciente.apellidos);
+                        cmd.Parameters.AddWithValue("edad", paciente.edad);
+                        cmd.Parameters.AddWithValue("genero", paciente.genero);
+                        cmd.Parameters.AddWithValue("codigo_beneficiario", paciente.codigo_beneficiario);
+                        cmd.Parameters.AddWithValue("fecha_nacimiento", paciente.fecha_nacimiento);
+                        cmd.Parameters.AddWithValue("observacion", paciente.observacion ?? (object)DBNull.Value);
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al guardar el paciente: " + ex.Message, ex);
             }
         }
 

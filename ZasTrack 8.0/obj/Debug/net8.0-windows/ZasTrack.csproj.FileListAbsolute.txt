@@ -89,3 +89,4 @@ C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTra
 C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wEditarProyecto.resources
 C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wEliminarProyecto.resources
 C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wProyectos.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Properties.Resources.resources

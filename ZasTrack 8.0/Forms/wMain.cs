@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZasTrack.Forms;
 
 namespace ZasTrack
 {
@@ -21,7 +23,6 @@ namespace ZasTrack
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-
         }
 
         #region ConfigBotones
@@ -61,23 +62,19 @@ namespace ZasTrack
 
         private void btnEstudiantes_Click(object sender, EventArgs e)
         {
-            actButton(sender, Colores.color1);
             Abrir_Form(new wEstudiantes());
         }
 
         private void btnExamenes_Click(object sender, EventArgs e)
         {
-            actButton(sender, Colores.color1);
         }
 
         private void btnReportes_Click(object sender, EventArgs e)
         {
-            actButton(sender, Colores.color1);
         }
 
         private void btnProyecto_Click(object sender, EventArgs e)
         {
-            actButton(sender, Colores.color1);
             Abrir_Form(new Forms.wProyectos.wProyectos());
         }
 
@@ -100,6 +97,11 @@ namespace ZasTrack
         private void pnlContenedor_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void btnAgregarProyecto_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.wAñadirProyecto());
         }
     }
 

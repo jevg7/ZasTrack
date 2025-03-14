@@ -1,6 +1,6 @@
 ﻿namespace ZasTrack.Models 
 { 
-public class Poyecto
+public class Proyecto
 {
     public int id_proyecto { get; set; } // PK
     public string nombre { get; set; }

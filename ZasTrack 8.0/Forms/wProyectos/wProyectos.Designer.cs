@@ -28,60 +28,138 @@
         /// </summary>
         private void InitializeComponent()
         {
-            msProyectos = new MenuStrip();
-            tsmiAñadirProyectos = new ToolStripMenuItem();
-            pnlProyectos = new Panel();
-            msProyectos.SuspendLayout();
+            pnlProyChildren = new Panel();
+            splProyectos = new SplitContainer();
+            pnlProyFather = new Panel();
+            pnlAggProy = new Panel();
+            pnlProyList = new Panel();
+            flpProyList = new FlowLayoutPanel();
+            panel1 = new Panel();
+            lblAdmProyec = new Label();
+            ((System.ComponentModel.ISupportInitialize)splProyectos).BeginInit();
+            splProyectos.Panel1.SuspendLayout();
+            splProyectos.Panel2.SuspendLayout();
+            splProyectos.SuspendLayout();
+            pnlProyFather.SuspendLayout();
+            pnlProyList.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // msProyectos
+            // pnlProyChildren
             // 
-            msProyectos.Items.AddRange(new ToolStripItem[] { tsmiAñadirProyectos });
-            msProyectos.Location = new Point(0, 0);
-            msProyectos.Name = "msProyectos";
-            msProyectos.Size = new Size(800, 24);
-            msProyectos.TabIndex = 0;
-            msProyectos.Text = "msProyectos";
-            msProyectos.ItemClicked += menuStrip1_ItemClicked;
+            pnlProyChildren.Dock = DockStyle.Fill;
+            pnlProyChildren.Location = new Point(0, 0);
+            pnlProyChildren.Name = "pnlProyChildren";
+            pnlProyChildren.Size = new Size(1021, 734);
+            pnlProyChildren.TabIndex = 1;
+            pnlProyChildren.Paint += pnlProyectos_Paint;
             // 
-            // tsmiAñadirProyectos
+            // splProyectos
             // 
-            tsmiAñadirProyectos.Name = "tsmiAñadirProyectos";
-            tsmiAñadirProyectos.Size = new Size(109, 20);
-            tsmiAñadirProyectos.Text = "Añadir Proyectos";
-            tsmiAñadirProyectos.Click += tsmiAñadirProyectos_Click;
+            splProyectos.Dock = DockStyle.Bottom;
+            splProyectos.Location = new Point(0, 34);
+            splProyectos.Name = "splProyectos";
             // 
-            // pnlProyectos
+            // splProyectos.Panel1
             // 
-            pnlProyectos.Dock = DockStyle.Fill;
-            pnlProyectos.Location = new Point(0, 24);
-            pnlProyectos.Name = "pnlProyectos";
-            pnlProyectos.Size = new Size(800, 426);
-            pnlProyectos.TabIndex = 1;
-            pnlProyectos.Paint += pnlProyectos_Paint;
+            splProyectos.Panel1.BackColor = SystemColors.ActiveCaption;
+            splProyectos.Panel1.Controls.Add(pnlProyFather);
+            splProyectos.Panel1.Paint += splitContainer1_Panel1_Paint_2;
+            // 
+            // splProyectos.Panel2
+            // 
+            splProyectos.Panel2.Controls.Add(pnlProyChildren);
+            splProyectos.Size = new Size(1366, 734);
+            splProyectos.SplitterDistance = 341;
+            splProyectos.TabIndex = 2;
+            // 
+            // pnlProyFather
+            // 
+            pnlProyFather.Controls.Add(pnlAggProy);
+            pnlProyFather.Controls.Add(pnlProyList);
+            pnlProyFather.Dock = DockStyle.Fill;
+            pnlProyFather.Location = new Point(0, 0);
+            pnlProyFather.Name = "pnlProyFather";
+            pnlProyFather.Size = new Size(341, 734);
+            pnlProyFather.TabIndex = 1;
+            // 
+            // pnlAggProy
+            // 
+            pnlAggProy.BackColor = SystemColors.ActiveCaption;
+            pnlAggProy.Dock = DockStyle.Top;
+            pnlAggProy.Location = new Point(0, 0);
+            pnlAggProy.Name = "pnlAggProy";
+            pnlAggProy.Size = new Size(341, 24);
+            pnlAggProy.TabIndex = 2;
+            // 
+            // pnlProyList
+            // 
+            pnlProyList.BackColor = SystemColors.ActiveCaption;
+            pnlProyList.Controls.Add(flpProyList);
+            pnlProyList.Dock = DockStyle.Fill;
+            pnlProyList.Location = new Point(0, 0);
+            pnlProyList.Name = "pnlProyList";
+            pnlProyList.Size = new Size(341, 734);
+            pnlProyList.TabIndex = 3;
+            // 
+            // flpProyList
+            // 
+            flpProyList.Dock = DockStyle.Bottom;
+            flpProyList.Location = new Point(0, 30);
+            flpProyList.Name = "flpProyList";
+            flpProyList.Size = new Size(341, 704);
+            flpProyList.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(lblAdmProyec);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1366, 45);
+            panel1.TabIndex = 3;
+            panel1.Paint += panel1_Paint;
+            // 
+            // lblAdmProyec
+            // 
+            lblAdmProyec.AutoSize = true;
+            lblAdmProyec.Location = new Point(15, 16);
+            lblAdmProyec.Name = "lblAdmProyec";
+            lblAdmProyec.Size = new Size(154, 15);
+            lblAdmProyec.TabIndex = 0;
+            lblAdmProyec.Text = "Administrador de Proyectos";
+            lblAdmProyec.Click += lblAdmProyec_Click;
             // 
             // wProyectos
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(pnlProyectos);
-            Controls.Add(msProyectos);
+            ClientSize = new Size(1366, 768);
+            Controls.Add(panel1);
+            Controls.Add(splProyectos);
             FormBorderStyle = FormBorderStyle.None;
-            MainMenuStrip = msProyectos;
             Name = "wProyectos";
             Text = "Proyectos";
             Load += wProyectos_Load;
-            msProyectos.ResumeLayout(false);
-            msProyectos.PerformLayout();
+            splProyectos.Panel1.ResumeLayout(false);
+            splProyectos.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splProyectos).EndInit();
+            splProyectos.ResumeLayout(false);
+            pnlProyFather.ResumeLayout(false);
+            pnlProyList.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private MenuStrip msProyectos;
-        private ToolStripMenuItem tsmiAñadirProyectos;
-        private Panel pnlProyectos;
+        private Panel pnlProyChildren;
+        private SplitContainer splProyectos;
+        private Panel panel1;
+        private Panel pnlProyFather;
+        private Label lblAdmProyec;
+        private Panel pnlAggProy;
+        private Panel pnlProyList;
+        private FlowLayoutPanel flpProyList;
     }
 }

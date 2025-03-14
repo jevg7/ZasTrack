@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,7 +53,43 @@ namespace ZasTrack
 
         private void btnGuardarPaciente_Click(object sender, EventArgs e)
         {
-            // Validar que todos los campos obligatorios estén llenos
+           guardarPaciente();
+        }
+        
+
+        private void txtAcodigo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void txtAnombreApellido_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void txtAobservacion_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void txtEdad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        #region Metodos
+        private void LimpiarCampos()
+        {
+            txtNombres.Clear();
+            txtApellidos.Clear();
+            txtCodigoBen.Clear();
+            txtEdad.Clear();
+            cmbGenero.SelectedIndex = 0;
+            dtpFechaNac.Value = DateTime.Now;
+            txtObservacion.Clear();
+        }
+        private void guardarPaciente()
+        {
             if (string.IsNullOrEmpty(txtCodigoBen.Text) ||
                 string.IsNullOrEmpty(txtNombres.Text) ||
                 string.IsNullOrEmpty(txtEdad.Text) ||
@@ -63,11 +100,10 @@ namespace ZasTrack
                 return;
             }
 
-            // Crear un objeto paciente con los datos del formulario
             pacientes nuevoPaciente = new pacientes
             {
-                nombres = txtNombres.Text.Split(' ')[0], 
-                apellidos = txtApellidos.Text.Contains(' ') ? txtApellidos.Text.Split(' ')[1] : "", 
+                nombres = CapitalizarTexto(txtNombres.Text),
+                apellidos = CapitalizarTexto(txtApellidos.Text),
                 edad = int.Parse(txtEdad.Text),
                 genero = cmbGenero.SelectedItem.ToString(),
                 codigo_beneficiario = txtCodigoBen.Text,
@@ -75,53 +111,27 @@ namespace ZasTrack
                 observacion = txtObservacion.Text
             };
 
-            // Guardar el paciente en la base de datos
             try
             {
+                PacienteRepository pacienteRepository = new PacienteRepository();
+
                 pacienteRepository.GuardarPaciente(nuevoPaciente);
                 MessageBox.Show("Paciente guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LimpiarCampos(); // Limpiar los campos después de guardar
+                LimpiarCampos();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al guardar el paciente: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        private void LimpiarCampos()
+        }   
+        private string CapitalizarTexto(string texto)
         {
-            // Limpiar los controles del formulario
-            txtNombres.Clear();
-            txtApellidos.Clear();
-            txtCodigoBen.Clear();
-            txtEdad.Clear();
-            cmbGenero.SelectedIndex = 0;
-            dtpFechaNac.Value = DateTime.Now;
-            txtObservacion.Clear(); 
+            if (string.IsNullOrWhiteSpace(texto))
+                return texto;
+
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(texto.ToLower());
         }
-
-
-        private void txtAcodigo_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtAnombreApellido_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void txtAobservacion_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtEdad_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        #endregion
     }
 }
