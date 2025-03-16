@@ -28,87 +28,100 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
-            label1 = new Label();
-            textBox1 = new TextBox();
+            components = new System.ComponentModel.Container();
+            pnlBuscar = new Panel();
             btnBuscar = new Button();
-            dataGridView1 = new DataGridView();
-            panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            txtBuscar = new TextBox();
+            lblCodigo = new Label();
+            dgvPacientes = new DataGridView();
+            pacienteRepositoryBindingSource = new BindingSource(components);
+            pnlBuscar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvPacientes).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pacienteRepositoryBindingSource).BeginInit();
             SuspendLayout();
             // 
-            // panel1
+            // pnlBuscar
             // 
-            panel1.BackColor = SystemColors.ActiveCaptionText;
-            panel1.Controls.Add(btnBuscar);
-            panel1.Controls.Add(textBox1);
-            panel1.Controls.Add(label1);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(901, 100);
-            panel1.TabIndex = 0;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.ForeColor = SystemColors.ButtonFace;
-            label1.Location = new Point(50, 39);
-            label1.Name = "label1";
-            label1.Size = new Size(111, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Codigo Beneficiario";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(180, 36);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(421, 23);
-            textBox1.TabIndex = 1;
+            pnlBuscar.BackColor = SystemColors.ActiveCaptionText;
+            pnlBuscar.Controls.Add(btnBuscar);
+            pnlBuscar.Controls.Add(txtBuscar);
+            pnlBuscar.Controls.Add(lblCodigo);
+            pnlBuscar.Dock = DockStyle.Top;
+            pnlBuscar.Location = new Point(0, 0);
+            pnlBuscar.Name = "pnlBuscar";
+            pnlBuscar.Size = new Size(901, 100);
+            pnlBuscar.TabIndex = 0;
+            pnlBuscar.Paint += panel1_Paint;
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(631, 36);
+            btnBuscar.Location = new Point(607, 35);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(75, 23);
             btnBuscar.TabIndex = 2;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
-            // dataGridView1
+            // txtBuscar
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 100);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(901, 651);
-            dataGridView1.TabIndex = 1;
+            txtBuscar.Location = new Point(180, 36);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.Size = new Size(421, 23);
+            txtBuscar.TabIndex = 1;
+            txtBuscar.TextChanged += txtBuscar_TextChanged;
             // 
-            // wVerEstudiantes
+            // lblCodigo
+            // 
+            lblCodigo.AutoSize = true;
+            lblCodigo.ForeColor = SystemColors.ButtonFace;
+            lblCodigo.Location = new Point(50, 39);
+            lblCodigo.Name = "lblCodigo";
+            lblCodigo.Size = new Size(111, 15);
+            lblCodigo.TabIndex = 0;
+            lblCodigo.Text = "Codigo Beneficiario";
+            // 
+            // dgvPacientes
+            // 
+            dgvPacientes.AllowUserToAddRows = false;
+            dgvPacientes.AllowUserToDeleteRows = false;
+            dgvPacientes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPacientes.Dock = DockStyle.Fill;
+            dgvPacientes.Location = new Point(0, 100);
+            dgvPacientes.Name = "dgvPacientes";
+            dgvPacientes.ReadOnly = true;
+            dgvPacientes.Size = new Size(901, 651);
+            dgvPacientes.TabIndex = 1;
+            dgvPacientes.CellContentClick += dgvPacientes_CellContentClick;
+            // 
+            // pacienteRepositoryBindingSource
+            // 
+            pacienteRepositoryBindingSource.DataSource = typeof(Repositories.PacienteRepository);
+            // 
+            // wVerPaciente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(901, 751);
-            Controls.Add(dataGridView1);
-            Controls.Add(panel1);
+            Controls.Add(dgvPacientes);
+            Controls.Add(pnlBuscar);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "wVerEstudiantes";
+            Name = "wVerPaciente";
             Text = "wVerEstudiantes";
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            pnlBuscar.ResumeLayout(false);
+            pnlBuscar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvPacientes).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pacienteRepositoryBindingSource).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Panel panel1;
+        private Panel pnlBuscar;
         private Button btnBuscar;
-        private TextBox textBox1;
-        private Label label1;
-        private DataGridView dataGridView1;
+        private TextBox txtBuscar;
+        private Label lblCodigo;
+        private DataGridView dgvPacientes;
+        private BindingSource pacienteRepositoryBindingSource;
     }
 }

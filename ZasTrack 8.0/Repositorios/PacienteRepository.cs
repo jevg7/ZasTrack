@@ -158,5 +158,82 @@ namespace ZasTrack.Repositories
                 throw; // Relanza la excepción para que el llamador pueda manejarla
             }
         }
+        public pacientes BuscarPacientePorId(int idPaciente)
+        {
+            string query = "SELECT * FROM pacientes WHERE id_paciente = @idPaciente";
+
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idPaciente", idPaciente);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new pacientes
+                            {
+                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                                genero = reader.GetString(reader.GetOrdinal("genero")),
+                                codigo_beneficiario = reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
+                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")),
+                                id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? "" : reader.GetString(reader.GetOrdinal("observacion"))
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null; // Si no se encuentra el paciente, retorna null
+        }
+
+        public List<pacientes> BuscarPacientesPorNombre(string nombre)
+        {
+            var pacientes = new List<pacientes>();
+            string query = @"
+        SELECT * FROM pacientes 
+        WHERE LOWER(nombres) LIKE LOWER(@nombre) 
+        OR LOWER(apellidos) LIKE LOWER(@nombre) 
+        OR LOWER(CONCAT(nombres, ' ', apellidos)) LIKE LOWER(@nombre)";
+
+            Console.WriteLine($"Buscando pacientes con nombre/apellido: {nombre}");
+
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", $"%{nombre.ToLower()}%"); // Búsqueda parcial y normalizada
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            pacientes.Add(new pacientes
+                            {
+                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                                genero = reader.GetString(reader.GetOrdinal("genero")),
+                                codigo_beneficiario = reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
+                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")),
+                                id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? "" : reader.GetString(reader.GetOrdinal("observacion"))
+                            });
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine($"Pacientes encontrados: {pacientes.Count}");
+            return pacientes;
+        }
+
+
     }
 }
