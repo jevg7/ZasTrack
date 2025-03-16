@@ -39,16 +39,16 @@
             lblPacientesTotal = new Label();
             pnlMuestrasDia = new Panel();
             lblMuestrasDia = new Label();
-            cboProyecto = new ComboBox();
+            cmbProyecto = new ComboBox();
             tlpGraficas = new TableLayoutPanel();
-            tableLayoutPanel2 = new TableLayoutPanel();
             pnlMuestrasProc = new Panel();
-            pnlTipoExamenes = new Panel();
-            pnlMuestrasUltimas = new Panel();
-            pnlExamenesUltimos = new Panel();
             lblMuestrasProcesadas = new Label();
+            pnlTipoExamenes = new Panel();
             lblExamenesTipos = new Label();
+            tlpUltimos = new TableLayoutPanel();
+            pnlMuestrasUltimas = new Panel();
             lblMuestrasUltimas = new Label();
+            pnlExamenesUltimos = new Panel();
             lblExamenesUltimos = new Label();
             tlpIndices.SuspendLayout();
             pnlInformes.SuspendLayout();
@@ -56,9 +56,9 @@
             pnlPacientesTotal.SuspendLayout();
             pnlMuestrasDia.SuspendLayout();
             tlpGraficas.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
             pnlMuestrasProc.SuspendLayout();
             pnlTipoExamenes.SuspendLayout();
+            tlpUltimos.SuspendLayout();
             pnlMuestrasUltimas.SuspendLayout();
             pnlExamenesUltimos.SuspendLayout();
             SuspendLayout();
@@ -82,6 +82,7 @@
             lblBienvenido.Size = new Size(316, 21);
             lblBienvenido.TabIndex = 1;
             lblBienvenido.Text = "Bienvenido al Sistema de Gestión de ZabLab";
+            lblBienvenido.Click += lblBienvenido_Click;
             // 
             // tlpIndices
             // 
@@ -142,6 +143,7 @@
             pnlPacientesTotal.Name = "pnlPacientesTotal";
             pnlPacientesTotal.Size = new Size(252, 134);
             pnlPacientesTotal.TabIndex = 5;
+            pnlPacientesTotal.Paint += pnlPacientesTotal_Paint;
             // 
             // lblPacientesTotal
             // 
@@ -159,6 +161,7 @@
             pnlMuestrasDia.Name = "pnlMuestrasDia";
             pnlMuestrasDia.Size = new Size(252, 134);
             pnlMuestrasDia.TabIndex = 6;
+            pnlMuestrasDia.Paint += pnlMuestrasDia_Paint;
             // 
             // lblMuestrasDia
             // 
@@ -169,13 +172,14 @@
             lblMuestrasDia.TabIndex = 0;
             lblMuestrasDia.Text = "Muestras de Hoy";
             // 
-            // cboProyecto
+            // cmbProyecto
             // 
-            cboProyecto.FormattingEnabled = true;
-            cboProyecto.Location = new Point(50, 111);
-            cboProyecto.Name = "cboProyecto";
-            cboProyecto.Size = new Size(121, 23);
-            cboProyecto.TabIndex = 5;
+            cmbProyecto.FormattingEnabled = true;
+            cmbProyecto.Location = new Point(50, 111);
+            cmbProyecto.Name = "cmbProyecto";
+            cmbProyecto.Size = new Size(121, 23);
+            cmbProyecto.TabIndex = 5;
+            cmbProyecto.SelectedIndexChanged += cboProyecto_SelectedIndexChanged;
             // 
             // tlpGraficas
             // 
@@ -191,20 +195,6 @@
             tlpGraficas.Size = new Size(1100, 232);
             tlpGraficas.TabIndex = 6;
             // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(pnlMuestrasUltimas, 0, 0);
-            tableLayoutPanel2.Controls.Add(pnlExamenesUltimos, 1, 0);
-            tableLayoutPanel2.Location = new Point(47, 524);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1100, 170);
-            tableLayoutPanel2.TabIndex = 7;
-            // 
             // pnlMuestrasProc
             // 
             pnlMuestrasProc.Controls.Add(lblMuestrasProcesadas);
@@ -213,33 +203,6 @@
             pnlMuestrasProc.Name = "pnlMuestrasProc";
             pnlMuestrasProc.Size = new Size(544, 226);
             pnlMuestrasProc.TabIndex = 0;
-            // 
-            // pnlTipoExamenes
-            // 
-            pnlTipoExamenes.Controls.Add(lblExamenesTipos);
-            pnlTipoExamenes.Dock = DockStyle.Fill;
-            pnlTipoExamenes.Location = new Point(553, 3);
-            pnlTipoExamenes.Name = "pnlTipoExamenes";
-            pnlTipoExamenes.Size = new Size(544, 226);
-            pnlTipoExamenes.TabIndex = 1;
-            // 
-            // pnlMuestrasUltimas
-            // 
-            pnlMuestrasUltimas.Controls.Add(lblMuestrasUltimas);
-            pnlMuestrasUltimas.Dock = DockStyle.Fill;
-            pnlMuestrasUltimas.Location = new Point(3, 3);
-            pnlMuestrasUltimas.Name = "pnlMuestrasUltimas";
-            pnlMuestrasUltimas.Size = new Size(544, 164);
-            pnlMuestrasUltimas.TabIndex = 0;
-            // 
-            // pnlExamenesUltimos
-            // 
-            pnlExamenesUltimos.Controls.Add(lblExamenesUltimos);
-            pnlExamenesUltimos.Dock = DockStyle.Fill;
-            pnlExamenesUltimos.Location = new Point(553, 3);
-            pnlExamenesUltimos.Name = "pnlExamenesUltimos";
-            pnlExamenesUltimos.Size = new Size(544, 164);
-            pnlExamenesUltimos.TabIndex = 1;
             // 
             // lblMuestrasProcesadas
             // 
@@ -250,6 +213,15 @@
             lblMuestrasProcesadas.TabIndex = 0;
             lblMuestrasProcesadas.Text = "Muestras Procesadas:";
             // 
+            // pnlTipoExamenes
+            // 
+            pnlTipoExamenes.Controls.Add(lblExamenesTipos);
+            pnlTipoExamenes.Dock = DockStyle.Fill;
+            pnlTipoExamenes.Location = new Point(553, 3);
+            pnlTipoExamenes.Name = "pnlTipoExamenes";
+            pnlTipoExamenes.Size = new Size(544, 226);
+            pnlTipoExamenes.TabIndex = 1;
+            // 
             // lblExamenesTipos
             // 
             lblExamenesTipos.AutoSize = true;
@@ -259,6 +231,29 @@
             lblExamenesTipos.TabIndex = 0;
             lblExamenesTipos.Text = "Tipos de Examenes:";
             // 
+            // tlpUltimos
+            // 
+            tlpUltimos.ColumnCount = 2;
+            tlpUltimos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlpUltimos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlpUltimos.Controls.Add(pnlMuestrasUltimas, 0, 0);
+            tlpUltimos.Controls.Add(pnlExamenesUltimos, 1, 0);
+            tlpUltimos.Location = new Point(47, 524);
+            tlpUltimos.Name = "tlpUltimos";
+            tlpUltimos.RowCount = 1;
+            tlpUltimos.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tlpUltimos.Size = new Size(1100, 170);
+            tlpUltimos.TabIndex = 7;
+            // 
+            // pnlMuestrasUltimas
+            // 
+            pnlMuestrasUltimas.Controls.Add(lblMuestrasUltimas);
+            pnlMuestrasUltimas.Dock = DockStyle.Fill;
+            pnlMuestrasUltimas.Location = new Point(3, 3);
+            pnlMuestrasUltimas.Name = "pnlMuestrasUltimas";
+            pnlMuestrasUltimas.Size = new Size(544, 164);
+            pnlMuestrasUltimas.TabIndex = 0;
+            // 
             // lblMuestrasUltimas
             // 
             lblMuestrasUltimas.AutoSize = true;
@@ -267,6 +262,15 @@
             lblMuestrasUltimas.Size = new Size(98, 15);
             lblMuestrasUltimas.TabIndex = 0;
             lblMuestrasUltimas.Text = "Últimas Muestras";
+            // 
+            // pnlExamenesUltimos
+            // 
+            pnlExamenesUltimos.Controls.Add(lblExamenesUltimos);
+            pnlExamenesUltimos.Dock = DockStyle.Fill;
+            pnlExamenesUltimos.Location = new Point(553, 3);
+            pnlExamenesUltimos.Name = "pnlExamenesUltimos";
+            pnlExamenesUltimos.Size = new Size(544, 164);
+            pnlExamenesUltimos.TabIndex = 1;
             // 
             // lblExamenesUltimos
             // 
@@ -282,9 +286,9 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1200, 700);
-            Controls.Add(tableLayoutPanel2);
+            Controls.Add(tlpUltimos);
             Controls.Add(tlpGraficas);
-            Controls.Add(cboProyecto);
+            Controls.Add(cmbProyecto);
             Controls.Add(tlpIndices);
             Controls.Add(lblBienvenido);
             Controls.Add(lblBienvDash);
@@ -302,11 +306,11 @@
             pnlMuestrasDia.ResumeLayout(false);
             pnlMuestrasDia.PerformLayout();
             tlpGraficas.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
             pnlMuestrasProc.ResumeLayout(false);
             pnlMuestrasProc.PerformLayout();
             pnlTipoExamenes.ResumeLayout(false);
             pnlTipoExamenes.PerformLayout();
+            tlpUltimos.ResumeLayout(false);
             pnlMuestrasUltimas.ResumeLayout(false);
             pnlMuestrasUltimas.PerformLayout();
             pnlExamenesUltimos.ResumeLayout(false);
@@ -330,9 +334,9 @@
         private Label lblMuestrasDia;
         private Panel pnlPacientesTotal;
         private Label lblPacientesTotal;
-        private ComboBox cboProyecto;
+        private ComboBox cmbProyecto;
         private TableLayoutPanel tlpGraficas;
-        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tlpUltimos;
         private Panel pnlMuestrasProc;
         private Panel pnlTipoExamenes;
         private Panel pnlMuestrasUltimas;

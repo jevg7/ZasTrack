@@ -121,6 +121,7 @@
             cmbProyecto.Name = "cmbProyecto";
             cmbProyecto.Size = new Size(121, 23);
             cmbProyecto.TabIndex = 36;
+            cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
             // btnGuardar
             // 
@@ -333,7 +334,7 @@
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
             // 
-            // wEditarEliminarEstudiante
+            // wEditarEliminarPaciente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -342,7 +343,7 @@
             Controls.Add(panel1);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
-            Name = "wEditarEliminarEstudiante";
+            Name = "wEditarEliminarPaciente";
             Text = "wEditarEstudiante";
             Load += wEditarEliminarEstudiante_Load;
             panel1.ResumeLayout(false);

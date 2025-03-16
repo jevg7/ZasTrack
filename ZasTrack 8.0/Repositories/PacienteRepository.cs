@@ -7,6 +7,39 @@ namespace ZasTrack.Repositories
 {
     public class PacienteRepository
     {
+        public List<pacientes> ObtenerPacientes()
+        {
+            var pacientes = new List<pacientes>();
+            string query = "SELECT id_paciente, nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, id_proyecto, observacion FROM pacientes";
+
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            pacientes.Add(new pacientes
+                            {
+                                id_paciente = reader.GetInt32(0),
+                                nombres = reader.GetString(1),
+                                apellidos = reader.GetString(2),
+                                edad = reader.GetInt32(3),
+                                genero = reader.GetString(4),
+                                codigo_beneficiario = reader.GetString(5),
+                                fecha_nacimiento = reader.GetDateTime(6),
+                                id_proyecto = reader.GetInt32(7),
+                                observacion = reader.IsDBNull(8) ? null : reader.GetString(8)
+                            });
+                        }
+                    }
+                }
+            }
+
+            return pacientes;
+        }
         public void GuardarPaciente(pacientes paciente)
         {
             string query = @"
@@ -46,75 +79,6 @@ namespace ZasTrack.Repositories
                 throw; // Relanza la excepción para que el llamador pueda manejarla
             }
         }
-
-        public List<pacientes> ObtenerPacientes()
-        {
-            var pacientes = new List<pacientes>();
-            string query = "SELECT id_paciente, nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, id_proyecto, observacion FROM pacientes";
-
-            using (var conn = DatabaseConnection.GetConnection())
-            {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            pacientes.Add(new pacientes
-                            {
-                                id_paciente = reader.GetInt32(0),
-                                nombres = reader.GetString(1),
-                                apellidos = reader.GetString(2),
-                                edad = reader.GetInt32(3),
-                                genero = reader.GetString(4),
-                                codigo_beneficiario = reader.GetString(5),
-                                fecha_nacimiento = reader.GetDateTime(6),
-                                id_proyecto = reader.GetInt32(7),
-                                observacion = reader.IsDBNull(8) ? null : reader.GetString(8)
-                            });
-                        }
-                    }
-                }
-            }
-
-            return pacientes;
-        }
-
-        public pacientes BuscarPacientePorCodigo(string codigo)
-        {
-            string query = "SELECT * FROM pacientes WHERE codigo_beneficiario = @codigo";
-
-            using (var conn = DatabaseConnection.GetConnection())
-            {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@codigo", codigo);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return new pacientes
-                            {
-                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
-                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
-                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
-                                edad = reader.GetInt32(reader.GetOrdinal("edad")),
-                                genero = reader.GetString(reader.GetOrdinal("genero")),
-                                codigo_beneficiario = reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
-                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")),
-                                id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
-                                observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? "" : reader.GetString(reader.GetOrdinal("observacion"))
-                            };
-                        }
-                    }
-                }
-            }
-
-            return null; // Si no se encuentra el paciente, retorna null
-        }
-
         public void EditarPaciente(pacientes paciente)
         {
             string query = @"UPDATE pacientes SET 
@@ -158,6 +122,39 @@ namespace ZasTrack.Repositories
                 throw; // Relanza la excepción para que el llamador pueda manejarla
             }
         }
+        public pacientes BuscarPacientePorCodigo(string codigo)
+        {
+            string query = "SELECT * FROM pacientes WHERE codigo_beneficiario = @codigo";
+
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@codigo", codigo);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new pacientes
+                            {
+                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                                genero = reader.GetString(reader.GetOrdinal("genero")),
+                                codigo_beneficiario = reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
+                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")),
+                                id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? "" : reader.GetString(reader.GetOrdinal("observacion"))
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null; // Si no se encuentra el paciente, retorna null
+        }        
         public pacientes BuscarPacientePorId(int idPaciente)
         {
             string query = "SELECT * FROM pacientes WHERE id_paciente = @idPaciente";
@@ -191,7 +188,6 @@ namespace ZasTrack.Repositories
 
             return null; // Si no se encuentra el paciente, retorna null
         }
-
         public List<pacientes> BuscarPacientesPorNombre(string nombre)
         {
             var pacientes = new List<pacientes>();
@@ -232,6 +228,20 @@ namespace ZasTrack.Repositories
 
             Console.WriteLine($"Pacientes encontrados: {pacientes.Count}");
             return pacientes;
+        }
+        public int obtTotalPacientes(int idProyecto)
+        {
+            string query = "SELECT COUNT(*) FROM pacientes WHERE id_proyecto = @idProyecto";
+
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    return Convert.ToInt32(cmd.ExecuteScalar()); // Devuelve el total de pacientes
+                }
+            }
         }
 
 

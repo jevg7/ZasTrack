@@ -206,5 +206,10 @@ namespace ZasTrack.Forms.Estudiantes
         {
 
         }
+
+        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

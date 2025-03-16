@@ -30,28 +30,28 @@
         {
             pnlProyecto = new Panel();
             txtFecha = new TextBox();
+            cmbProyecto = new ComboBox();
+            lblProyecto = new Label();
             btnGuardar = new Button();
             cklExamenes = new CheckedListBox();
             lblFecha = new Label();
-            textBox1 = new TextBox();
+            txtIdPaciente = new TextBox();
             lblRegMuestra = new Label();
             txtMuestrasId = new TextBox();
             label2 = new Label();
             lblMuestrasId = new Label();
-            lblProyecto = new Label();
-            comboBox1 = new ComboBox();
             pnlProyecto.SuspendLayout();
             SuspendLayout();
             // 
             // pnlProyecto
             // 
-            pnlProyecto.Controls.Add(comboBox1);
-            pnlProyecto.Controls.Add(lblProyecto);
             pnlProyecto.Controls.Add(txtFecha);
+            pnlProyecto.Controls.Add(cmbProyecto);
+            pnlProyecto.Controls.Add(lblProyecto);
             pnlProyecto.Controls.Add(btnGuardar);
             pnlProyecto.Controls.Add(cklExamenes);
             pnlProyecto.Controls.Add(lblFecha);
-            pnlProyecto.Controls.Add(textBox1);
+            pnlProyecto.Controls.Add(txtIdPaciente);
             pnlProyecto.Controls.Add(lblRegMuestra);
             pnlProyecto.Controls.Add(txtMuestrasId);
             pnlProyecto.Controls.Add(label2);
@@ -61,14 +61,32 @@
             pnlProyecto.Name = "pnlProyecto";
             pnlProyecto.Size = new Size(1200, 700);
             pnlProyecto.TabIndex = 0;
+            pnlProyecto.Paint += pnlProyecto_Paint;
             // 
             // txtFecha
             // 
-            txtFecha.Location = new Point(118, 183);
+            txtFecha.Location = new Point(328, 183);
             txtFecha.Name = "txtFecha";
-            txtFecha.Size = new Size(184, 23);
-            txtFecha.TabIndex = 11;
-            txtFecha.Text = "autorellenado";
+            txtFecha.Size = new Size(243, 23);
+            txtFecha.TabIndex = 15;
+            // 
+            // cmbProyecto
+            // 
+            cmbProyecto.FormattingEnabled = true;
+            cmbProyecto.Location = new Point(54, 140);
+            cmbProyecto.Name = "cmbProyecto";
+            cmbProyecto.Size = new Size(189, 23);
+            cmbProyecto.TabIndex = 13;
+            // 
+            // lblProyecto
+            // 
+            lblProyecto.AutoSize = true;
+            lblProyecto.Font = new Font("Segoe UI", 12F);
+            lblProyecto.Location = new Point(54, 116);
+            lblProyecto.Name = "lblProyecto";
+            lblProyecto.Size = new Size(74, 21);
+            lblProyecto.TabIndex = 12;
+            lblProyecto.Text = "Proyecto:";
             // 
             // btnGuardar
             // 
@@ -78,33 +96,35 @@
             btnGuardar.TabIndex = 10;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // cklExamenes
             // 
             cklExamenes.Font = new Font("Segoe UI", 14F);
             cklExamenes.FormattingEnabled = true;
-            cklExamenes.Items.AddRange(new object[] { "EGH", "EGO", "BBC" });
+            cklExamenes.Items.AddRange(new object[] { "EGH", "EGO", "BCC" });
             cklExamenes.Location = new Point(59, 303);
             cklExamenes.Name = "cklExamenes";
             cklExamenes.Size = new Size(184, 85);
             cklExamenes.TabIndex = 9;
+            cklExamenes.SelectedIndexChanged += cklExamenes_SelectedIndexChanged;
             // 
             // lblFecha
             // 
             lblFecha.AutoSize = true;
             lblFecha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblFecha.Location = new Point(59, 181);
+            lblFecha.Location = new Point(249, 185);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(53, 21);
             lblFecha.TabIndex = 8;
             lblFecha.Text = "Fecha:";
             // 
-            // textBox1
+            // txtIdPaciente
             // 
-            textBox1.Location = new Point(59, 256);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(243, 23);
-            textBox1.TabIndex = 7;
+            txtIdPaciente.Location = new Point(59, 256);
+            txtIdPaciente.Name = "txtIdPaciente";
+            txtIdPaciente.Size = new Size(243, 23);
+            txtIdPaciente.TabIndex = 7;
             // 
             // lblRegMuestra
             // 
@@ -118,7 +138,7 @@
             // 
             // txtMuestrasId
             // 
-            txtMuestrasId.Location = new Point(59, 140);
+            txtMuestrasId.Location = new Point(328, 140);
             txtMuestrasId.Name = "txtMuestrasId";
             txtMuestrasId.Size = new Size(243, 23);
             txtMuestrasId.TabIndex = 5;
@@ -137,29 +157,11 @@
             // 
             lblMuestrasId.AutoSize = true;
             lblMuestrasId.Font = new Font("Segoe UI", 12F);
-            lblMuestrasId.Location = new Point(59, 116);
+            lblMuestrasId.Location = new Point(328, 116);
             lblMuestrasId.Name = "lblMuestrasId";
             lblMuestrasId.Size = new Size(92, 21);
             lblMuestrasId.TabIndex = 0;
             lblMuestrasId.Text = "Muestra N°:";
-            // 
-            // lblProyecto
-            // 
-            lblProyecto.AutoSize = true;
-            lblProyecto.Font = new Font("Segoe UI", 12F);
-            lblProyecto.Location = new Point(371, 116);
-            lblProyecto.Name = "lblProyecto";
-            lblProyecto.Size = new Size(74, 21);
-            lblProyecto.TabIndex = 12;
-            lblProyecto.Text = "Proyecto:";
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(371, 140);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(189, 23);
-            comboBox1.TabIndex = 13;
             // 
             // wMuestras
             // 
@@ -169,7 +171,7 @@
             Controls.Add(pnlProyecto);
             FormBorderStyle = FormBorderStyle.None;
             Name = "wMuestras";
-            Text = "Muestras";
+            Text = "z";
             Load += wMuestras_Load;
             pnlProyecto.ResumeLayout(false);
             pnlProyecto.PerformLayout();
@@ -182,13 +184,13 @@
         private Label label2;
         private Label lblMuestrasId;
         private TextBox txtMuestrasId;
-        private TextBox txtFecha;
         private Button btnGuardar;
         private CheckedListBox cklExamenes;
         private Label lblFecha;
-        private TextBox textBox1;
+        private TextBox txtIdPaciente;
         private Label lblRegMuestra;
-        private ComboBox comboBox1;
         private Label lblProyecto;
+        private TextBox txtFecha;
+        private ComboBox cmbProyecto;
     }
 }

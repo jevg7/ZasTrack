@@ -234,6 +234,7 @@
             cmbProyecto.Name = "cmbProyecto";
             cmbProyecto.Size = new Size(121, 23);
             cmbProyecto.TabIndex = 19;
+            cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
             // wAgregarPaciente
             // 

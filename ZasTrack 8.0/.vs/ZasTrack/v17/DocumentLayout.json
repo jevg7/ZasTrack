@@ -3,28 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\repositorios\\pacienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositorios\\pacienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\pacientes\\wverpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\pacientes\\wverpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\pacientes\\wverpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\pacientes\\wverpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\pacientes\\weditareliminarpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\pacientes\\weditareliminarpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\pacientes\\weditareliminarpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\pacientes\\weditareliminarpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\pacientes\\wagregarpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\pacientes\\wagregarpaciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -74,77 +58,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "wAgregarPaciente.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wAgregarPaciente.cs",
-              "RelativeDocumentMoniker": "Forms\\Pacientes\\wAgregarPaciente.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wAgregarPaciente.cs [Dise\u00F1o]",
-              "RelativeToolTip": "Forms\\Pacientes\\wAgregarPaciente.cs [Dise\u00F1o]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T01:50:13.872Z",
-              "EditorCaption": " [Dise\u00F1o]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "wEditarEliminarPaciente.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wEditarEliminarPaciente.cs",
-              "RelativeDocumentMoniker": "Forms\\Pacientes\\wEditarEliminarPaciente.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wEditarEliminarPaciente.cs",
-              "RelativeToolTip": "Forms\\Pacientes\\wEditarEliminarPaciente.cs",
-              "ViewState": "AgIAAK4AAAAAAAAAAAAjwM4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T01:44:36.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "wEditarEliminarPaciente.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wEditarEliminarPaciente.cs",
-              "RelativeDocumentMoniker": "Forms\\Pacientes\\wEditarEliminarPaciente.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wEditarEliminarPaciente.cs [Dise\u00F1o]",
-              "RelativeToolTip": "Forms\\Pacientes\\wEditarEliminarPaciente.cs [Dise\u00F1o]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T01:44:34.901Z",
-              "EditorCaption": " [Dise\u00F1o]"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PacienteRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Repositorios\\PacienteRepository.cs",
-              "RelativeDocumentMoniker": "Repositorios\\PacienteRepository.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Repositorios\\PacienteRepository.cs",
-              "RelativeToolTip": "Repositorios\\PacienteRepository.cs",
-              "ViewState": "AgIAAMUAAAAAAAAAAAAgwNsAAAAeAAAAAAAAAA==",
+              "Title": "wMuestras.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs",
+              "RelativeDocumentMoniker": "Forms\\Muestras\\wMuestras.cs",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs",
+              "RelativeToolTip": "Forms\\Muestras\\wMuestras.cs",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAkwKkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T01:43:46.208Z",
+              "WhenOpened": "2025-03-16T07:02:23.124Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "wVerPaciente.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wVerPaciente.cs",
-              "RelativeDocumentMoniker": "Forms\\Pacientes\\wVerPaciente.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wVerPaciente.cs",
-              "RelativeToolTip": "Forms\\Pacientes\\wVerPaciente.cs",
-              "ViewState": "AgIAAF8AAAAAAAAAAIAwwB8AAAAAAAAAAAAAAA==",
+              "Title": "wMuestras.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs",
+              "RelativeDocumentMoniker": "Forms\\Muestras\\wMuestras.cs",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs [Dise\u00F1o]",
+              "RelativeToolTip": "Forms\\Muestras\\wMuestras.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T01:36:35.12Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "wVerPaciente.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wVerPaciente.cs",
-              "RelativeDocumentMoniker": "Forms\\Pacientes\\wVerPaciente.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wVerPaciente.cs [Dise\u00F1o]",
-              "RelativeToolTip": "Forms\\Pacientes\\wVerPaciente.cs [Dise\u00F1o]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T01:35:54.324Z",
+              "WhenOpened": "2025-03-16T07:02:39.821Z",
               "EditorCaption": " [Dise\u00F1o]"
             }
           ]

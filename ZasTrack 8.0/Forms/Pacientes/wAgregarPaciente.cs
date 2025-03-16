@@ -121,7 +121,7 @@ namespace ZasTrack
 
                 pacienteRepository.GuardarPaciente(nuevoPaciente);
                 MessageBox.Show("Paciente guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
             }
 
             catch (Exception ex)
@@ -151,5 +151,9 @@ namespace ZasTrack
         #endregion
 
 
+        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
