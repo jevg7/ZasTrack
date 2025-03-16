@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Class\" />
+    <Folder Include="Forms\Informes\" />
   </ItemGroup>
 
 </Project>

@@ -15,11 +15,11 @@ using ZasTrack.Repositories;
 
 namespace ZasTrack
 {
-    public partial class wAgregarEstudiante : Form
+    public partial class wAgregarPaciente : Form
     {
         private PacienteRepository pacienteRepository;
 
-        public wAgregarEstudiante()
+        public wAgregarPaciente()
         {
             InitializeComponent();
             pacienteRepository = new PacienteRepository();

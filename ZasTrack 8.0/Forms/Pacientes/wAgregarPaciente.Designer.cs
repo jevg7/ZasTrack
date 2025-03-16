@@ -1,6 +1,6 @@
 ﻿namespace ZasTrack
 {
-    partial class wAgregarEstudiante
+    partial class wAgregarPaciente
     {
         /// <summary>
         /// Required designer variable.
@@ -154,7 +154,7 @@
             txtEdad.Margin = new Padding(4, 3, 4, 3);
             txtEdad.Name = "txtEdad";
             txtEdad.ReadOnly = true;
-            txtEdad.Size = new Size(92, 23);
+            txtEdad.Size = new Size(121, 23);
             txtEdad.TabIndex = 11;
             txtEdad.TextChanged += txtEdad_TextChanged;
             // 
@@ -235,7 +235,7 @@
             cmbProyecto.Size = new Size(121, 23);
             cmbProyecto.TabIndex = 19;
             // 
-            // wAgregarEstudiante
+            // wAgregarPaciente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -263,7 +263,7 @@
             Controls.Add(lblCodigoBen);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "wAgregarEstudiante";
+            Name = "wAgregarPaciente";
             Text = "wAgregarEstudiante";
             Load += wAgregarEstudiante_Load;
             ResumeLayout(false);

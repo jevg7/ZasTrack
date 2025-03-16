@@ -1,6 +1,6 @@
 ﻿namespace ZasTrack.Forms.Estudiantes
 {
-    partial class wEditarEliminarEstudiante
+    partial class wEditarEliminarPaciente
     {
         /// <summary>
         /// Required designer variable.

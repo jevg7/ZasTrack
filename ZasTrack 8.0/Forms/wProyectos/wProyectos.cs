@@ -83,15 +83,7 @@ namespace ZasTrack.Forms.wProyectos
 
         private void Abrir_Form(object formhijo)
         {
-            if (this.pnlProyChildren.Controls.Count > 0)
-                this.pnlProyChildren.Controls.RemoveAt(0); // Eliminar cualquier control existente
-
-            Form fh = formhijo as Form; // Convertir el objeto a un formulario
-            fh.TopLevel = false; // Establecer como formulario secundario
-            fh.Dock = DockStyle.Fill; // Ajustar al tamaño del panel contenedor
-            this.pnlProyChildren.Controls.Add(fh); // Agregar al panel contenedor
-            this.pnlProyChildren.Tag = fh; // Establecer referencia
-            fh.Show(); // Mostrar el formulario
+          
         }
         private async void CargarProyectosAsync()
         {
@@ -154,6 +146,7 @@ namespace ZasTrack.Forms.wProyectos
                         Font = new Font("Segoe UI", 9)
                     };
 
+
                     pnlProyecto.Controls.Add(lblNombre);
                     pnlProyecto.Controls.Add(lblFechaInicio);
                     pnlProyecto.Controls.Add(lblFechaFin);
@@ -209,7 +202,31 @@ namespace ZasTrack.Forms.wProyectos
 
         private void flpProyList_Paint(object sender, PaintEventArgs e)
         {
-            pnlProyList.AutoScroll = true;
+        }
+
+        private void pnlProyList_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlProyFather_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void splProyectos_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void flpProyList_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlProyChildren_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 

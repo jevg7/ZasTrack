@@ -62,7 +62,7 @@ namespace ZasTrack
 
         private void btnEstudiantes_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new wEstudiantes());
+            Abrir_Form(new wPaciente());
         }
 
         private void btnExamenes_Click(object sender, EventArgs e)
@@ -102,6 +102,17 @@ namespace ZasTrack
         private void btnAgregarProyecto_Click(object sender, EventArgs e)
         {
             Abrir_Form(new Forms.wAñadirProyecto());
+        }
+
+        private void btnMuestras_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.Muestras.wMuestras());
+
+        }
+
+        private void btnDashBoard_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.Dashboard.wDashboard());
         }
     }
 

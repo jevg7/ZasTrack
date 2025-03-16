@@ -1,13 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="Forms\Estudiantes\wAgregarEstudiante.cs">
+    <Compile Update="Forms\Dashboard\wDashboard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Estudiantes\wEditarEliminarEstudiante.cs">
+    <Compile Update="Forms\Examenes\wExamenes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Estudiantes\wVerEstudiantes.cs">
+    <Compile Update="Forms\Muestras\wMuestras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Pacientes\wAgregarPaciente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Pacientes\wEditarEliminarPaciente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Pacientes\wVerPaciente.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\wProyectos\wAñadirProyecto.cs">
@@ -19,7 +28,7 @@
     <Compile Update="Forms\wProyectos\wEliminarProyecto.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Estudiantes\wEstudiantes.cs">
+    <Compile Update="Forms\Pacientes\wPaciente.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\wMain.cs">

@@ -14,10 +14,10 @@ using ZasTrack.Repositories;
 
 namespace ZasTrack.Forms.Estudiantes
 {
-    public partial class wEditarEliminarEstudiante : Form
+    public partial class wEditarEliminarPaciente : Form
     {
         private PacienteRepository pacienteRepository;
-        public wEditarEliminarEstudiante()
+        public wEditarEliminarPaciente()
         {
             InitializeComponent();
             pacienteRepository = new PacienteRepository();

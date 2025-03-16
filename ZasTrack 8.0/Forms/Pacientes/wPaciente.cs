@@ -11,16 +11,16 @@ using ZasTrack.Forms.Estudiantes;
 
 namespace ZasTrack
 {
-    public partial class wEstudiantes : Form
+    public partial class wPaciente : Form
     {
-        public wEstudiantes()
+        public wPaciente()
         {
             InitializeComponent();
         }
 
         private void agregarEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new wAgregarEstudiante());
+            Abrir_Form(new wAgregarPaciente());
         }
 
 
@@ -45,12 +45,17 @@ namespace ZasTrack
 
         private void editarEliminarEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new wEditarEliminarEstudiante());
+            Abrir_Form(new wEditarEliminarPaciente());
         }
 
         private void verEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new wVerEstudiantes());
+            Abrir_Form(new wVerPaciente());
+        }
+
+        private void wPaciente_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

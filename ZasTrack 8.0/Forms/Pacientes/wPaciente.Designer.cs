@@ -1,6 +1,6 @@
 ﻿namespace ZasTrack
 {
-    partial class wEstudiantes
+    partial class wPaciente
     {
         /// <summary>
         /// Required designer variable.
@@ -76,7 +76,7 @@
             pnlCntEstudiantes.TabIndex = 1;
             pnlCntEstudiantes.Paint += pnlCntEstudiantes_Paint;
             // 
-            // wEstudiantes
+            // wPaciente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -86,8 +86,9 @@
             FormBorderStyle = FormBorderStyle.None;
             MainMenuStrip = menuStrip1;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "wEstudiantes";
+            Name = "wPaciente";
             Text = "wEstudiantes";
+            Load += wPaciente_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);

@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ZasTrack.Forms.Estudiantes
+namespace ZasTrack.Forms.Muestras
 {
-    public partial class wVerEstudiantes : Form
+    public partial class wMuestras : Form
     {
-        public wVerEstudiantes()
+        public wMuestras()
         {
             InitializeComponent();
+        }
+
+        private void wMuestras_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
