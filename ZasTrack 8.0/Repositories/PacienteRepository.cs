@@ -244,6 +244,51 @@ namespace ZasTrack.Repositories
             }
         }
 
+        public List<pacientes> BuscarPacientes(string criterio, int idProyecto)
+        {
+            var pacientes = new List<pacientes>();
+            string query = @"
+        SELECT * FROM pacientes 
+        WHERE id_proyecto = @idProyecto 
+        AND (
+            CAST(id_paciente AS TEXT) LIKE @criterio 
+            OR LOWER(nombres) LIKE LOWER(@criterio) 
+            OR LOWER(apellidos) LIKE LOWER(@criterio) 
+            OR LOWER(CONCAT(nombres, ' ', apellidos)) LIKE LOWER(@criterio) 
+            OR LOWER(codigo_beneficiario) LIKE LOWER(@criterio)
+        )";
+
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@criterio", $"%{criterio.ToLower()}%");
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            pacientes.Add(new pacientes
+                            {
+                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                                genero = reader.GetString(reader.GetOrdinal("genero")),
+                                codigo_beneficiario = reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
+                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")),
+                                id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? "" : reader.GetString(reader.GetOrdinal("observacion"))
+                            });
+                        }
+                    }
+                }
+            }
+
+            return pacientes;
+        }
 
     }
 }

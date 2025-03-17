@@ -12,6 +12,10 @@ namespace ZasTrack.Repositories
     {
         private string connectionString;
 
+        public MuestraRepository()
+        {
+        }
+
         public MuestraRepository(string connectionString)
         {
             this.connectionString = connectionString;
@@ -19,21 +23,82 @@ namespace ZasTrack.Repositories
 
         public void InsertMuestra(Muestra muestra)
         {
-            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            try
             {
-                string query = "INSERT INTO muestra (id_paciente, id_tipo_examen, numero_muestra, fecha_muestra, fecha_informe) VALUES (@IdPaciente, @IdTipoExamen, @NumeroMuestra, @FechaMuestra, @FechaInforme)";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                command.Parameters.AddWithValue("@IdPaciente", muestra.IdPaciente);
-                command.Parameters.AddWithValue("@IdTipoExamen", muestra.IdTipoExamen);
-                command.Parameters.AddWithValue("@NumeroMuestra", muestra.NumeroMuestra);
-                command.Parameters.AddWithValue("@FechaMuestra", muestra.FechaMuestra);
-                command.Parameters.AddWithValue("@FechaInforme", (object)muestra.FechaInforme ?? DBNull.Value);
+                // Verifica que la cadena de conexión esté definida correctamente
+                using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+                {
+                    string query = @"
+                INSERT INTO muestra (id_proyecto, id_paciente, id_tipo_examen, numero_muestra, fecha_recepcion)
+                VALUES (@IdProyecto, @IdPaciente, @IdTipoExamen, @NumeroMuestra, @FechaRecepcion)";
 
-                connection.Open();
-                command.ExecuteNonQuery();
+                    // Comando para ejecutar la consulta
+                    using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                    {
+                        // Agrega los parámetros de la consulta
+                        command.Parameters.AddWithValue("@IdProyecto", muestra.IdProyecto);
+                        command.Parameters.AddWithValue("@IdPaciente", muestra.IdPaciente);
+                        command.Parameters.AddWithValue("@IdTipoExamen", muestra.IdTipoExamen);
+                        command.Parameters.AddWithValue("@NumeroMuestra", muestra.NumeroMuestra);
+                        command.Parameters.AddWithValue("@FechaRecepcion", muestra.FechaRecepcion);
+
+                        // Abre la conexión y ejecuta la consulta
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                // Mensaje de éxito
+                MessageBox.Show("Muestra guardada correctamente.");
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones en caso de error
+                MessageBox.Show($"Ocurrió un error al guardar la muestra: {ex.Message}");
             }
         }
-       
+
+        public int ObtenerUltimaMuestra(int idProyecto, DateTime fecha)
+        {
+            int ultimaMuestra = 0;
+            string query = @"
+SELECT COALESCE(MAX(numero_muestra), 0) 
+FROM muestra 
+WHERE id_proyecto = @idProyecto 
+AND fecha_recepcion::DATE = @fecha";
+
+            try
+            {
+                // Asegúrate de que la conexión se inicialice correctamente
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                        cmd.Parameters.AddWithValue("@fecha", fecha.Date);
+
+                        // Ejecutamos el comando y obtenemos el resultado
+                        var result = cmd.ExecuteScalar();
+                        if (result != DBNull.Value)
+                        {
+                            ultimaMuestra = Convert.ToInt32(result);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones para detectar problemas de conexión
+                Console.WriteLine($"Error al obtener la última muestra: {ex.Message}");
+                throw;  // Relanza la excepción para manejarla en otro nivel si es necesario
+            }
+
+            return ultimaMuestra;
+        }
+
+
+
 
     }
 }

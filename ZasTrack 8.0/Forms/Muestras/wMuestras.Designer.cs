@@ -28,30 +28,45 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             pnlProyecto = new Panel();
+            txtIdPaciente = new TextBox();
+            btnBuscar = new Button();
+            txtBuscar = new TextBox();
+            lblExamenes = new Label();
+            chkSangre = new CheckBox();
+            chkOrina = new CheckBox();
+            chkHeces = new CheckBox();
             txtFecha = new TextBox();
             cmbProyecto = new ComboBox();
             lblProyecto = new Label();
             btnGuardar = new Button();
-            cklExamenes = new CheckedListBox();
             lblFecha = new Label();
-            txtIdPaciente = new TextBox();
+            txtPaciente = new TextBox();
             lblRegMuestra = new Label();
             txtMuestrasId = new TextBox();
             label2 = new Label();
             lblMuestrasId = new Label();
+            proyectoBindingSource = new BindingSource(components);
             pnlProyecto.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)proyectoBindingSource).BeginInit();
             SuspendLayout();
             // 
             // pnlProyecto
             // 
+            pnlProyecto.Controls.Add(txtIdPaciente);
+            pnlProyecto.Controls.Add(btnBuscar);
+            pnlProyecto.Controls.Add(txtBuscar);
+            pnlProyecto.Controls.Add(lblExamenes);
+            pnlProyecto.Controls.Add(chkSangre);
+            pnlProyecto.Controls.Add(chkOrina);
+            pnlProyecto.Controls.Add(chkHeces);
             pnlProyecto.Controls.Add(txtFecha);
             pnlProyecto.Controls.Add(cmbProyecto);
             pnlProyecto.Controls.Add(lblProyecto);
             pnlProyecto.Controls.Add(btnGuardar);
-            pnlProyecto.Controls.Add(cklExamenes);
             pnlProyecto.Controls.Add(lblFecha);
-            pnlProyecto.Controls.Add(txtIdPaciente);
+            pnlProyecto.Controls.Add(txtPaciente);
             pnlProyecto.Controls.Add(lblRegMuestra);
             pnlProyecto.Controls.Add(txtMuestrasId);
             pnlProyecto.Controls.Add(label2);
@@ -63,26 +78,98 @@
             pnlProyecto.TabIndex = 0;
             pnlProyecto.Paint += pnlProyecto_Paint;
             // 
+            // txtIdPaciente
+            // 
+            txtIdPaciente.Location = new Point(304, 82);
+            txtIdPaciente.Name = "txtIdPaciente";
+            txtIdPaciente.Size = new Size(10, 23);
+            txtIdPaciente.TabIndex = 22;
+            txtIdPaciente.Visible = false;
+            // 
+            // btnBuscar
+            // 
+            btnBuscar.Location = new Point(59, 229);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(243, 25);
+            btnBuscar.TabIndex = 21;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
+            // 
+            // txtBuscar
+            // 
+            txtBuscar.Location = new Point(59, 200);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.Size = new Size(243, 23);
+            txtBuscar.TabIndex = 20;
+            // 
+            // lblExamenes
+            // 
+            lblExamenes.AutoSize = true;
+            lblExamenes.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblExamenes.Location = new Point(59, 312);
+            lblExamenes.Name = "lblExamenes";
+            lblExamenes.Size = new Size(82, 21);
+            lblExamenes.TabIndex = 19;
+            lblExamenes.Text = "Examenes:";
+            // 
+            // chkSangre
+            // 
+            chkSangre.AutoSize = true;
+            chkSangre.Font = new Font("Segoe UI", 13F);
+            chkSangre.Location = new Point(251, 342);
+            chkSangre.Name = "chkSangre";
+            chkSangre.Size = new Size(63, 29);
+            chkSangre.TabIndex = 18;
+            chkSangre.Text = "BCC";
+            chkSangre.UseVisualStyleBackColor = true;
+            chkSangre.CheckedChanged += chkSangre_CheckedChanged_1;
+            // 
+            // chkOrina
+            // 
+            chkOrina.AutoSize = true;
+            chkOrina.Font = new Font("Segoe UI", 13F);
+            chkOrina.Location = new Point(160, 342);
+            chkOrina.Name = "chkOrina";
+            chkOrina.Size = new Size(66, 29);
+            chkOrina.TabIndex = 17;
+            chkOrina.Text = "EGO";
+            chkOrina.UseVisualStyleBackColor = true;
+            // 
+            // chkHeces
+            // 
+            chkHeces.AutoSize = true;
+            chkHeces.Font = new Font("Segoe UI", 13F);
+            chkHeces.Location = new Point(59, 342);
+            chkHeces.Name = "chkHeces";
+            chkHeces.Size = new Size(65, 29);
+            chkHeces.TabIndex = 16;
+            chkHeces.Text = "EGH";
+            chkHeces.UseVisualStyleBackColor = true;
+            chkHeces.CheckedChanged += chkHeces_CheckedChanged;
+            // 
             // txtFecha
             // 
-            txtFecha.Location = new Point(328, 183);
+            txtFecha.Location = new Point(328, 200);
             txtFecha.Name = "txtFecha";
             txtFecha.Size = new Size(243, 23);
             txtFecha.TabIndex = 15;
+            txtFecha.TextChanged += txtFecha_TextChanged_1;
             // 
             // cmbProyecto
             // 
             cmbProyecto.FormattingEnabled = true;
-            cmbProyecto.Location = new Point(54, 140);
+            cmbProyecto.Location = new Point(59, 140);
             cmbProyecto.Name = "cmbProyecto";
             cmbProyecto.Size = new Size(189, 23);
             cmbProyecto.TabIndex = 13;
+            cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
             // lblProyecto
             // 
             lblProyecto.AutoSize = true;
             lblProyecto.Font = new Font("Segoe UI", 12F);
-            lblProyecto.Location = new Point(54, 116);
+            lblProyecto.Location = new Point(59, 116);
             lblProyecto.Name = "lblProyecto";
             lblProyecto.Size = new Size(74, 21);
             lblProyecto.TabIndex = 12;
@@ -98,33 +185,23 @@
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
             // 
-            // cklExamenes
-            // 
-            cklExamenes.Font = new Font("Segoe UI", 14F);
-            cklExamenes.FormattingEnabled = true;
-            cklExamenes.Items.AddRange(new object[] { "EGH", "EGO", "BCC" });
-            cklExamenes.Location = new Point(59, 303);
-            cklExamenes.Name = "cklExamenes";
-            cklExamenes.Size = new Size(184, 85);
-            cklExamenes.TabIndex = 9;
-            cklExamenes.SelectedIndexChanged += cklExamenes_SelectedIndexChanged;
-            // 
             // lblFecha
             // 
             lblFecha.AutoSize = true;
             lblFecha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblFecha.Location = new Point(249, 185);
+            lblFecha.Location = new Point(328, 176);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(53, 21);
             lblFecha.TabIndex = 8;
             lblFecha.Text = "Fecha:";
             // 
-            // txtIdPaciente
+            // txtPaciente
             // 
-            txtIdPaciente.Location = new Point(59, 256);
-            txtIdPaciente.Name = "txtIdPaciente";
-            txtIdPaciente.Size = new Size(243, 23);
-            txtIdPaciente.TabIndex = 7;
+            txtPaciente.Location = new Point(59, 286);
+            txtPaciente.Name = "txtPaciente";
+            txtPaciente.Size = new Size(243, 23);
+            txtPaciente.TabIndex = 7;
+            txtPaciente.TextChanged += txtIdPaciente_TextChanged;
             // 
             // lblRegMuestra
             // 
@@ -142,12 +219,13 @@
             txtMuestrasId.Name = "txtMuestrasId";
             txtMuestrasId.Size = new Size(243, 23);
             txtMuestrasId.TabIndex = 5;
+            txtMuestrasId.TextChanged += txtMuestrasId_TextChanged;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(59, 232);
+            label2.Location = new Point(59, 176);
             label2.Name = "label2";
             label2.Size = new Size(70, 21);
             label2.TabIndex = 1;
@@ -163,6 +241,10 @@
             lblMuestrasId.TabIndex = 0;
             lblMuestrasId.Text = "Muestra N°:";
             // 
+            // proyectoBindingSource
+            // 
+            proyectoBindingSource.DataSource = typeof(Models.Proyecto);
+            // 
             // wMuestras
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -175,6 +257,7 @@
             Load += wMuestras_Load;
             pnlProyecto.ResumeLayout(false);
             pnlProyecto.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)proyectoBindingSource).EndInit();
             ResumeLayout(false);
         }
 
@@ -185,12 +268,19 @@
         private Label lblMuestrasId;
         private TextBox txtMuestrasId;
         private Button btnGuardar;
-        private CheckedListBox cklExamenes;
         private Label lblFecha;
-        private TextBox txtIdPaciente;
+        private TextBox txtPaciente;
         private Label lblRegMuestra;
         private Label lblProyecto;
         private TextBox txtFecha;
         private ComboBox cmbProyecto;
+        private BindingSource proyectoBindingSource;
+        private Label lblExamenes;
+        private CheckBox chkSangre;
+        private CheckBox chkOrina;
+        private CheckBox chkHeces;
+        private Button btnBuscar;
+        private TextBox txtBuscar;
+        private TextBox txtIdPaciente;
     }
 }

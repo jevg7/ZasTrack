@@ -16,189 +16,176 @@ namespace ZasTrack.Forms.Muestras
     public partial class wMuestras : Form
     {
         private PacienteRepository pacienteRepository;
+        private MuestraRepository muestraRepository;
+        private ProyectoRepository proyectoRepository;
+        private int ultimoProyectoSeleccionado = -1;
 
         public wMuestras()
         {
-            InitializeComponent();
-            CargarProyectos();
-            txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            txtFecha.Enabled = false;
+            muestraRepository = new MuestraRepository();
             pacienteRepository = new PacienteRepository();
+            proyectoRepository = new ProyectoRepository();
+            InitializeComponent();
+
         }
 
         private void wMuestras_Load(object sender, EventArgs e)
         {
-            mostrarNumMuestra();
+            CargarProyectos();
+            fechaLock();
         }
-
         private void pnlProyecto_Paint(object sender, PaintEventArgs e)
         {
 
         }
-
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            GuardarMuestra();
+            
+            if (!chkOrina.Checked && !chkHeces.Checked && !chkSangre.Checked)
+            {
+                MessageBox.Show("Debe seleccionar al menos un tipo de examen.");
+                return;
+            }
 
-
+            guardarMuestra();
         }
 
+        private void guardarMuestra()
+        {
+            if (string.IsNullOrWhiteSpace(txtFecha.Text) || string.IsNullOrWhiteSpace(txtPaciente.Text) || string.IsNullOrWhiteSpace(txtMuestrasId.Text))
+            {
+                MessageBox.Show("Por favor, llene todos los campos");
+                return;
+            }
+
+            Muestra muestra = new Muestra()
+            {
+                IdProyecto = Convert.ToInt32(cmbProyecto.SelectedValue),
+                IdPaciente = Convert.ToInt32(txtIdPaciente.Text), // Usar el Id del paciente
+                NumeroMuestra = Convert.ToInt32(txtMuestrasId.Text),
+                FechaRecepcion = DateTime.Now
+            };
+
+            muestraRepository.InsertMuestra(muestra);
+            MessageBox.Show("Muestra guardada correctamente");
+            LimpiarCampos(false);
+        }
+
+
         private void txtFecha_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void cklExamenes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbProyecto.SelectedValue != null)
+            {
+                int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
+                ultimoProyectoSeleccionado = idProyecto;
+                txtMuestrasId.Text = (muestraRepository.ObtenerUltimaMuestra(idProyecto, DateTime.Now) + 1).ToString();
+            }
+        }
+        private void txtFecha_TextChanged_1(object sender, EventArgs e)
         {
             txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             txtFecha.Enabled = false;
         }
+        private void txtMuestrasId_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void chkHeces_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void chkOrina_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void chkSangre_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fechaLock()
+        {
+            txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            txtFecha.Enabled = false;
+            txtFecha.Font = new Font("Arial", 12, FontStyle.Regular);
+        }
+
         private void CargarProyectos()
         {
-            ProyectoRepository proyectoRepository = new ProyectoRepository();
             List<Proyecto> proyectos = proyectoRepository.ObtenerProyectos();
             cmbProyecto.DataSource = proyectos;
             cmbProyecto.DisplayMember = "nombre";
             cmbProyecto.ValueMember = "id_proyecto";
             cmbProyecto.SelectedIndex = -1;
         }
-        private bool validarNombre()
+        private void LimpiarCampos(bool limpiarProyecto = true)
         {
-            if (string.IsNullOrWhiteSpace(txtIdPaciente.Text))
+            txtPaciente.Clear();
+            chkOrina.Checked = false;
+            chkHeces.Checked = false;
+            chkSangre.Checked = false;
+            txtMuestrasId.Clear();
+
+            if (!limpiarProyecto && ultimoProyectoSeleccionado != -1)
             {
-                MessageBox.Show("El nombre del paciente es obligatorio.");
-                return false;
-            }
-            return true;
-        }
-        private List<int> obtTipoExaSelect()
-        {
-            List<int> tiposExamen = new List<int>();
-
-            // Recorrer los ítems seleccionados en el CheckedListBox
-            foreach (int index in cklExamenes.CheckedIndices)
-            {
-                // Mapear el índice al ID correspondiente
-                switch (index)
-                {
-                    case 0: // EGH (Heces)
-                        tiposExamen.Add(1);
-                        break;
-                    case 1: // EGO (Orina)
-                        tiposExamen.Add(2);
-                        break;
-                    case 2: // BCC (Sangre)
-                        tiposExamen.Add(3);
-                        break;
-                }
-            }
-
-            return tiposExamen;
-        }
-        private void GuardarMuestra()
-        {
-            if (!validarNombre() || !validarExamenes())
-                return;
-
-            int idProyecto = (int)cmbProyecto.SelectedValue;
-            DateTime fechaMuestra = DateTime.Now;
-            int numeroMuestra = obtSigMuestra(idProyecto, fechaMuestra);
-            string nombrePaciente = txtIdPaciente.Text;
-            List<int> tiposExamen = obtTipoExaSelect();
-
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
-            {
-                connection.Open();
-                using (NpgsqlTransaction transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        // Insertar la muestra
-                        string queryMuestra = "INSERT INTO muestra (id_proyecto, numero_muestra, fecha_muestra, nombre_paciente) VALUES (@IdProyecto, @NumeroMuestra, @FechaMuestra, @NombrePaciente) RETURNING id_muestra";
-                        NpgsqlCommand commandMuestra = new NpgsqlCommand(queryMuestra, connection, transaction);
-                        commandMuestra.Parameters.AddWithValue("@IdProyecto", idProyecto);
-                        commandMuestra.Parameters.AddWithValue("@NumeroMuestra", numeroMuestra);
-                        commandMuestra.Parameters.AddWithValue("@FechaMuestra", fechaMuestra);
-                        commandMuestra.Parameters.AddWithValue("@NombrePaciente", nombrePaciente);
-                        int idMuestra = Convert.ToInt32(commandMuestra.ExecuteScalar());
-
-                        // Insertar los tipos de examen seleccionados en muestra_examen
-                        foreach (int idTipoExamen in tiposExamen)
-                        {
-                            string queryExamen = "INSERT INTO muestra_examen (id_muestra, id_tipo_examen) VALUES (@IdMuestra, @IdTipoExamen)";
-                            NpgsqlCommand commandExamen = new NpgsqlCommand(queryExamen, connection, transaction);
-                            commandExamen.Parameters.AddWithValue("@IdMuestra", idMuestra);
-                            commandExamen.Parameters.AddWithValue("@IdTipoExamen", idTipoExamen);
-                            commandExamen.ExecuteNonQuery();
-                        }
-
-                        transaction.Commit();
-                        MessageBox.Show("Muestra guardada correctamente.");
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show("Error al guardar la muestra: " + ex.Message);
-                    }
-                }
+                cmbProyecto.SelectedValue = ultimoProyectoSeleccionado;
+                txtMuestrasId.Text = (muestraRepository.ObtenerUltimaMuestra(ultimoProyectoSeleccionado, DateTime.Now) + 1).ToString();
             }
         }
-        private void CargarTiposExamen()
+
+
+
+        private void txtIdPaciente_TextChanged(object sender, EventArgs e)
         {
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+
+        }
+
+        private void btnBuscarPaciente_Click(object sender, EventArgs e)
+        {
+       
+        }
+
+        private void chkSangre_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string criterio = txtBuscar.Text.Trim();
+            int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
+            List<pacientes> pacientes = pacienteRepository.BuscarPacientes(criterio, idProyecto);
+
+            if (pacientes.Count == 0)
             {
-                string query = "SELECT id_tipo_examen, nombre_examen FROM tipo_examen WHERE activo = true";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                connection.Open();
-                NpgsqlDataReader reader = command.ExecuteReader();
+                MessageBox.Show("No se encontraron pacientes.");
+            }
+            else if (pacientes.Count > 1)
+            {
+                MessageBox.Show("Hay múltiples pacientes con ese nombre. Intente buscar con el código de beneficiario.");
+            }
+            else
+            {
+                // Mostrar el nombre en el campo visible
+                txtPaciente.Text = pacientes[0].nombres + " " + pacientes[0].apellidos;
 
-                DataTable dt = new DataTable();
-                dt.Load(reader);
+                // Guardar el id del paciente en el campo oculto
+                txtIdPaciente.Text = pacientes[0].id_paciente.ToString();
+                txtIdPaciente.Visible = false; // Ocultar el campo de id paciente
+                txtPaciente.Enabled = false;
 
-                cklExamenes.DisplayMember = "nombre_examen";
-                cklExamenes.ValueMember = "id_tipo_examen";
-                cklExamenes.DataSource = dt;
             }
         }
-        private int obtSigMuestra(int idProyecto, DateTime fecha)
-        {
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
-            {
-                string query = "SELECT COALESCE(MAX(numero_muestra), 0) + 1 FROM muestra WHERE id_proyecto = @IdProyecto AND fecha_muestra = @FechaMuestra";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                command.Parameters.AddWithValue("@IdProyecto", idProyecto);
-                command.Parameters.AddWithValue("@FechaMuestra", fecha);
 
-                connection.Open();
-                return Convert.ToInt32(command.ExecuteScalar());
-            }
-        }
-        private bool validarExamenes()
-        {
-            if (cklExamenes.CheckedItems.Count == 0)
-            {
-                MessageBox.Show("Debe seleccionar al menos un tipo de examen.");
-                return false;
-            }
-            return true;
-        }
-        private void mostrarNumMuestra()
-        {
-            // Validar que se haya seleccionado un proyecto
-            if (cmbProyecto.SelectedValue == null)
-            {
-                MessageBox.Show("Debe seleccionar un proyecto para generar el número de muestra.");
-                return;
-            }
 
-            int idProyecto = (int)cmbProyecto.SelectedValue;
-            DateTime fechaMuestra = DateTime.Now;
 
-            // Obtener el siguiente número de muestra
-            int numeroMuestra = obtSigMuestra(idProyecto, fechaMuestra);
-
-            // Asignar el número de muestra al campo txtMuestrasId
-            txtMuestrasId.Text = numeroMuestra.ToString();
-        }
-
-        private void cklExamenes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            mostrarNumMuestra();
-        }
     }
 }

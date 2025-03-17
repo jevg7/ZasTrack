@@ -1,13 +1,12 @@
 ﻿namespace ZasTrack.Models
 {
 
-    public class examen
+    public class Examen
     {
-        public int id_examen { get; set; } // PK
-        public int id_persona { get; set; } // FK
-        public int id_tipo_examen { get; set; } // FK
-        public DateTime fecha_examen { get; set; }
-        public DateTime fecha_recepcion { get; set; }
-        public DateTime fecha_registro { get; set; }
+        public int IdExamen { get; set; } // PK
+        public int IdMuestra { get; set; } // FK
+        public int IdTipoExamen { get; set; } // FK
+        public int IdPaciente { get; set; } // FK
+        public DateTime FechaRecepcion { get; set; } // FK
     }
 }
