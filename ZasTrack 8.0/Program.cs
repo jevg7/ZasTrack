@@ -1,4 +1,5 @@
 using ZasTrack.Forms;
+using ZasTrack.Forms.Examenes;
 
 namespace ZasTrack
 {
@@ -13,7 +14,7 @@ namespace ZasTrack
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new wMain());
+            Application.Run(new BHC());
         }
     }
 }
