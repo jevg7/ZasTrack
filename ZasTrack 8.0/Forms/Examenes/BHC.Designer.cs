@@ -1,6 +1,6 @@
 ﻿namespace ZasTrack.Forms.Examenes
 {
-    partial class BHC
+    partial class wBHC
     {
         /// <summary>
         /// Required designer variable.
@@ -290,7 +290,7 @@
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
             // 
-            // BHC
+            // wBHC
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -323,8 +323,8 @@
             Controls.Add(label2);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "BHC";
-            Text = "v";
+            Name = "wBHC";
+            Text = "Biometria Hematica Completa";
             WindowState = FormWindowState.Minimized;
             ResumeLayout(false);
             PerformLayout();

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj": {}
+    "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj": {
+    "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
+        "projectUniqueName": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
         "projectName": "ZasTrack",
-        "projectPath": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
-        "packagesPath": "C:\\Users\\jairo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\obj\\",
+        "projectPath": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
+        "packagesPath": "C:\\Users\\alexj\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\jairo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\alexj\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

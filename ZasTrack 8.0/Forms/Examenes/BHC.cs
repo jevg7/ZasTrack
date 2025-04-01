@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ZasTrack.Forms.Examenes
 {
-    public partial class BHC : Form
+    public partial class wBHC : Form
     {
-        public BHC()
+        public wBHC()
         {
             InitializeComponent();
         }
