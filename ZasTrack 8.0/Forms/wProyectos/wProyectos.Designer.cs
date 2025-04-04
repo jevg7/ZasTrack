@@ -28,13 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
             lblAdmProyec = new Label();
-            flpProyList = new FlowLayoutPanel();
-            vScrollBar1 = new VScrollBar();
+            panel1 = new Panel();
+            panel2 = new Panel();
+            menuStrip1 = new MenuStrip();
+            agregarProyectoToolStripMenuItem = new ToolStripMenuItem();
+            editarProyectoToolStripMenuItem = new ToolStripMenuItem();
+            eliminarProyectoToolStripMenuItem = new ToolStripMenuItem();
+            verProyectoToolStripMenuItem = new ToolStripMenuItem();
+            pnlContenedor = new Panel();
             panel1.SuspendLayout();
-            flpProyList.SuspendLayout();
+            panel2.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
+            // 
+            // lblAdmProyec
+            // 
+            lblAdmProyec.AutoSize = true;
+            lblAdmProyec.Location = new Point(14, 12);
+            lblAdmProyec.Name = "lblAdmProyec";
+            lblAdmProyec.Size = new Size(193, 20);
+            lblAdmProyec.TabIndex = 0;
+            lblAdmProyec.Text = "Administrador de Proyectos";
+            lblAdmProyec.Click += lblAdmProyec_Click;
             // 
             // panel1
             // 
@@ -48,56 +64,94 @@
             panel1.TabIndex = 3;
             panel1.Paint += splitContainer1_Panel1_Paint_2;
             // 
-            // lblAdmProyec
+            // panel2
             // 
-            lblAdmProyec.AutoSize = true;
-            lblAdmProyec.Location = new Point(14, 12);
-            lblAdmProyec.Name = "lblAdmProyec";
-            lblAdmProyec.Size = new Size(193, 20);
-            lblAdmProyec.TabIndex = 0;
-            lblAdmProyec.Text = "Administrador de Proyectos";
-            lblAdmProyec.Click += lblAdmProyec_Click;
+            panel2.Controls.Add(menuStrip1);
+            panel2.Dock = DockStyle.Top;
+            panel2.Location = new Point(0, 37);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(1561, 29);
+            panel2.TabIndex = 8;
             // 
-            // flpProyList
+            // menuStrip1
             // 
-            flpProyList.Controls.Add(vScrollBar1);
-            flpProyList.Dock = DockStyle.Fill;
-            flpProyList.Location = new Point(0, 37);
-            flpProyList.Margin = new Padding(3, 4, 3, 4);
-            flpProyList.Name = "flpProyList";
-            flpProyList.Size = new Size(1561, 987);
-            flpProyList.TabIndex = 7;
-            flpProyList.Paint += flpProyList_Paint_2;
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { agregarProyectoToolStripMenuItem, editarProyectoToolStripMenuItem, eliminarProyectoToolStripMenuItem, verProyectoToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1561, 28);
+            menuStrip1.TabIndex = 0;
+            menuStrip1.Text = "menuStrip1";
             // 
-            // vScrollBar1
+            // agregarProyectoToolStripMenuItem
             // 
-            vScrollBar1.Location = new Point(0, 0);
-            vScrollBar1.Name = "vScrollBar1";
-            vScrollBar1.Size = new Size(22, 1156);
-            vScrollBar1.TabIndex = 4;
+            agregarProyectoToolStripMenuItem.Name = "agregarProyectoToolStripMenuItem";
+            agregarProyectoToolStripMenuItem.Size = new Size(139, 24);
+            agregarProyectoToolStripMenuItem.Text = "Agregar Proyecto";
+            agregarProyectoToolStripMenuItem.Click += agregarProyectoToolStripMenuItem_Click;
+            // 
+            // editarProyectoToolStripMenuItem
+            // 
+            editarProyectoToolStripMenuItem.Name = "editarProyectoToolStripMenuItem";
+            editarProyectoToolStripMenuItem.Size = new Size(124, 24);
+            editarProyectoToolStripMenuItem.Text = "Editar Proyecto";
+            editarProyectoToolStripMenuItem.Click += editarProyectoToolStripMenuItem_Click;
+            // 
+            // eliminarProyectoToolStripMenuItem
+            // 
+            eliminarProyectoToolStripMenuItem.Name = "eliminarProyectoToolStripMenuItem";
+            eliminarProyectoToolStripMenuItem.Size = new Size(139, 24);
+            eliminarProyectoToolStripMenuItem.Text = "Eliminar Proyecto";
+            eliminarProyectoToolStripMenuItem.Click += eliminarProyectoToolStripMenuItem_Click;
+            // 
+            // verProyectoToolStripMenuItem
+            // 
+            verProyectoToolStripMenuItem.Name = "verProyectoToolStripMenuItem";
+            verProyectoToolStripMenuItem.Size = new Size(106, 24);
+            verProyectoToolStripMenuItem.Text = "Ver Proyecto";
+            verProyectoToolStripMenuItem.Click += verProyectoToolStripMenuItem_Click;
+            // 
+            // pnlContenedor
+            // 
+            pnlContenedor.Dock = DockStyle.Fill;
+            pnlContenedor.Location = new Point(0, 66);
+            pnlContenedor.Name = "pnlContenedor";
+            pnlContenedor.Size = new Size(1561, 958);
+            pnlContenedor.TabIndex = 9;
+            pnlContenedor.Paint += pnlContenedor_Paint;
             // 
             // wProyectos
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1561, 1024);
-            Controls.Add(flpProyList);
+            Controls.Add(pnlContenedor);
+            Controls.Add(panel2);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
+            MainMenuStrip = menuStrip1;
             Margin = new Padding(3, 4, 3, 4);
             Name = "wProyectos";
             Text = "Proyectos";
             Load += wProyectos_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            flpProyList.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
-        private Panel panel1;
         private Label lblAdmProyec;
-        private FlowLayoutPanel flpProyList;
-        private VScrollBar vScrollBar1;
+        private Panel panel1;
+        private Panel panel2;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem agregarProyectoToolStripMenuItem;
+        private ToolStripMenuItem editarProyectoToolStripMenuItem;
+        private ToolStripMenuItem eliminarProyectoToolStripMenuItem;
+        private ToolStripMenuItem verProyectoToolStripMenuItem;
+        private Panel pnlContenedor;
     }
 }

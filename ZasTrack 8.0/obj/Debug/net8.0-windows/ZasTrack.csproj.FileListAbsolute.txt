@@ -172,3 +172,6 @@ C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.genruntimeconfig.cache
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ref\ZasTrack.dll
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.wBHC.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.EGH.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.EGO.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wVerProyecto.resources

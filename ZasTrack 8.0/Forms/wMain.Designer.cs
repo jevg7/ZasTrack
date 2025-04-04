@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(wMain));
             pnlMenu = new Panel();
             btnMuestras = new Button();
             btnAgregarProyecto = new Button();
@@ -211,6 +212,7 @@
             ClientSize = new Size(1543, 996);
             Controls.Add(pnlMenu);
             Controls.Add(pnlContenedor);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5, 4, 5, 4);
             Name = "wMain";
             StartPosition = FormStartPosition.CenterScreen;
