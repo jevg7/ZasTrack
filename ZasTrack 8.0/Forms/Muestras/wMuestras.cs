@@ -15,18 +15,22 @@ namespace ZasTrack.Forms.Muestras
 {
     public partial class wMuestras : Form
     {
+       
         private PacienteRepository pacienteRepository;
         private MuestraRepository muestraRepository;
         private ProyectoRepository proyectoRepository;
+        private MuestraExamenRepository muestraExamenRepository;
         private int ultimoProyectoSeleccionado = -1;
 
         public wMuestras()
         {
+            // Asegúrate de pasar la cadena de conexión correcta al constructor
+            string connectionString = "YourConnectionStringHere"; // Reemplaza con tu cadena de conexión real
             muestraRepository = new MuestraRepository();
             pacienteRepository = new PacienteRepository();
             proyectoRepository = new ProyectoRepository();
+            muestraExamenRepository = new MuestraExamenRepository(connectionString);
             InitializeComponent();
-
         }
 
         private void wMuestras_Load(object sender, EventArgs e)
@@ -58,19 +62,32 @@ namespace ZasTrack.Forms.Muestras
                 return;
             }
 
+            int idTipoExamen = 0;
+            if (chkOrina.Checked)
+            {
+                idTipoExamen = 1; // ID para orina
+            }
+            else if (chkHeces.Checked)
+            {
+                idTipoExamen = 2; // ID para heces
+            }
+            else if (chkSangre.Checked)
+            {
+                idTipoExamen = 3; // ID para sangre
+            }
+
             Muestra muestra = new Muestra()
             {
                 IdProyecto = Convert.ToInt32(cmbProyecto.SelectedValue),
                 IdPaciente = Convert.ToInt32(txtIdPaciente.Text), // Usar el Id del paciente
+                IdTipoExamen = idTipoExamen,
                 NumeroMuestra = Convert.ToInt32(txtMuestrasId.Text),
                 FechaRecepcion = DateTime.Now
             };
 
-            muestraRepository.InsertMuestra(muestra);
+            muestraRepository.GuardarMuestras(muestra);
             MessageBox.Show("Muestra guardada correctamente");
-            LimpiarCampos(false);
         }
-
 
         private void txtFecha_TextChanged(object sender, EventArgs e)
         {
@@ -96,20 +113,9 @@ namespace ZasTrack.Forms.Muestras
         }
         private void txtMuestrasId_TextChanged(object sender, EventArgs e)
         {
-
+            txtMuestrasId.Enabled = false;
         }
-        private void chkHeces_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void chkOrina_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void chkSangre_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void fechaLock()
         {
@@ -142,22 +148,6 @@ namespace ZasTrack.Forms.Muestras
         }
 
 
-
-        private void txtIdPaciente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnBuscarPaciente_Click(object sender, EventArgs e)
-        {
-       
-        }
-
-        private void chkSangre_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string criterio = txtBuscar.Text.Trim();
@@ -185,7 +175,34 @@ namespace ZasTrack.Forms.Muestras
             }
         }
 
+        #region useles ahh shi
+        private void txtIdPaciente_TextChanged(object sender, EventArgs e)
+        {
 
+        }
+
+        private void btnBuscarPaciente_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkSangre_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+        private void chkHeces_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void chkOrina_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void chkSangre_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
 
     }
 }

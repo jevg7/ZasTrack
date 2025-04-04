@@ -158,6 +158,7 @@ namespace ZasTrack.Forms.wProyectos
 
         private void pnlContenedor_Paint(object sender, PaintEventArgs e)
         {
+         
 
         }
     }

@@ -15,17 +15,5 @@ namespace ZasTrack.Models
         public int NumeroMuestra { get; set; }
         public DateTime FechaRecepcion { get; set; }
 
-        // Constructor sin parámetros
-        public Muestra() { }
-
-        // Constructor con parámetros
-        public Muestra(int idProyecto, int idPaciente, int idTipoExamen, int numeroMuestra, DateTime fechaRecepcion)
-        {
-            IdProyecto = idProyecto;
-            IdPaciente = idPaciente;
-            IdTipoExamen = idTipoExamen;
-            NumeroMuestra = numeroMuestra;
-            FechaRecepcion = fechaRecepcion;
-        }
     }
 }
