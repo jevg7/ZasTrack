@@ -4,8 +4,9 @@
     "\\ZasTrack 8.0",
     "\\ZasTrack 8.0\\Forms",
     "\\ZasTrack 8.0\\Forms\\Dashboard",
-    "\\ZasTrack 8.0\\Forms\\Examenes"
+    "\\ZasTrack 8.0\\Forms\\Examenes",
+    "\\ZasTrack 8.0\\Repositories"
   ],
-  "SelectedNode": "\\ZasTrack 8.0\\Forms\\Examenes\\BHC.cs",
+  "SelectedNode": "\\ZasTrack 8.0\\Repositories\\MuestraRepository.cs",
   "PreviewInSolutionExplorer": false
 }

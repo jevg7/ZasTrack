@@ -83,7 +83,7 @@ namespace ZasTrack.Forms.wProyectos
 
         private void Abrir_Form(object formhijo)
         {
-          
+
         }
         private async void CargarProyectosAsync()
         {
@@ -110,7 +110,7 @@ namespace ZasTrack.Forms.wProyectos
                     Console.WriteLine($"Agregando proyecto: {proyecto.nombre}");
                     Panel pnlProyecto = new Panel
                     {
-                        Size = new Size(200, 100),
+                        Size = new Size(300, 150),
                         BackColor = SystemColors.ControlLight,
                         Margin = new Padding(10),
                         BorderStyle = BorderStyle.FixedSingle
@@ -120,10 +120,11 @@ namespace ZasTrack.Forms.wProyectos
                     {
                         Text = proyecto.nombre,
                         AutoSize = false,
-                        Size = new Size(180, 40),
-                        Location = new Point(10, 10),
+                        Size = new Size(180, 50),
+                        Location = new Point(5, 10),
                         TextAlign = ContentAlignment.MiddleCenter,
-                        Font = new Font("Segoe UI", 12, FontStyle.Bold)
+                        Font = new Font("Segoe UI", 10, FontStyle.Bold),                      
+                        BorderStyle = BorderStyle.Fixed3D,
                     };
 
                     Label lblFechaInicio = new Label
@@ -145,11 +146,19 @@ namespace ZasTrack.Forms.wProyectos
                         TextAlign = ContentAlignment.MiddleLeft,
                         Font = new Font("Segoe UI", 9)
                     };
-
+                    Button btnDetalles = new Button
+                    {
+                        Text = "Detalles",
+                        Size = new Size(80, 30),
+                        Location = new Point(10, 100),
+                        BackColor = Color.LightBlue,
+                        FlatStyle = FlatStyle.Flat
+                    };
 
                     pnlProyecto.Controls.Add(lblNombre);
                     pnlProyecto.Controls.Add(lblFechaInicio);
                     pnlProyecto.Controls.Add(lblFechaFin);
+                    pnlProyecto.Controls.Add(btnDetalles);
 
                     flpProyList.Controls.Add(pnlProyecto);
                 }
@@ -225,6 +234,11 @@ namespace ZasTrack.Forms.wProyectos
         }
 
         private void pnlProyChildren_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void flpProyList_Paint_2(object sender, PaintEventArgs e)
         {
 
         }
