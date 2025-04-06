@@ -16,5 +16,10 @@ namespace ZasTrack.Forms
         {
             InitializeComponent();
         }
+
+        private void wEliminarProyecto_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

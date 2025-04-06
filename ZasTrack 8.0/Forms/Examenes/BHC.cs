@@ -43,5 +43,10 @@ namespace ZasTrack.Forms.Examenes
 
 
         }
+
+        private void wBHC_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

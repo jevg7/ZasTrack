@@ -38,10 +38,7 @@ namespace ZasTrack.Forms.Muestras
             CargarProyectos();
             fechaLock();
         }
-        private void pnlProyecto_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+       
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             
@@ -87,16 +84,7 @@ namespace ZasTrack.Forms.Muestras
 
             muestraRepository.GuardarMuestras(muestra);
             MessageBox.Show("Muestra guardada correctamente");
-        }
-
-        private void txtFecha_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void cklExamenes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        }       
         private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbProyecto.SelectedValue != null)
@@ -114,8 +102,7 @@ namespace ZasTrack.Forms.Muestras
         private void txtMuestrasId_TextChanged(object sender, EventArgs e)
         {
             txtMuestrasId.Enabled = false;
-        }
-       
+        }      
 
         private void fechaLock()
         {
@@ -123,7 +110,6 @@ namespace ZasTrack.Forms.Muestras
             txtFecha.Enabled = false;
             txtFecha.Font = new Font("Arial", 12, FontStyle.Regular);
         }
-
         private void CargarProyectos()
         {
             List<Proyecto> proyectos = proyectoRepository.ObtenerProyectos();
@@ -146,8 +132,6 @@ namespace ZasTrack.Forms.Muestras
                 txtMuestrasId.Text = (muestraRepository.ObtenerUltimaMuestra(ultimoProyectoSeleccionado, DateTime.Now) + 1).ToString();
             }
         }
-
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string criterio = txtBuscar.Text.Trim();
@@ -199,6 +183,20 @@ namespace ZasTrack.Forms.Muestras
 
         }
         private void chkSangre_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlProyecto_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtFecha_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void cklExamenes_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

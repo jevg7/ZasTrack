@@ -16,5 +16,10 @@ namespace ZasTrack.Forms.Examenes
         {
             InitializeComponent();
         }
+
+        private void wExamenes_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

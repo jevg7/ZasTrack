@@ -32,12 +32,14 @@
             // 
             // wExamenes
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1184, 661);
+            ClientSize = new Size(1353, 881);
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(3, 4, 3, 4);
             Name = "wExamenes";
             Text = "wExamenes";
+            Load += wExamenes_Load;
             ResumeLayout(false);
         }
 

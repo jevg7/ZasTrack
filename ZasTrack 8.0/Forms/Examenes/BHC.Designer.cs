@@ -326,6 +326,7 @@
             Name = "wBHC";
             Text = "Biometria Hematica Completa";
             WindowState = FormWindowState.Minimized;
+            Load += wBHC_Load;
             ResumeLayout(false);
             PerformLayout();
         }
