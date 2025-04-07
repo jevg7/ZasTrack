@@ -13,7 +13,7 @@ namespace ZasTrack.Models
         public int IdPaciente { get; set; }
         public int IdTipoExamen { get; set; }
         public int NumeroMuestra { get; set; }
-        public DateTime FechaRecepcion { get; set; }
+        public DateTime FechaRecepcion { get; set; }         
 
     }
 }

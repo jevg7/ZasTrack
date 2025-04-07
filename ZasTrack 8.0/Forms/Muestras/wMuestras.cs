@@ -20,6 +20,7 @@ namespace ZasTrack.Forms.Muestras
         private MuestraRepository muestraRepository;
         private ProyectoRepository proyectoRepository;
         private int ultimoProyectoSeleccionado = -1;
+        private MuestraExamenRepository muestraExamenRepository;
 
         public wMuestras()
         {
@@ -28,7 +29,10 @@ namespace ZasTrack.Forms.Muestras
             muestraRepository = new MuestraRepository();
             pacienteRepository = new PacienteRepository();
             proyectoRepository = new ProyectoRepository();
+            muestraExamenRepository = new MuestraExamenRepository();
+
             InitializeComponent();
+
         }
 
         private void wMuestras_Load(object sender, EventArgs e)
@@ -118,32 +122,33 @@ namespace ZasTrack.Forms.Muestras
                 MessageBox.Show("Por favor, llene todos los campos");
                 return;
             }
+            int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
+            DateTime fechaActual = DateTime.Now.Date;
+            int numeroMuestra = muestraRepository.ObtenerUltimaMuestra(idProyecto, fechaActual) + 1;
 
-            int idTipoExamen = 0;
-            if (chkOrina.Checked)
-            {
-                idTipoExamen = 1; // ID para orina
-            }
-            else if (chkHeces.Checked)
-            {
-                idTipoExamen = 2; // ID para heces
-            }
-            else if (chkSangre.Checked)
-            {
-                idTipoExamen = 3; // ID para sangre
-            }
-
+            // 1. Primero crea y guarda la muestra
             Muestra muestra = new Muestra()
             {
-                IdProyecto = Convert.ToInt32(cmbProyecto.SelectedValue),
-                IdPaciente = Convert.ToInt32(txtIdPaciente.Text), // Usar el Id del paciente
-                IdTipoExamen = idTipoExamen,
-                NumeroMuestra = Convert.ToInt32(txtMuestrasId.Text),
-                FechaRecepcion = DateTime.Now
+                IdProyecto = idProyecto,
+                IdPaciente = Convert.ToInt32(txtIdPaciente.Text),
+                NumeroMuestra = numeroMuestra,
+                FechaRecepcion = fechaActual
             };
 
-            muestraRepository.GuardarMuestras(muestra);
+            int idMuestra = muestraRepository.GuardarMuestras(muestra);
+
+            // 2. Luego vincula los exámenes
+            if (chkOrina.Checked)
+                muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 1 });
+
+            if (chkHeces.Checked)
+                muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 2 });
+
+            if (chkSangre.Checked)
+                muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 3 });
+
             MessageBox.Show("Muestra guardada correctamente");
+            LimpiarCampos();
         }
         private void fechaLock()
         {

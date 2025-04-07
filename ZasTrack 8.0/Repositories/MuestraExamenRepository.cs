@@ -1,19 +1,19 @@
-﻿using Npgsql;
+﻿// MuestraExamenRepository.cs
+using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using ZasTrack.Models;
 
 namespace ZasTrack.Repositories
 {
-    public class MuestraRepository
+    public class MuestraExamenRepository
     {
-        public int GuardarMuestras(Muestra muestra)
+        public void VincularExamen(MuestraExamen muestraExamen)
         {
             string query = @"
-        INSERT INTO muestra (fecha_recepcion, id_proyecto, id_paciente, numero_muestra)
-        VALUES (@FechaRecepcion, @IdProyecto, @IdPaciente, @NumeroMuestra)
-        RETURNING id_muestra";
+                INSERT INTO muestra_examen (id_muestra, id_tipo_examen)
+                VALUES (@IdMuestra, @IdTipoExamen)
+                ON CONFLICT (id_muestra, id_tipo_examen) DO NOTHING";
 
             try
             {
@@ -22,58 +22,9 @@ namespace ZasTrack.Repositories
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@FechaRecepcion", muestra.FechaRecepcion);
-                        cmd.Parameters.AddWithValue("@IdProyecto", muestra.IdProyecto);
-                        cmd.Parameters.AddWithValue("@IdPaciente", muestra.IdPaciente);
-                        cmd.Parameters.AddWithValue("@NumeroMuestra", muestra.NumeroMuestra);
-                        return Convert.ToInt32(cmd.ExecuteScalar());
-
-
-                    }
-                }            
-            }
-            catch (NpgsqlException ex)
-            {
-                Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
-                Console.WriteLine($"Código de error: {ex.SqlState}");
-                throw; // Relanza la excepción para que el llamador pueda manejarla
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error general: {ex.Message}");
-                Console.WriteLine(ex.StackTrace);
-                throw; // Relanza la excepción para que el llamador pueda manejarla
-            }
-
-        }
-
-
-        public int ObtenerUltimaMuestra(int idProyecto, DateTime fecha)
-        {
-            int ultimaMuestra = 0;
-            string query = @"
-                SELECT COALESCE(MAX(numero_muestra), 0) 
-                FROM muestra 
-                WHERE id_proyecto = @idProyecto 
-                AND fecha_recepcion::DATE = @fecha";
-
-            try
-            {
-                // Asegúrate de que la conexión se inicialice correctamente
-                using (var conn = DatabaseConnection.GetConnection())
-                {
-                    conn.Open();
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                        cmd.Parameters.AddWithValue("@fecha", fecha.Date);
-
-                        // Ejecutamos el comando y obtenemos el resultado
-                        var result = cmd.ExecuteScalar();
-                        if (result != DBNull.Value)
-                        {
-                            ultimaMuestra = Convert.ToInt32(result);
-                        }
+                        cmd.Parameters.AddWithValue("@IdMuestra", muestraExamen.IdMuestra);
+                        cmd.Parameters.AddWithValue("@IdTipoExamen", muestraExamen.IdTipoExamen);
+                        cmd.ExecuteNonQuery();
                     }
                 }
             }
@@ -89,8 +40,45 @@ namespace ZasTrack.Repositories
                 Console.WriteLine(ex.StackTrace);
                 throw; // Relanza la excepción para que el llamador pueda manejarla
             }
-            return ultimaMuestra;
+        }
+
+        public List<int> GetExamenesPorMuestra(int idMuestra)
+        {
+
+           
+            var examenes = new List<int>();
+            string query = "SELECT id_tipo_examen FROM muestra_examen WHERE id_muestra = @IdMuestra";
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IdMuestra", idMuestra);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            examenes.Add(reader.GetInt32(0));
+                        }
+                    }
+                }
+            }
+            return examenes;
+            }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
+                Console.WriteLine($"Código de error: {ex.SqlState}");
+                throw; // Relanza la excepción para que el llamador pueda manejarla
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw; // Relanza la excepción para que el llamador pueda manejarla
+            }
         }
     }
 }
-

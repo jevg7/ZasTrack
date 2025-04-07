@@ -7,6 +7,6 @@
         public int IdMuestra { get; set; } // FK
         public int IdTipoExamen { get; set; } // FK
         public int IdPaciente { get; set; } // FK
-        public DateTime FechaRecepcion { get; set; } // FK
+        public DateTime FechaProcesamiento { get; set; } // FK
     }
 }
