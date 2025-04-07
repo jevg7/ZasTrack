@@ -21,12 +21,62 @@ namespace ZasTrack.Forms.Estudiantes
         {
             InitializeComponent();
             pacienteRepository = new PacienteRepository();
-
-
-
         }
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            btnEliminar.Visible = true;
+            btnCancelar.Visible = false;
+            btnGuardar.Visible = false;
+            txtCodigoBen.Enabled = false;
+            txtNombres.Enabled = false;
+            txtApellidos.Enabled = false;
+            txtObservacion.Enabled = false;
+            dtpFechaNac.Enabled = false;
+            txtGenero.Show();
+            cmbGenero.Hide();
+        }           
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            btnEliminar.Visible = false;
+            btnCancelar.Visible = true;
+            btnGuardar.Visible = true;
+            txtCodigoBen.Enabled = true;
+            txtNombres.Enabled = true;
+            txtApellidos.Enabled = true;
+            txtObservacion.Enabled = true;
+            dtpFechaNac.Enabled = true;
+            txtGenero.Hide();
+            cmbGenero.Show();
+        }      
+        private void wEditarEliminarEstudiante_Load(object sender, EventArgs e)
+        {
+            cmbGenero.Items.Add("Masculino");
+            cmbGenero.Items.Add("Femenino");
+            cmbGenero.SelectedIndex = 0;
+            CargarProyectos();
+        }
+        private void dtpFechaNac_ValueChanged(object sender, EventArgs e)
+        {
+            string fecha = "00/00/0000";
+            fecha = string.Format("{0: yyyy-MM-dd}", dtpFechaNac.Value);
+            DateTime fechaNacimiento = DateTime.Parse(fecha);
 
+            int edad = DateTime.Today.Year - fechaNacimiento.Year;
 
+            if (DateTime.Today < fechaNacimiento.AddYears(edad))
+                --edad;
+
+            txtEdad.Text = edad.ToString();
+        }      
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            editarPaciente();
+
+        }    
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            BuscarPacientes();
+        }
 
         #region Metodos
 
@@ -86,99 +136,7 @@ namespace ZasTrack.Forms.Estudiantes
             cmbProyecto.ValueMember = "id_proyecto";
             cmbProyecto.SelectedIndex = -1;
         }
-
-
-
-
-        private string CapitalizarTexto(string texto)
-        {
-            if (string.IsNullOrWhiteSpace(texto))
-                return texto;
-
-            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-            return textInfo.ToTitleCase(texto.ToLower());
-        }
-        #endregion
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            btnEliminar.Visible = true;
-            btnCancelar.Visible = false;
-            btnGuardar.Visible = false;
-            txtCodigoBen.Enabled = false;
-            txtNombres.Enabled = false;
-            txtApellidos.Enabled = false;
-            txtObservacion.Enabled = false;
-            dtpFechaNac.Enabled = false;
-            txtGenero.Show();
-            cmbGenero.Hide();
-
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnEditar_Click(object sender, EventArgs e)
-        {
-            btnEliminar.Visible = false;
-            btnCancelar.Visible = true;
-            btnGuardar.Visible = true;
-            txtCodigoBen.Enabled = true;
-            txtNombres.Enabled = true;
-            txtApellidos.Enabled = true;
-            txtObservacion.Enabled = true;
-            dtpFechaNac.Enabled = true;
-            txtGenero.Hide();
-            cmbGenero.Show();
-
-        }
-
-        private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void wEditarEliminarEstudiante_Load(object sender, EventArgs e)
-        {
-            cmbGenero.Items.Add("Masculino");
-            cmbGenero.Items.Add("Femenino");
-            cmbGenero.SelectedIndex = 0;
-            CargarProyectos();
-        }
-
-        private void dtpFechaNac_ValueChanged(object sender, EventArgs e)
-        {
-            string fecha = "00/00/0000";
-            fecha = string.Format("{0: yyyy-MM-dd}", dtpFechaNac.Value);
-            DateTime fechaNacimiento = DateTime.Parse(fecha);
-
-            int edad = DateTime.Today.Year - fechaNacimiento.Year;
-
-            if (DateTime.Today < fechaNacimiento.AddYears(edad))
-                --edad;
-
-            txtEdad.Text = edad.ToString();
-        }
-
-        private void btnEliminar_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            editarPaciente();
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void btnBuscar_Click(object sender, EventArgs e)
+        private void BuscarPacientes()
         {
             string codigo = txtBusqueda.Text; // oe jairo sos baboso, habias puesto el txt de abajo no el de arriba, con razon no servia
 
@@ -201,6 +159,17 @@ namespace ZasTrack.Forms.Estudiantes
 
             }
         }
+        private string CapitalizarTexto(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return texto;
+
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(texto.ToLower());
+        }
+
+        #endregion
+        #region Windows Form Designer generated code
 
         private void txtBusqueda_TextChanged(object sender, EventArgs e)
         {
@@ -211,5 +180,26 @@ namespace ZasTrack.Forms.Estudiantes
         {
 
         }
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void lblNombres_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

@@ -38,11 +38,7 @@ namespace ZasTrack
             fh.Show(); // Muestra el formulario.
         }
 
-        private void pnlCntEstudiantes_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
+       
         private void editarEliminarEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Abrir_Form(new wEditarEliminarPaciente());
@@ -52,10 +48,16 @@ namespace ZasTrack
         {
             Abrir_Form(new wVerPaciente());
         }
-
+        #region Windows Forms Designer generated code
         private void wPaciente_Load(object sender, EventArgs e)
         {
 
         }
+        private void pnlCntEstudiantes_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }

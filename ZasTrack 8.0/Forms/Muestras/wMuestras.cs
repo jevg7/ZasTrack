@@ -51,6 +51,68 @@ namespace ZasTrack.Forms.Muestras
             guardarMuestra();
         }
 
+        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbProyecto.SelectedValue != null)
+            {
+                int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
+                ultimoProyectoSeleccionado = idProyecto;
+                txtMuestrasId.Text = (muestraRepository.ObtenerUltimaMuestra(idProyecto, DateTime.Now) + 1).ToString();
+            }
+        }
+        private void txtFecha_TextChanged_1(object sender, EventArgs e)
+        {
+            txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            txtFecha.Enabled = false;
+        }
+        private void txtMuestrasId_TextChanged(object sender, EventArgs e)
+        {
+            txtMuestrasId.Enabled = false;
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string criterio = txtBuscar.Text.Trim();
+            int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
+            List<pacientes> pacientes = pacienteRepository.BuscarPacientes(criterio, idProyecto);
+
+            if (pacientes.Count == 0)
+            {
+                MessageBox.Show("No se encontraron pacientes.");
+            }
+            else if (pacientes.Count > 1)
+            {
+                MessageBox.Show("Hay múltiples pacientes con ese nombre. Intente buscar con el código de beneficiario.");
+            }
+            else
+            {
+                // Mostrar el nombre en el campo visible
+                txtPaciente.Text = pacientes[0].nombres + " " + pacientes[0].apellidos;
+
+                // Guardar el id del paciente en el campo oculto
+                txtIdPaciente.Text = pacientes[0].id_paciente.ToString();
+                txtIdPaciente.Visible = false; // Ocultar el campo de id paciente
+                txtPaciente.Enabled = false;
+
+            }
+        }
+
+        #region Metodos
+        private void LimpiarCampos(bool limpiarProyecto = true)
+        {
+            txtPaciente.Clear();
+            chkOrina.Checked = false;
+            chkHeces.Checked = false;
+            chkSangre.Checked = false;
+            txtMuestrasId.Clear();
+
+            if (!limpiarProyecto && ultimoProyectoSeleccionado != -1)
+            {
+                cmbProyecto.SelectedValue = ultimoProyectoSeleccionado;
+                txtMuestrasId.Text = (muestraRepository.ObtenerUltimaMuestra(ultimoProyectoSeleccionado, DateTime.Now) + 1).ToString();
+            }
+        }
+
         private void guardarMuestra()
         {
             if (string.IsNullOrWhiteSpace(txtFecha.Text) || string.IsNullOrWhiteSpace(txtPaciente.Text) || string.IsNullOrWhiteSpace(txtMuestrasId.Text))
@@ -84,26 +146,7 @@ namespace ZasTrack.Forms.Muestras
 
             muestraRepository.GuardarMuestras(muestra);
             MessageBox.Show("Muestra guardada correctamente");
-        }       
-        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbProyecto.SelectedValue != null)
-            {
-                int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
-                ultimoProyectoSeleccionado = idProyecto;
-                txtMuestrasId.Text = (muestraRepository.ObtenerUltimaMuestra(idProyecto, DateTime.Now) + 1).ToString();
-            }
         }
-        private void txtFecha_TextChanged_1(object sender, EventArgs e)
-        {
-            txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            txtFecha.Enabled = false;
-        }
-        private void txtMuestrasId_TextChanged(object sender, EventArgs e)
-        {
-            txtMuestrasId.Enabled = false;
-        }      
-
         private void fechaLock()
         {
             txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -118,46 +161,7 @@ namespace ZasTrack.Forms.Muestras
             cmbProyecto.ValueMember = "id_proyecto";
             cmbProyecto.SelectedIndex = -1;
         }
-        private void LimpiarCampos(bool limpiarProyecto = true)
-        {
-            txtPaciente.Clear();
-            chkOrina.Checked = false;
-            chkHeces.Checked = false;
-            chkSangre.Checked = false;
-            txtMuestrasId.Clear();
-
-            if (!limpiarProyecto && ultimoProyectoSeleccionado != -1)
-            {
-                cmbProyecto.SelectedValue = ultimoProyectoSeleccionado;
-                txtMuestrasId.Text = (muestraRepository.ObtenerUltimaMuestra(ultimoProyectoSeleccionado, DateTime.Now) + 1).ToString();
-            }
-        }
-        private void btnBuscar_Click(object sender, EventArgs e)
-        {
-            string criterio = txtBuscar.Text.Trim();
-            int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
-            List<pacientes> pacientes = pacienteRepository.BuscarPacientes(criterio, idProyecto);
-
-            if (pacientes.Count == 0)
-            {
-                MessageBox.Show("No se encontraron pacientes.");
-            }
-            else if (pacientes.Count > 1)
-            {
-                MessageBox.Show("Hay múltiples pacientes con ese nombre. Intente buscar con el código de beneficiario.");
-            }
-            else
-            {
-                // Mostrar el nombre en el campo visible
-                txtPaciente.Text = pacientes[0].nombres + " " + pacientes[0].apellidos;
-
-                // Guardar el id del paciente en el campo oculto
-                txtIdPaciente.Text = pacientes[0].id_paciente.ToString();
-                txtIdPaciente.Visible = false; // Ocultar el campo de id paciente
-                txtPaciente.Enabled = false;
-
-            }
-        }
+        #endregion
 
         #region useles ahh shi
         private void txtIdPaciente_TextChanged(object sender, EventArgs e)

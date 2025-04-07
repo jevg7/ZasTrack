@@ -22,8 +22,50 @@ namespace ZasTrack.Forms.wProyectos
         {
             InitializeComponent();
             proyectoRepository = new ProyectoRepository(); // Inicializar el repositorio
+        }      
+
+        private void btnAggProyect_Click1(object sender, EventArgs e)
+        {
+            // Abrir el formulario wAñadirProyecto como un diálogo
+            using (var form = new wAñadirProyecto()) ;
+
+        }    
+
+        private void Abrir_Form(object formhijo)
+        {
+
+            if (this.pnlContenedor.Controls.Count > 0)
+                this.pnlContenedor.Controls.RemoveAt(0); // Elimina cualquier control existente del panel contenedor.
+
+            Form fh = formhijo as Form; // Convierte el objeto de entrada en un formulario.
+            fh.TopLevel = false; // Establece la propiedad TopLevel del formulario como false.
+            fh.Dock = DockStyle.Fill; // Establece la propiedad Dock del formulario para que ocupe todo el espacio del panel contenedor.
+            this.pnlContenedor.Controls.Add(fh); // Agrega el formulario al panel contenedor.
+            this.pnlContenedor.Tag = fh; // Establece la propiedad Tag del panel contenedor como el formulario.
+            fh.Show(); // Muestra el formulario.
+        }             
+
+        private void agregarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.wAñadirProyecto());
+
         }
 
+        private void editarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.wEditarProyecto());
+        }
+
+        private void verProyectoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.wProyectos.wVerProyecto());
+        }
+
+        private void eliminarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.wEliminarProyecto());
+        }
+        #region Windows Form Designer generated code
         private void tsmiAñadirProyectos_Click(object sender, EventArgs e)
         {
 
@@ -53,14 +95,6 @@ namespace ZasTrack.Forms.wProyectos
         {
 
         }
-
-        private void btnAggProyect_Click1(object sender, EventArgs e)
-        {
-            // Abrir el formulario wAñadirProyecto como un diálogo
-            using (var form = new wAñadirProyecto()) ;
-
-        }
-
         private void splitContainer1_Panel1_Paint_2(object sender, PaintEventArgs e)
         {
 
@@ -80,26 +114,15 @@ namespace ZasTrack.Forms.wProyectos
         {
 
         }
-
-        private void Abrir_Form(object formhijo)
+        private void pnlContenedor_Paint(object sender, PaintEventArgs e)
         {
+         
 
-            if (this.pnlContenedor.Controls.Count > 0)
-                this.pnlContenedor.Controls.RemoveAt(0); // Elimina cualquier control existente del panel contenedor.
-
-            Form fh = formhijo as Form; // Convierte el objeto de entrada en un formulario.
-            fh.TopLevel = false; // Establece la propiedad TopLevel del formulario como false.
-            fh.Dock = DockStyle.Fill; // Establece la propiedad Dock del formulario para que ocupe todo el espacio del panel contenedor.
-            this.pnlContenedor.Controls.Add(fh); // Agrega el formulario al panel contenedor.
-            this.pnlContenedor.Tag = fh; // Establece la propiedad Tag del panel contenedor como el formulario.
-            fh.Show(); // Muestra el formulario.
         }
-
         private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
 
         }
-
         private void flpProyList_Paint(object sender, PaintEventArgs e)
         {
         }
@@ -108,61 +131,28 @@ namespace ZasTrack.Forms.wProyectos
         {
 
         }
-
         private void pnlProyFather_Paint(object sender, PaintEventArgs e)
         {
 
         }
-
         private void splProyectos_Panel2_Paint(object sender, PaintEventArgs e)
         {
 
         }
-
         private void flpProyList_Paint_1(object sender, PaintEventArgs e)
         {
 
         }
-
-
         private void pnlProyChildren_Paint(object sender, PaintEventArgs e)
         {
-
+            
         }
-
         private void flpProyList_Paint_2(object sender, PaintEventArgs e)
         {
 
         }
-
-        private void agregarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.wAñadirProyecto());
-
-        }
-
-        private void editarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.wEditarProyecto());
-        }
-
-        private void verProyectoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.wProyectos.wVerProyecto());
-        }
-
-        private void eliminarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.wEliminarProyecto());
-        }
-
-        private void pnlContenedor_Paint(object sender, PaintEventArgs e)
-        {
-         
-
-        }
+        #endregion
     }
-
 }
 
 

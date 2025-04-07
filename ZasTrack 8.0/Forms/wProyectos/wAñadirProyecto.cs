@@ -17,12 +17,7 @@ namespace ZasTrack.Forms
         public wAñadirProyecto()
         {
             InitializeComponent();
-        }
-
-        private void wAñadirProyecto_Load(object sender, EventArgs e)
-        {
-
-        }
+        }      
         private void btnGuardarProyecto_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtNombreProyecto.Text))
@@ -51,9 +46,13 @@ namespace ZasTrack.Forms
             catch (Exception ex)
             {
                 MessageBox.Show("Error al guardar el proyecto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            
+            }           
         }
+        #region windows forms generated
+        private void wAñadirProyecto_Load(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

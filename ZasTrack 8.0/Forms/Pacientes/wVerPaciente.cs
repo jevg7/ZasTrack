@@ -20,11 +20,7 @@ namespace ZasTrack.Forms.Estudiantes
             pacienteRepository = new PacienteRepository();
             ConfigurarDataGridView();
         }
-        #region Windows Form Designer generated code
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -32,7 +28,6 @@ namespace ZasTrack.Forms.Estudiantes
 
         }
 
-        #endregion
 
         #region Metodos
 
@@ -140,6 +135,7 @@ namespace ZasTrack.Forms.Estudiantes
         }
 
         #endregion
+        #region Windows Form Designer generated code
 
         private void dgvPacientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -150,6 +146,11 @@ namespace ZasTrack.Forms.Estudiantes
         {
 
         }
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }
     

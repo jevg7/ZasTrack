@@ -25,10 +25,7 @@ namespace ZasTrack.Forms.wProyectos
 
         }
 
-        private void flpProyList_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        #region Metodos
         private async void CargarProyectosAsync()
         {
             MostrarCargando(true);
@@ -147,5 +144,14 @@ namespace ZasTrack.Forms.wProyectos
                 }
             }
         }
+        #endregion
+
+        #region Windows Form Designer generated code
+        private void flpProyList_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        #endregion
+
     }
 }

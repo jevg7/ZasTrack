@@ -49,22 +49,22 @@
             // agregarEstudiantesToolStripMenuItem
             // 
             agregarEstudiantesToolStripMenuItem.Name = "agregarEstudiantesToolStripMenuItem";
-            agregarEstudiantesToolStripMenuItem.Size = new Size(124, 20);
-            agregarEstudiantesToolStripMenuItem.Text = "Agregar estudiantes";
+            agregarEstudiantesToolStripMenuItem.Size = new Size(114, 20);
+            agregarEstudiantesToolStripMenuItem.Text = "Agregar Pacientes";
             agregarEstudiantesToolStripMenuItem.Click += agregarEstudiantesToolStripMenuItem_Click;
             // 
             // editarEliminarEstudiantesToolStripMenuItem
             // 
             editarEliminarEstudiantesToolStripMenuItem.Name = "editarEliminarEstudiantesToolStripMenuItem";
-            editarEliminarEstudiantesToolStripMenuItem.Size = new Size(160, 20);
-            editarEliminarEstudiantesToolStripMenuItem.Text = "Editar/Eliminar estudiantes";
+            editarEliminarEstudiantesToolStripMenuItem.Size = new Size(150, 20);
+            editarEliminarEstudiantesToolStripMenuItem.Text = "Editar/Eliminar Pacientes";
             editarEliminarEstudiantesToolStripMenuItem.Click += editarEliminarEstudiantesToolStripMenuItem_Click;
             // 
             // verEstudiantesToolStripMenuItem
             // 
             verEstudiantesToolStripMenuItem.Name = "verEstudiantesToolStripMenuItem";
-            verEstudiantesToolStripMenuItem.Size = new Size(98, 20);
-            verEstudiantesToolStripMenuItem.Text = "Ver estudiantes";
+            verEstudiantesToolStripMenuItem.Size = new Size(88, 20);
+            verEstudiantesToolStripMenuItem.Text = "Ver Pacientes";
             verEstudiantesToolStripMenuItem.Click += verEstudiantesToolStripMenuItem_Click;
             // 
             // pnlCntEstudiantes

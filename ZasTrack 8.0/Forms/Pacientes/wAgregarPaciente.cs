@@ -18,18 +18,15 @@ namespace ZasTrack
     public partial class wAgregarPaciente : Form
     {
         private PacienteRepository pacienteRepository;
-
         public wAgregarPaciente()
         {
             InitializeComponent();
             pacienteRepository = new PacienteRepository();
         }
-
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
-
         private void wAgregarEstudiante_Load(object sender, EventArgs e)
         {
             cmbGenero.Items.Add("Masculino");
@@ -37,7 +34,6 @@ namespace ZasTrack
             cmbGenero.SelectedIndex = 0;
             CargarProyectos();
         }
-
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             string fecha = "00/00/0000";
@@ -51,34 +47,12 @@ namespace ZasTrack
 
             txtEdad.Text = edad.ToString();
         }
-
         private void btnGuardarPaciente_Click(object sender, EventArgs e)
         {
             guardarPaciente();
             LimpiarCampos();
-        }
+        }      
 
-
-        private void txtAcodigo_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void txtAnombreApellido_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void txtAobservacion_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void txtEdad_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         #region Metodos
         private void LimpiarCampos()
         {
@@ -138,7 +112,6 @@ namespace ZasTrack
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
             return textInfo.ToTitleCase(texto.ToLower());
         }
-
         private void CargarProyectos()
         {
             ProyectoRepository proyectoRepository = new ProyectoRepository();
@@ -149,11 +122,32 @@ namespace ZasTrack
             cmbProyecto.SelectedIndex = -1;
         }
         #endregion
-
+        #region Windows Form Designer generated code
 
         private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
+        private void txtAcodigo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void txtAnombreApellido_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void txtAobservacion_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void txtEdad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void cmbGenero_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

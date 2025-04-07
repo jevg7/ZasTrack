@@ -292,6 +292,7 @@
             lblNombres.Size = new Size(59, 15);
             lblNombres.TabIndex = 19;
             lblNombres.Text = "Nombres:";
+            lblNombres.Click += lblNombres_Click;
             // 
             // txtCodigoBen
             // 
