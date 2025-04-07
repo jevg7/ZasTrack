@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZasTrack.Forms;
+using ZasTrack.Forms.Examenes;
 
 namespace ZasTrack
 {
@@ -61,8 +62,12 @@ namespace ZasTrack
         {
             Abrir_Form(new Forms.Dashboard.wDashboard());
         }
-        #endregion        
-    
+        private void btnExamenes_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new wExamenes());
+        }
+        #endregion
+
         /// ni idea si se usan
         #region ConfigBotones
 
@@ -103,10 +108,7 @@ namespace ZasTrack
         private void pnlContenedor_Paint(object sender, PaintEventArgs e)
         {
         }
-        private void btnExamenes_Click(object sender, EventArgs e)
-        {
-        }
-
+       
         private void btnReportes_Click(object sender, EventArgs e)        
         {
         }

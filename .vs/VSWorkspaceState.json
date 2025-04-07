@@ -6,8 +6,9 @@
     "\\ZasTrack 8.0\\Forms\\Dashboard",
     "\\ZasTrack 8.0\\Forms\\Examenes",
     "\\ZasTrack 8.0\\Forms\\wProyectos",
+    "\\ZasTrack 8.0\\Models",
     "\\ZasTrack 8.0\\Repositories"
   ],
-  "SelectedNode": "\\ZasTrack 8.0\\ZasTrack.sln",
+  "SelectedNode": "\\ZasTrack 8.0\\Models\\Muestra_Examen.cs",
   "PreviewInSolutionExplorer": false
 }

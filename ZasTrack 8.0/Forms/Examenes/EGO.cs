@@ -16,5 +16,15 @@ namespace ZasTrack.Forms.Examenes
         {
             InitializeComponent();
         }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EGO_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

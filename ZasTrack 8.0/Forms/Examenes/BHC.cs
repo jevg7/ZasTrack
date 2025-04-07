@@ -10,43 +10,11 @@ using System.Windows.Forms;
 
 namespace ZasTrack.Forms.Examenes
 {
-    public partial class wBHC : Form
+    public partial class BHC : Form
     {
-        public wBHC()
+        public BHC()
         {
             InitializeComponent();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
-            if ((string.IsNullOrEmpty(txtGlobulosRojos.Text)) || (string.IsNullOrEmpty(txtHematocrito.Text)) || (string.IsNullOrEmpty(txtHemoglobina.Text))
-                || (string.IsNullOrEmpty(txtLeucocitos.Text)) || (string.IsNullOrEmpty(txtMCV.Text)) || (string.IsNullOrEmpty(txtMCH.Text))
-                || (string.IsNullOrEmpty(txtMCHC.Text)) || (string.IsNullOrEmpty(txtNeutrofilos.Text)) || (string.IsNullOrEmpty(txtLinfocitos.Text))
-                || (string.IsNullOrEmpty(txtMonocitos.Text)) || (string.IsNullOrEmpty(txtEosinofilos.Text) || (string.IsNullOrEmpty(txtBasofilos.Text))))
-            {
-                MessageBox.Show("Por favor, llene todos los campos.");
-                return;
-            }
-
-            else
-            {
-                MessageBox.Show("Examen guardado correctamente.");
-            }
-
-
-
-
-        }
-
-        private void wBHC_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
