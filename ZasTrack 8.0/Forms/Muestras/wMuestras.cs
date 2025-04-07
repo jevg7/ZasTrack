@@ -19,7 +19,6 @@ namespace ZasTrack.Forms.Muestras
         private PacienteRepository pacienteRepository;
         private MuestraRepository muestraRepository;
         private ProyectoRepository proyectoRepository;
-        private MuestraExamenRepository muestraExamenRepository;
         private int ultimoProyectoSeleccionado = -1;
 
         public wMuestras()
@@ -29,7 +28,6 @@ namespace ZasTrack.Forms.Muestras
             muestraRepository = new MuestraRepository();
             pacienteRepository = new PacienteRepository();
             proyectoRepository = new ProyectoRepository();
-            muestraExamenRepository = new MuestraExamenRepository(connectionString);
             InitializeComponent();
         }
 
