@@ -132,15 +132,15 @@ namespace ZasTrack.Forms.wProyectos
                     Location = new Point(10, 10),
                     Font = new Font("Segoe UI", 12)
                 };
-                panel1.Controls.Add(lblCargando);
+                pnlCargando.Controls.Add(lblCargando);
             }
             else
             {
                 // Ocultar el mensaje de carga (eliminar solo el Label de carga)
-                Control lblCargando = panel1.Controls.Find(nombreLabelCargando, true).FirstOrDefault();
+                Control lblCargando = pnlCargando.Controls.Find(nombreLabelCargando, true).FirstOrDefault();
                 if (lblCargando != null)
                 {
-                    panel1.Controls.Remove(lblCargando);
+                    pnlCargando.Controls.Remove(lblCargando);
                 }
             }
         }

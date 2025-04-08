@@ -15,7 +15,7 @@ namespace ZasTrack.Forms.Muestras
 {
     public partial class wMuestras : Form
     {
-       
+
         private PacienteRepository pacienteRepository;
         private MuestraRepository muestraRepository;
         private ProyectoRepository proyectoRepository;
@@ -40,10 +40,10 @@ namespace ZasTrack.Forms.Muestras
             CargarProyectos();
             fechaLock();
         }
-       
+
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            
+
             if (!chkOrina.Checked && !chkHeces.Checked && !chkSangre.Checked)
             {
                 MessageBox.Show("Debe seleccionar al menos un tipo de examen.");

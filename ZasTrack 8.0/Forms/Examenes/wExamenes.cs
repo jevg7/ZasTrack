@@ -50,5 +50,10 @@ namespace ZasTrack.Forms.Examenes
         {
             Abrir_Form(new EGH());
         }
+
+        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
