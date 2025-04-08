@@ -44,7 +44,7 @@ namespace ZasTrack.Forms.wProyectos
 
                 Console.WriteLine("Limpiando FlowLayoutPanel...");
                 flpProyList.Controls.Clear();
-
+                    
                 Console.WriteLine("Agregando proyectos al FlowLayoutPanel...");
                 foreach (Proyecto proyecto in proyectos)
                 {
@@ -132,15 +132,15 @@ namespace ZasTrack.Forms.wProyectos
                     Location = new Point(10, 10),
                     Font = new Font("Segoe UI", 12)
                 };
-                flpProyList.Controls.Add(lblCargando);
+                panel1.Controls.Add(lblCargando);
             }
             else
             {
                 // Ocultar el mensaje de carga (eliminar solo el Label de carga)
-                Control lblCargando = flpProyList.Controls.Find(nombreLabelCargando, true).FirstOrDefault();
+                Control lblCargando = panel1.Controls.Find(nombreLabelCargando, true).FirstOrDefault();
                 if (lblCargando != null)
                 {
-                    flpProyList.Controls.Remove(lblCargando);
+                    panel1.Controls.Remove(lblCargando);
                 }
             }
         }
@@ -149,7 +149,7 @@ namespace ZasTrack.Forms.wProyectos
         #region Windows Form Designer generated code
         private void flpProyList_Paint(object sender, PaintEventArgs e)
         {
-
+                                
         }
         #endregion
 

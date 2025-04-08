@@ -34,6 +34,7 @@
             vScrollBar2 = new VScrollBar();
             flowLayoutPanel2 = new FlowLayoutPanel();
             vScrollBar3 = new VScrollBar();
+            panel1 = new Panel();
             flpProyList.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -42,6 +43,7 @@
             // flpProyList
             // 
             flpProyList.Controls.Add(vScrollBar1);
+            flpProyList.Controls.Add(panel1);
             flpProyList.Controls.Add(flowLayoutPanel1);
             flpProyList.Dock = DockStyle.Fill;
             flpProyList.Location = new Point(0, 0);
@@ -91,6 +93,13 @@
             vScrollBar3.Size = new Size(22, 1156);
             vScrollBar3.TabIndex = 4;
             // 
+            // panel1
+            // 
+            panel1.Location = new Point(25, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(269, 81);
+            panel1.TabIndex = 9;
+            // 
             // wVerProyecto
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -114,5 +123,6 @@
         private VScrollBar vScrollBar2;
         private FlowLayoutPanel flowLayoutPanel2;
         private VScrollBar vScrollBar3;
+        private Panel panel1;
     }
 }

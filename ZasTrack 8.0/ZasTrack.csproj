@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Class\**" />
     <Compile Remove="Forms\Informes\**" />
+    <EmbeddedResource Remove="Class\**" />
     <EmbeddedResource Remove="Forms\Informes\**" />
+    <None Remove="Class\**" />
     <None Remove="Forms\Informes\**" />
   </ItemGroup>
 
@@ -31,10 +34,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Class\" />
   </ItemGroup>
 
 </Project>
