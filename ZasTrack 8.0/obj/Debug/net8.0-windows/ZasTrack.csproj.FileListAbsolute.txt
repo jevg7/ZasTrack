@@ -180,3 +180,6 @@ C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTra
 C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wVerProyecto.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.BHC.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.wExamenesDVG.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.wExamenesTest.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.Debug.wNoProcesados.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.Debug.wProcesados.resources

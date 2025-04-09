@@ -38,6 +38,7 @@
             btnExamenes = new Button();
             btnPacientes = new Button();
             pnlContenedor = new Panel();
+            button1 = new Button();
             pnlMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -45,6 +46,7 @@
             // pnlMenu
             // 
             pnlMenu.BackColor = Color.White;
+            pnlMenu.Controls.Add(button1);
             pnlMenu.Controls.Add(btnMuestras);
             pnlMenu.Controls.Add(btnDashBoard);
             pnlMenu.Controls.Add(pictureBox1);
@@ -136,7 +138,7 @@
             btnInformes.FlatStyle = FlatStyle.Flat;
             btnInformes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnInformes.ForeColor = SystemColors.ActiveCaptionText;
-            btnInformes.Location = new Point(41, 562);
+            btnInformes.Location = new Point(49, 624);
             btnInformes.Margin = new Padding(2, 3, 2, 3);
             btnInformes.Name = "btnInformes";
             btnInformes.Size = new Size(141, 53);
@@ -191,6 +193,17 @@
             pnlContenedor.TabIndex = 2;
             pnlContenedor.Paint += pnlContenedor_Paint;
             // 
+            // button1
+            // 
+            button1.ForeColor = SystemColors.ActiveCaptionText;
+            button1.Location = new Point(49, 553);
+            button1.Name = "button1";
+            button1.Size = new Size(104, 49);
+            button1.TabIndex = 8;
+            button1.Text = "examenes prueba";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // wMain
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -219,6 +232,7 @@
         private System.Windows.Forms.Panel pnlContenedor;
         private Button btnDashBoard;
         private Button btnMuestras;
+        private Button button1;
     }
 }
 

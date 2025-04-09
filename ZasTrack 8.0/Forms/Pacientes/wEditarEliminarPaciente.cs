@@ -121,9 +121,17 @@ namespace ZasTrack.Forms.Estudiantes
                     MessageBox.Show("No se encontró el paciente para editar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
+                Console.WriteLine($"Código de error: {ex.SqlState}");
+                throw; // Relanza la excepción para que el llamador pueda manejarla
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al actualizar el paciente: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"Error general: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw; // Relanza la excepción para que el llamador pueda manejarla
             }
         }
 

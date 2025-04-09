@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Npgsql;
 using ZasTrack.Models;
 using ZasTrack.Repositories;
 
@@ -43,10 +44,18 @@ namespace ZasTrack.Forms
                 this.DialogResult = DialogResult.OK; // Indica que el formulario se cerró correctamente
                 this.Close();
             }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
+                Console.WriteLine($"Código de error: {ex.SqlState}");
+                throw; // Relanza la excepción para que el llamador pueda manejarla
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar el proyecto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }           
+                Console.WriteLine($"Error general: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw; // Relanza la excepción para que el llamador pueda manejarla
+            }
         }
         #region windows forms generated
         private void wAñadirProyecto_Load(object sender, EventArgs e)

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Npgsql;
 using ZasTrack.Models;
 using ZasTrack.Repositories;
 
@@ -104,10 +105,17 @@ namespace ZasTrack.Forms.wProyectos
                     flpProyList.Controls.Add(pnlProyecto);
                 }
             }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
+                Console.WriteLine($"Código de error: {ex.SqlState}");
+                throw; // Relanza la excepción para que el llamador pueda manejarla
+            }
             catch (Exception ex)
             {
-                Console.WriteLine("Error en CargarProyectosAsync: " + ex.Message);
-                MessageBox.Show("Error al cargar los proyectos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"Error general: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw; // Relanza la excepción para que el llamador pueda manejarla
             }
             finally
             {

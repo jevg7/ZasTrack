@@ -42,7 +42,7 @@ namespace ZasTrack
             Abrir_Form(new wPaciente());
         }
 
-     
+
         private void btnProyecto_Click(object sender, EventArgs e)
         {
             Abrir_Form(new Forms.wProyectos.wProyectos());
@@ -108,8 +108,8 @@ namespace ZasTrack
         private void pnlContenedor_Paint(object sender, PaintEventArgs e)
         {
         }
-       
-        private void btnReportes_Click(object sender, EventArgs e)        
+
+        private void btnReportes_Click(object sender, EventArgs e)
         {
         }
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -117,6 +117,11 @@ namespace ZasTrack
         }
 
         #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new wExamenesTest());
+        }
     }
 
 }
