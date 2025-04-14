@@ -4,7 +4,7 @@
     <Compile Update="Forms\Dashboard\wDashboard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\BHC.cs">
+    <Compile Update="Forms\Examenes\ExamWrite\BHC.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\Debug\wNoProcesados.cs">
@@ -13,10 +13,10 @@
     <Compile Update="Forms\Examenes\Debug\wProcesados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\EGH.cs">
+    <Compile Update="Forms\Examenes\ExamWrite\EGH.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\EGO.cs">
+    <Compile Update="Forms\Examenes\ExamWrite\EGO.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\wExamenes.cs">

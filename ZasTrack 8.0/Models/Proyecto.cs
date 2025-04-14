@@ -1,10 +1,12 @@
-﻿namespace ZasTrack.Models 
-{ 
-public class Proyecto
+﻿namespace ZasTrack.Models
 {
-    public int id_proyecto { get; set; } // PK
-    public string nombre { get; set; }
-    public DateTime fecha_inicio { get; set; }
-    public DateTime? fecha_fin { get; set; }
-}
+    public class Proyecto
+    {
+        public int IdProyecto { get; set; }
+        public string Nombre { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime? FechaFin { get; set; }        
+        public bool IsArchived { get; set; } 
+        public string Codigo { get; set; }   
+    }
 }

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             pnlContenedorDvg = new Panel();
+            flpPacientes = new FlowLayoutPanel();
             lblPacientes = new Label();
             pnlProyecto = new Panel();
-            flpPacientes = new FlowLayoutPanel();
             pnlContenedorDvg.SuspendLayout();
             flpPacientes.SuspendLayout();
             SuspendLayout();
@@ -45,6 +45,16 @@
             pnlContenedorDvg.Size = new Size(1353, 842);
             pnlContenedorDvg.TabIndex = 0;
             pnlContenedorDvg.Paint += pnlContenedorDvg_Paint;
+            // 
+            // flpPacientes
+            // 
+            flpPacientes.Controls.Add(lblPacientes);
+            flpPacientes.Dock = DockStyle.Fill;
+            flpPacientes.Location = new Point(0, 0);
+            flpPacientes.Name = "flpPacientes";
+            flpPacientes.Size = new Size(1353, 842);
+            flpPacientes.TabIndex = 1;
+            flpPacientes.Paint += flpPacientes_Paint;
             // 
             // lblPacientes
             // 
@@ -63,16 +73,6 @@
             pnlProyecto.Name = "pnlProyecto";
             pnlProyecto.Size = new Size(1353, 33);
             pnlProyecto.TabIndex = 1;
-            // 
-            // flpPacientes
-            // 
-            flpPacientes.Controls.Add(lblPacientes);
-            flpPacientes.Dock = DockStyle.Fill;
-            flpPacientes.Location = new Point(0, 0);
-            flpPacientes.Name = "flpPacientes";
-            flpPacientes.Size = new Size(1353, 842);
-            flpPacientes.TabIndex = 1;
-            flpPacientes.Paint += flpPacientes_Paint;
             // 
             // wExamenesDVG
             // 

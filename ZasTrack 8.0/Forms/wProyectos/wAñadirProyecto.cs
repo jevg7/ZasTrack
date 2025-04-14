@@ -18,7 +18,7 @@ namespace ZasTrack.Forms
         public wAñadirProyecto()
         {
             InitializeComponent();
-        }      
+        }
         private void btnGuardarProyecto_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtNombreProyecto.Text))
@@ -63,5 +63,15 @@ namespace ZasTrack.Forms
 
         }
         #endregion
+
+        private void txtCodigo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblCodigoProyecto_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
