@@ -31,7 +31,7 @@ namespace ZasTrack.Forms
             {
                 nombre = txtNombreProyecto.Text,
                 fecha_inicio = dtpFechaInicio.Value,
-                fecha_fin = dtpFechaFin.Checked ? dtpFechaFin.Value : (DateTime?)null
+                codigo = txtCodigo.Text,
             };
 
             var proyectoRepository = new ProyectoRepository();
@@ -62,8 +62,6 @@ namespace ZasTrack.Forms
         {
 
         }
-        #endregion
-
         private void txtCodigo_TextChanged(object sender, EventArgs e)
         {
 
@@ -73,5 +71,13 @@ namespace ZasTrack.Forms
         {
 
         }
+
+        private void dtpFechaFin_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
+
     }
 }

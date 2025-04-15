@@ -38,7 +38,6 @@
             btnExamenes = new Button();
             btnPacientes = new Button();
             pnlContenedor = new Panel();
-            button1 = new Button();
             pnlMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -46,7 +45,6 @@
             // pnlMenu
             // 
             pnlMenu.BackColor = Color.White;
-            pnlMenu.Controls.Add(button1);
             pnlMenu.Controls.Add(btnMuestras);
             pnlMenu.Controls.Add(btnDashBoard);
             pnlMenu.Controls.Add(pictureBox1);
@@ -59,7 +57,7 @@
             pnlMenu.Location = new Point(0, 0);
             pnlMenu.Margin = new Padding(0);
             pnlMenu.Name = "pnlMenu";
-            pnlMenu.Size = new Size(213, 996);
+            pnlMenu.Size = new Size(186, 747);
             pnlMenu.TabIndex = 1;
             pnlMenu.Paint += panel1_Paint;
             // 
@@ -71,10 +69,10 @@
             btnMuestras.FlatStyle = FlatStyle.Flat;
             btnMuestras.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnMuestras.ForeColor = SystemColors.ActiveCaptionText;
-            btnMuestras.Location = new Point(41, 411);
-            btnMuestras.Margin = new Padding(2, 3, 2, 3);
+            btnMuestras.Location = new Point(36, 308);
+            btnMuestras.Margin = new Padding(2);
             btnMuestras.Name = "btnMuestras";
-            btnMuestras.Size = new Size(141, 53);
+            btnMuestras.Size = new Size(123, 40);
             btnMuestras.TabIndex = 4;
             btnMuestras.Text = "Muestras";
             btnMuestras.TextAlign = ContentAlignment.MiddleLeft;
@@ -89,10 +87,10 @@
             btnDashBoard.FlatStyle = FlatStyle.Flat;
             btnDashBoard.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDashBoard.ForeColor = SystemColors.ActiveCaptionText;
-            btnDashBoard.Location = new Point(39, 205);
-            btnDashBoard.Margin = new Padding(2, 3, 2, 3);
+            btnDashBoard.Location = new Point(34, 154);
+            btnDashBoard.Margin = new Padding(2);
             btnDashBoard.Name = "btnDashBoard";
-            btnDashBoard.Size = new Size(138, 53);
+            btnDashBoard.Size = new Size(121, 40);
             btnDashBoard.TabIndex = 7;
             btnDashBoard.Text = "Dashboard";
             btnDashBoard.TextAlign = ContentAlignment.MiddleLeft;
@@ -104,10 +102,10 @@
             pictureBox1.BackColor = Color.White;
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
             pictureBox1.Image = Properties.Resources.Zas_log;
-            pictureBox1.Location = new Point(49, 16);
-            pictureBox1.Margin = new Padding(5, 4, 5, 4);
+            pictureBox1.Location = new Point(43, 12);
+            pictureBox1.Margin = new Padding(4, 3, 4, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(128, 141);
+            pictureBox1.Size = new Size(112, 106);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 6;
             pictureBox1.TabStop = false;
@@ -120,10 +118,10 @@
             btnProyecto.FlatStyle = FlatStyle.Flat;
             btnProyecto.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnProyecto.ForeColor = SystemColors.ActiveCaptionText;
-            btnProyecto.Location = new Point(41, 269);
-            btnProyecto.Margin = new Padding(2, 3, 2, 3);
+            btnProyecto.Location = new Point(36, 202);
+            btnProyecto.Margin = new Padding(2);
             btnProyecto.Name = "btnProyecto";
-            btnProyecto.Size = new Size(112, 53);
+            btnProyecto.Size = new Size(98, 40);
             btnProyecto.TabIndex = 4;
             btnProyecto.Text = "Proyecto";
             btnProyecto.TextAlign = ContentAlignment.MiddleLeft;
@@ -138,10 +136,10 @@
             btnInformes.FlatStyle = FlatStyle.Flat;
             btnInformes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnInformes.ForeColor = SystemColors.ActiveCaptionText;
-            btnInformes.Location = new Point(49, 624);
-            btnInformes.Margin = new Padding(2, 3, 2, 3);
+            btnInformes.Location = new Point(43, 422);
+            btnInformes.Margin = new Padding(2);
             btnInformes.Name = "btnInformes";
-            btnInformes.Size = new Size(141, 53);
+            btnInformes.Size = new Size(123, 40);
             btnInformes.TabIndex = 3;
             btnInformes.Text = "Informes";
             btnInformes.TextAlign = ContentAlignment.MiddleLeft;
@@ -156,10 +154,10 @@
             btnExamenes.FlatStyle = FlatStyle.Flat;
             btnExamenes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnExamenes.ForeColor = SystemColors.ActiveCaptionText;
-            btnExamenes.Location = new Point(41, 482);
-            btnExamenes.Margin = new Padding(2, 3, 2, 3);
+            btnExamenes.Location = new Point(36, 362);
+            btnExamenes.Margin = new Padding(2);
             btnExamenes.Name = "btnExamenes";
-            btnExamenes.Size = new Size(133, 53);
+            btnExamenes.Size = new Size(116, 40);
             btnExamenes.TabIndex = 2;
             btnExamenes.Text = "Examenes";
             btnExamenes.TextAlign = ContentAlignment.MiddleLeft;
@@ -174,10 +172,10 @@
             btnPacientes.FlatStyle = FlatStyle.Flat;
             btnPacientes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnPacientes.ForeColor = SystemColors.ActiveCaptionText;
-            btnPacientes.Location = new Point(39, 339);
-            btnPacientes.Margin = new Padding(2, 3, 2, 3);
+            btnPacientes.Location = new Point(34, 254);
+            btnPacientes.Margin = new Padding(2);
             btnPacientes.Name = "btnPacientes";
-            btnPacientes.Size = new Size(141, 53);
+            btnPacientes.Size = new Size(123, 40);
             btnPacientes.TabIndex = 1;
             btnPacientes.Text = "Pacientes";
             btnPacientes.TextAlign = ContentAlignment.MiddleLeft;
@@ -186,33 +184,22 @@
             // 
             // pnlContenedor
             // 
-            pnlContenedor.Location = new Point(217, 0);
-            pnlContenedor.Margin = new Padding(5, 4, 5, 4);
+            pnlContenedor.Location = new Point(190, 0);
+            pnlContenedor.Margin = new Padding(4, 3, 4, 3);
             pnlContenedor.Name = "pnlContenedor";
-            pnlContenedor.Size = new Size(1361, 1053);
+            pnlContenedor.Size = new Size(1191, 790);
             pnlContenedor.TabIndex = 2;
             pnlContenedor.Paint += pnlContenedor_Paint;
             // 
-            // button1
-            // 
-            button1.ForeColor = SystemColors.ActiveCaptionText;
-            button1.Location = new Point(49, 553);
-            button1.Name = "button1";
-            button1.Size = new Size(104, 49);
-            button1.TabIndex = 8;
-            button1.Text = "examenes prueba";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // wMain
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1543, 996);
+            ClientSize = new Size(1350, 747);
             Controls.Add(pnlMenu);
             Controls.Add(pnlContenedor);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(5, 4, 5, 4);
+            Margin = new Padding(4, 3, 4, 3);
             Name = "wMain";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Menu Principal";
@@ -232,7 +219,6 @@
         private System.Windows.Forms.Panel pnlContenedor;
         private Button btnDashBoard;
         private Button btnMuestras;
-        private Button button1;
     }
 }
 

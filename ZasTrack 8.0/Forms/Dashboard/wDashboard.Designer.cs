@@ -177,7 +177,7 @@
             cmbProyecto.FormattingEnabled = true;
             cmbProyecto.Location = new Point(50, 111);
             cmbProyecto.Name = "cmbProyecto";
-            cmbProyecto.Size = new Size(121, 23);
+            cmbProyecto.Size = new Size(252, 23);
             cmbProyecto.TabIndex = 5;
             cmbProyecto.SelectedIndexChanged += cboProyecto_SelectedIndexChanged;
             // 

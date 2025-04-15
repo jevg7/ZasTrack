@@ -45,7 +45,7 @@ namespace ZasTrack.Forms.wProyectos
 
                 Console.WriteLine("Limpiando FlowLayoutPanel...");
                 flpProyList.Controls.Clear();
-                    
+
                 Console.WriteLine("Agregando proyectos al FlowLayoutPanel...");
                 foreach (Proyecto proyecto in proyectos)
                 {
@@ -157,7 +157,12 @@ namespace ZasTrack.Forms.wProyectos
         #region Windows Form Designer generated code
         private void flpProyList_Paint(object sender, PaintEventArgs e)
         {
-                                
+
+        }
+
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+
         }
         #endregion
 

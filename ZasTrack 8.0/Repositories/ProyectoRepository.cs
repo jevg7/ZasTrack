@@ -10,8 +10,8 @@ namespace ZasTrack.Repositories
         public void GuardarProyecto(Proyecto proyecto)
         {
             string query = @"
-                INSERT INTO proyecto (nombre, fecha_inicio, fecha_fin)
-                VALUES (@nombre, @fecha_inicio, @fecha_fin)";
+                INSERT INTO proyecto (nombre, fecha_inicio, codigo)
+                VALUES (@nombre, @fecha_inicio, @codigo)";
 
             try
             {
@@ -22,7 +22,7 @@ namespace ZasTrack.Repositories
                     {
                         cmd.Parameters.AddWithValue("nombre", proyecto.nombre);
                         cmd.Parameters.AddWithValue("fecha_inicio", proyecto.fecha_inicio);
-                        cmd.Parameters.AddWithValue("fecha_fin", proyecto.fecha_fin ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("codigo", proyecto.codigo);
 
                         cmd.ExecuteNonQuery();
                     }
