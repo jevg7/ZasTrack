@@ -1,77 +1,86 @@
 ﻿using Npgsql;
-using System;
-using System.Collections.Generic;
+using ZasTrack.Models;
+using ZasTrack;
 
-namespace ZasTrack.Repositories
+public class ExamenRepository
 {
-    public class ExamenRepository
+    // Cambia el tipo de retorno a List<MuestraInfoViewModel>
+    public List<MuestraInfoViewModel> ObtenerPacientesPorProyecto(int idProyecto)
     {
-        public List<dynamic> ObtenerPacientesPorProyecto(int idProyecto)
+        // Pega la NUEVA consulta SQL aquí
+        string query = @"
+            SELECT
+                m.id_muestra,
+                m.numero_muestra,
+                p.nombres || ' ' || p.apellidos AS paciente,
+                p.genero,
+                p.edad,
+                m.fecha_recepcion,
+                STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
+                     e.id_examen IS NULL OR
+                     (
+                       (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
+                       (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
+                       (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
+                     )
+                ) AS examenes_pendientes_str
+            FROM
+                muestra m
+            INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+            LEFT JOIN muestra_examen me ON m.id_muestra = me.id_muestra
+            LEFT JOIN tipo_examen te ON me.id_tipo_examen = te.id_tipo_examen
+            LEFT JOIN examen e ON e.id_muestra = me.id_muestra AND e.id_tipo_examen = me.id_tipo_examen
+            LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+            LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+            LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+            WHERE
+                m.id_proyecto = @idProyecto
+            GROUP BY
+                m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion
+            ORDER BY
+                m.fecha_recepcion DESC, m.numero_muestra;
+        "; // Fin de la consulta SQL
+
+        var resultados = new List<MuestraInfoViewModel>(); // Cambia el tipo de la lista
+        try
         {
-            string query = @"
-                SELECT 
-                    m.id_muestra,
-                    m.numero_muestra,
-                    p.nombres || ' ' || p.apellidos AS paciente,
-                    p.genero,
-                    p.edad,
-                    m.fecha_recepcion,
-                    COUNT(CASE WHEN e.fecha_procesamiento IS NULL THEN 1 END) AS examenes_pendientes
-                FROM muestra m
-                INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
-                LEFT JOIN examen e ON e.id_muestra = m.id_muestra
-                WHERE m.id_proyecto = @idProyecto
-                GROUP BY m.id_muestra, m.numero_muestra, p.nombres, p.apellidos, p.genero, p.edad, m.fecha_recepcion
-                ORDER BY m.numero_muestra;
-            ";
-
-            List<dynamic> pacientes = new List<dynamic>();
-
-            try
+            using (var conn = DatabaseConnection.GetConnection())
             {
-                using (var conn = DatabaseConnection.GetConnection())
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    conn.Open();
-
-                    using (var cmd = new NpgsqlCommand(query, conn))
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-
-                        using (var reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
+                            resultados.Add(new MuestraInfoViewModel // Crea el ViewModel
                             {
-                                var paciente = new
-                                {
-                                    IdMuestra = reader.GetInt32(0),
-                                    NumeroMuestra = reader.GetInt32(1),
-                                    Paciente = reader.GetString(2),
-                                    Genero = reader.GetString(3),
-                                    Edad = reader.GetInt32(4),
-                                    FechaRecepcion = reader.GetDateTime(5),
-                                    ExamenesPendientes = reader.GetInt32(6)
-                                };
-
-                                pacientes.Add(paciente);
-                            }
+                                IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                                NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                                Paciente = reader.GetString(reader.GetOrdinal("paciente")),
+                                Genero = reader.GetString(reader.GetOrdinal("genero")),
+                                Edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                                FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
+                                // Lee la nueva columna y maneja NULL (si no hay pendientes, STRING_AGG devuelve NULL)
+                                ExamenesPendientesStr = reader.IsDBNull(reader.GetOrdinal("examenes_pendientes_str"))
+                                                      ? "Sin pendientes"
+                                                      : reader.GetString(reader.GetOrdinal("examenes_pendientes_str"))
+                            });
                         }
                     }
                 }
             }
-            catch (NpgsqlException ex)
-            {
-                Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
-                Console.WriteLine($"Código de error: {ex.SqlState}");
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error general: {ex.Message}");
-                Console.WriteLine(ex.StackTrace);
-                throw;
-            }
-
-            return pacientes;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener pacientes y pendientes: {ex.Message}");
+            // Considera un mejor manejo de errores/logging aquí
+            throw;
+        }
+        return resultados;
     }
+
+    // Ya NO necesitas este método si no lo usas en otro lado:
+    // public List<string> ObtenerExamenesPendientesPorMuestra(int idMuestra) { ... }
 }
