@@ -1,11 +1,13 @@
 ﻿using Npgsql;
 using ZasTrack.Models;
 using ZasTrack;
+using System.Globalization;
+using System.Collections.Generic;
 
 public class ExamenRepository
 {
     // Cambia el tipo de retorno a List<MuestraInfoViewModel>
-    public List<MuestraInfoViewModel> ObtenerPacientesPorProyecto(int idProyecto)
+    public List<MuestraInfoViewModel> ObtenerPacientesPorProyecto(int idProyecto, DateTime fecha)
     {
         // Pega la NUEVA consulta SQL aquí
         string query = @"
@@ -16,13 +18,16 @@ public class ExamenRepository
                 p.genero,
                 p.edad,
                 m.fecha_recepcion,
-                STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
-                     e.id_examen IS NULL OR
-                     (
-                       (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
-                       (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
-                       (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
-                     )
+                COALESCE(
+                    STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
+                         e.id_examen IS NULL OR
+                         (
+                           (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
+                           (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
+                           (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
+                         )
+                    ),
+                    'Sin pendientes'
                 ) AS examenes_pendientes_str
             FROM
                 muestra m
@@ -35,11 +40,13 @@ public class ExamenRepository
             LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
             WHERE
                 m.id_proyecto = @idProyecto
+                -- ***** PASO 2: Añadir filtro por fecha en SQL *****
+                AND m.fecha_recepcion = @fechaRecepcion
             GROUP BY
                 m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion
             ORDER BY
-                m.fecha_recepcion DESC, m.numero_muestra;
-        "; // Fin de la consulta SQL
+                 m.numero_muestra;
+        ";
 
         var resultados = new List<MuestraInfoViewModel>(); // Cambia el tipo de la lista
         try
@@ -50,11 +57,14 @@ public class ExamenRepository
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    // ***** PASO 3: Añadir el parámetro de fecha al comando *****
+                    cmd.Parameters.AddWithValue("@fechaRecepcion", fecha.Date);
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            resultados.Add(new MuestraInfoViewModel // Crea el ViewModel
+                            resultados.Add(new MuestraInfoViewModel
                             {
                                 IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
                                 NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
@@ -62,10 +72,7 @@ public class ExamenRepository
                                 Genero = reader.GetString(reader.GetOrdinal("genero")),
                                 Edad = reader.GetInt32(reader.GetOrdinal("edad")),
                                 FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
-                                // Lee la nueva columna y maneja NULL (si no hay pendientes, STRING_AGG devuelve NULL)
-                                ExamenesPendientesStr = reader.IsDBNull(reader.GetOrdinal("examenes_pendientes_str"))
-                                                      ? "Sin pendientes"
-                                                      : reader.GetString(reader.GetOrdinal("examenes_pendientes_str"))
+                                ExamenesPendientesStr = reader.GetString(reader.GetOrdinal("examenes_pendientes_str")) // Lee directo gracias a COALESCE
                             });
                         }
                     }

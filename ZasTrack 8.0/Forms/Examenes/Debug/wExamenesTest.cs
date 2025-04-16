@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using ZasTrack.Models;
@@ -20,6 +21,9 @@ namespace ZasTrack.Forms.Examenes
             InitializeComponent();
             proyectoRepository = new ProyectoRepository();
             examenRepository = new ExamenRepository();
+            dtpFechaRecepcion.ValueChanged += dtpFechaRecepcion_ValueChanged;
+
+            dtpFechaRecepcion.Value = DateTime.Today;
 
             CargarProyectos();
         }
@@ -38,15 +42,22 @@ namespace ZasTrack.Forms.Examenes
             if (cmbProyecto.SelectedItem is Proyecto p)
             {
                 ultimoProyectoSeleccionado = p.id_proyecto;
-                CargarPacientesPorProyecto(p.id_proyecto);
+                CargarPacientesPorProyecto(p.id_proyecto, dtpFechaRecepcion.Value.Date);
+                // --------------------------
+            }
+            else
+            {
+                ultimoProyectoSeleccionado = -1;
+                pnlPacientes.Controls.Clear();
             }
         }
 
-        private void CargarPacientesPorProyecto(int idProyecto)
+
+        private void CargarPacientesPorProyecto(int idProyecto, DateTime fecha)
         {
             pnlPacientes.Controls.Clear();
 
-            // Títulos
+            // Títulos (sin cambios)
             var titlePanel = new Panel
             {
                 Height = 30,
@@ -62,22 +73,28 @@ namespace ZasTrack.Forms.Examenes
             titlePanel.Controls.Add(CreateLabel("Acciones", 750));
             pnlPacientes.Controls.Add(titlePanel);
 
-            var pacientes = examenRepository.ObtenerPacientesPorProyecto(idProyecto);
+            // Llamada al repositorio (asume que el repositorio ya está modificado para aceptar fecha)
+            var pacientes = examenRepository.ObtenerPacientesPorProyecto(idProyecto, fecha);
+
             if (!pacientes.Any())
             {
                 pnlPacientes.Controls.Add(new Label
                 {
-                    Text = "No se encontró ningúna muestra en el proyecto seleccionado.",
+                    // Ajusta el texto si quieres ser más específico sobre la fecha
+                    Text = "No se encontró ninguna muestra para el proyecto y fecha seleccionados.",
                     Location = new Point(10, 40),
                     AutoSize = true,
                     Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                    ForeColor = Color.Red
+                    ForeColor = Color.DarkOrange // Cambié el color para diferenciarlo de un error
                 });
                 return;
             }
 
+            // Define la cultura una vez antes del bucle
+            CultureInfo culturaEsp = new CultureInfo("es-NI");
+
             // Para cada muestra, creamos un panel
-            foreach (var pac in pacientes)
+            foreach (var pac in pacientes) // pac es de tipo MuestraInfoViewModel
             {
                 var panel = new Panel
                 {
@@ -87,38 +104,46 @@ namespace ZasTrack.Forms.Examenes
                     BorderStyle = BorderStyle.FixedSingle
                 };
 
-                panel.Controls.Add(CreateLabel($"#{pac.NumeroMuestra}", 10));
+                // ----- INICIO: Modificación para la primera etiqueta -----
+                // Obtiene el nombre del día de la semana en español
+                string diaSemana = pac.FechaRecepcion.ToString("dddd", culturaEsp);
+                // Capitaliza la primera letra
+                if (!string.IsNullOrEmpty(diaSemana))
+                {
+                    diaSemana = char.ToUpper(diaSemana[0]) + diaSemana.Substring(1);
+                }
+                // Crea la etiqueta con el formato "Dia #Num"
+                panel.Controls.Add(CreateLabel($"{diaSemana} #{pac.NumeroMuestra}", 10));
+                // ----- FIN: Modificación para la primera etiqueta -----
+
+                // El resto de las etiquetas usan los datos del ViewModel
                 panel.Controls.Add(CreateLabel(pac.Paciente, 120));
                 panel.Controls.Add(CreateLabel(pac.Genero, 270));
                 panel.Controls.Add(CreateLabel(pac.Edad.ToString(), 360));
-
-                // *** ¡La parte simplificada! ***
-                // Usa directamente la cadena de pendientes del ViewModel
-                panel.Controls.Add(CreateLabel(pac.ExamenesPendientesStr, 420)); // Ya no necesitas el placeholder "..."
-
+                // Usa la cadena de pendientes directamente (viene del repo con STRING_AGG)
+                panel.Controls.Add(CreateLabel(pac.ExamenesPendientesStr, 420));
                 panel.Controls.Add(CreateLabel(pac.FechaRecepcion.ToShortDateString(), 600));
+                
 
+                // Botón Procesar (sin cambios)
                 var btn = new Button
                 {
                     Text = "Procesar",
                     Location = new Point(750, 15),
                     Size = new Size(80, 30),
-                    Tag = pac.IdMuestra
+                    Tag = pac.IdMuestra // Pasamos el IdMuestra real
                 };
                 btn.Click += BtnAccion_Click;
                 panel.Controls.Add(btn);
 
+                // Añade el panel completo
                 pnlPacientes.Controls.Add(panel);
-                pnlPacientes.Controls.SetChildIndex(panel, 0); // Mantiene el orden de agregado
-
-                // *** ¡Ya NO necesitas llamar a ObtenerExamenesPendientesPorMuestra aquí! ***
-                // var lblPend = panel.Controls...
-                // var pendientes = examenRepository.ObtenerExamenesPendientesPorMuestra(...);
-                // lblPend.Text = ...;
-                // --> ¡Todo ese bloque se elimina! <--
+                // Asegura el orden visual correcto al añadir desde arriba
+                pnlPacientes.Controls.SetChildIndex(panel, 0);
             }
         }
 
+        // El método CreateLabel (sin cambios)
         private Label CreateLabel(string text, int x)
             => new Label
             {
@@ -128,17 +153,53 @@ namespace ZasTrack.Forms.Examenes
                 Font = new Font("Segoe UI", 9)
             };
 
+        // El método BtnAccion_Click (sin cambios)
         private void BtnAccion_Click(object sender, EventArgs e)
         {
             int idMuestra = (int)((Button)sender).Tag;
-            MessageBox.Show($"Procesar muestra #{idMuestra}");
+            MessageBox.Show($"Procesar muestra ID: {idMuestra}");
+            // Cambié un poco el mensaje para claridad
+                                                                 
             // Aquí abres tu modal de procesamiento...
+                                                                  
+            // Ejemplo:
+                                                                  
+            // using (var modalForm = new wProcesarResultados(idMuestra))
+                                                                  
+            // {
+                                                                  
+            //     modalForm.ShowDialog();
+                                                                  
+            //     // Después de cerrar el modal, refresca la lista
+                                                                  
+            //     if(ultimoProyectoSeleccionado != -1)
+                                                                 
+            //     {
+                                                                  
+            //          CargarPacientesPorProyecto(ultimoProyectoSeleccionado, dtpFechaRecepcion.Value.Date);
+                                                                  
+            //     }
+                                                                  
+            // }
         }
+        private void dtpFechaRecepcion_ValueChanged(object sender, EventArgs e)
+        {
+            if (ultimoProyectoSeleccionado != -1)
+            {
+                CargarPacientesPorProyecto(ultimoProyectoSeleccionado, dtpFechaRecepcion.Value.Date);
+            }
+        }
+        // ------------------------------------
         private void pnlPacientes_Paint(object sender, PaintEventArgs e)
         {
         }
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

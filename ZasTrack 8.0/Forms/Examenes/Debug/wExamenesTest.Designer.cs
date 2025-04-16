@@ -29,7 +29,8 @@
         private void InitializeComponent()
         {
             pnlContenedor = new Panel();
-            panel2 = new Panel();
+            pnlFecha = new Panel();
+            dtpFechaRecepcion = new DateTimePicker();
             pnlContProc = new Panel();
             panel1 = new Panel();
             label2 = new Label();
@@ -41,6 +42,7 @@
             txtBuscar = new TextBox();
             cmbFiltros = new ComboBox();
             pnlContenedor.SuspendLayout();
+            pnlFecha.SuspendLayout();
             pnlContProc.SuspendLayout();
             panel1.SuspendLayout();
             pnlSearchFiltro.SuspendLayout();
@@ -48,7 +50,7 @@
             // 
             // pnlContenedor
             // 
-            pnlContenedor.Controls.Add(panel2);
+            pnlContenedor.Controls.Add(pnlFecha);
             pnlContenedor.Controls.Add(pnlContProc);
             pnlContenedor.Controls.Add(pnlPacientes);
             pnlContenedor.Controls.Add(pnlSearchFiltro);
@@ -60,12 +62,21 @@
             pnlContenedor.TabIndex = 1;
             pnlContenedor.Paint += panel1_Paint;
             // 
-            // panel2
+            // pnlFecha
             // 
-            panel2.Location = new Point(3, 92);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(1181, 31);
-            panel2.TabIndex = 3;
+            pnlFecha.Controls.Add(dtpFechaRecepcion);
+            pnlFecha.Location = new Point(3, 92);
+            pnlFecha.Name = "pnlFecha";
+            pnlFecha.Size = new Size(1181, 31);
+            pnlFecha.TabIndex = 3;
+            pnlFecha.Paint += panel2_Paint;
+            // 
+            // dtpFechaRecepcion
+            // 
+            dtpFechaRecepcion.Location = new Point(19, 5);
+            dtpFechaRecepcion.Name = "dtpFechaRecepcion";
+            dtpFechaRecepcion.Size = new Size(255, 23);
+            dtpFechaRecepcion.TabIndex = 4;
             // 
             // pnlContProc
             // 
@@ -128,9 +139,10 @@
             // 
             // pnlPacientes
             // 
+            pnlPacientes.AutoScroll = true;
             pnlPacientes.Location = new Point(0, 129);
             pnlPacientes.Name = "pnlPacientes";
-            pnlPacientes.Size = new Size(1184, 532);
+            pnlPacientes.Size = new Size(1152, 532);
             pnlPacientes.TabIndex = 1;
             pnlPacientes.Paint += pnlPacientes_Paint;
             // 
@@ -170,6 +182,7 @@
             Name = "wExamenesTest";
             Text = "wExamenesTest";
             pnlContenedor.ResumeLayout(false);
+            pnlFecha.ResumeLayout(false);
             pnlContProc.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -190,6 +203,7 @@
         private Panel pnlSearchFiltro;
         private TextBox txtBuscar;
         private ComboBox cmbFiltros;
-        private Panel panel2;
+        private Panel pnlFecha;
+        private DateTimePicker dtpFechaRecepcion;
     }
 }
