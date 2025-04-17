@@ -16,6 +16,7 @@
             public decimal monocitos { get; set; }
             public decimal eosinofilos { get; set; }
             public decimal basofilos { get; set; }
-            public string observacion { get; set; }
+        public bool procesado { get; set; }
+        public string observacion { get; set; }
         }
     }

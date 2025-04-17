@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using ZasTrack.Forms.Examenes.Debug;
 using ZasTrack.Models;
 using ZasTrack.Repositories;
 
@@ -15,7 +16,9 @@ namespace ZasTrack.Forms.Examenes
         private ProyectoRepository proyectoRepository;
         private ExamenRepository examenRepository;
         private int ultimoProyectoSeleccionado = -1;
-        private Button btnClearFilters => btnLimpiarFiltros; 
+        private Button btnClearFilters => btnLimpiarFiltros;
+        private bool mostrandoRecepcionados = true; // Inicia mostrando Recepcionados
+
 
         public wExamenesNoRecep()
         {
@@ -32,9 +35,14 @@ namespace ZasTrack.Forms.Examenes
             txtSearch.KeyDown += txtSearch_KeyDown;         // Evento para buscar con Enter
             btnActualizar.Click += btnActualizar_Click;     // Evento para botón Actualizar
             btnClearFilters.Click += btnLimpiarFiltros_Click; // Evento para botón Limpiar
+            btnVerRecepcionados.Click += btnVerRecepcionados_Click; // <- Verifica nombre btnVerRecepcionados
+            btnVerProcesados.Click += btnVerProcesados_Click;   // <- Verifica nombre btnVerProcesados
+            
 
             dtpFechaRecepcion.Value = DateTime.Today;
             CargarProyectos();
+            ActualizarAparienciaBotonesVista();
+
         }
 
         private void CargarProyectos()
@@ -83,108 +91,136 @@ namespace ZasTrack.Forms.Examenes
             pnlPacientes.Controls.Add(titlePanel);
         }
 
-   
-        private void CargarPacientesPorProyecto(int idProyecto, DateTime fecha, List<int> tiposFiltro, string textoBusqueda)
+
+        // En wExamenesNoRecep.cs
+
+        // ***** MÉTODO RENOMBRADO Y ADAPTADO PARA MOSTRAR LA LISTA *****
+        // Recibe la lista de pacientes/muestras y un booleano indicando la vista actual
+        private void MostrarListaMuestras(List<MuestraInfoViewModel> pacientes, bool esVistaRecepcionados)
         {
+            // Guarda el control que tenía el foco antes de refrescar
             Control focusedControl = this.ActiveControl;
 
+            // Suspende el layout del panel para evitar parpadeos mientras se añaden controles
             pnlPacientes.SuspendLayout();
 
+            // Limpia los controles existentes (excepto quizás el panel de título si se maneja diferente)
             pnlPacientes.Controls.Clear();
-            AddTitlePanel(); 
-
-            List<Panel> panelesData = new List<Panel>();
+            // Vuelve a añadir el panel de títulos (asegúrate que AddTitlePanel no tenga SetChildIndex)
+            AddTitlePanel();
 
             try
             {
-                var pacientes = examenRepository.ObtenerPacientesPorProyecto(idProyecto, fecha, tiposFiltro, textoBusqueda);
-
-                if (pacientes.Any()) // Solo si hay pacientes
+                // Verifica si la lista de pacientes que se recibió está vacía
+                if (!pacientes.Any())
                 {
-                    CultureInfo culturaEsp = new CultureInfo("es-NI");
-                    foreach (var pac in pacientes) 
+                    // Define el mensaje apropiado según la vista activa
+                    string textoNoEncontrado = esVistaRecepcionados
+                        ? "No se encontraron muestras pendientes con los filtros aplicados."
+                        : "No se encontraron muestras procesadas con los filtros aplicados.";
+
+                    // Crea y añade una etiqueta para informar al usuario
+                    pnlPacientes.Controls.Add(new Label
                     {
+                        Text = textoNoEncontrado,
+                        Location = new Point(10, 40), // Posición debajo de la fila de títulos
+                        AutoSize = true,
+                        Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                        ForeColor = Color.DarkOrange
+                    });
+                }
+                else // Si la lista SÍ tiene pacientes/muestras
+                {
+                    CultureInfo culturaEsp = new CultureInfo("es-NI"); // Para formato de fecha/día
+
+                    // Itera sobre cada elemento en la lista de pacientes/muestras
+                    foreach (var pac in pacientes)
+                    {
+                        // Crea un nuevo Panel para representar esta fila
                         var panel = new Panel
                         {
                             Height = 60,
-                            Dock = DockStyle.Top,
+                            Dock = DockStyle.Top, // Se apilará debajo del anterior
                             BackColor = Color.White,
                             BorderStyle = BorderStyle.FixedSingle
                         };
 
+                        // --- Creación de etiquetas y botón para esta fila ---
+
+                        // 1. Etiqueta Muestra ("Dia #Num")
                         string diaSemana = pac.FechaRecepcion.ToString("dddd", culturaEsp);
-                        if (!string.IsNullOrEmpty(diaSemana)) { diaSemana = char.ToUpper(diaSemana[0]) + diaSemana.Substring(1); }
+                        if (!string.IsNullOrEmpty(diaSemana))
+                        {
+                            diaSemana = char.ToUpper(diaSemana[0]) + diaSemana.Substring(1);
+                        }
                         panel.Controls.Add(CreateLabel($"{diaSemana} #{pac.NumeroMuestra}", 10));
+
+                        // 2. Etiqueta Paciente (guardamos referencia para resaltado)
                         Label lblPaciente = CreateLabel(pac.Paciente, 120);
                         panel.Controls.Add(lblPaciente);
+
+                        // 3. Etiquetas Género y Edad
                         panel.Controls.Add(CreateLabel(pac.Genero, 270));
                         panel.Controls.Add(CreateLabel(pac.Edad.ToString(), 360));
-                        panel.Controls.Add(CreateLabel(pac.ExamenesPendientesStr, 420));
-                        panel.Controls.Add(CreateLabel(pac.FechaRecepcion.ToShortDateString(), 600));
-                        var btn = new Button
 
+                        // 4. Etiqueta Estado / Exámenes Pendientes (CONTENIDO CONDICIONAL)
+                        //    (Opcional) Cambiar el título de la columna una sola vez fuera del loop si es necesario
+                        string estadoExamenesTexto = esVistaRecepcionados ? pac.ExamenesPendientesStr : "Completado";
+                        panel.Controls.Add(CreateLabel(estadoExamenesTexto, 420));
+
+                        // 5. Etiqueta Fecha Recepción
+                        panel.Controls.Add(CreateLabel(pac.FechaRecepcion.ToShortDateString(), 600));
+
+                        // 6. Botón Acción (TEXTO CONDICIONAL)
+                        // Dentro del foreach en MostrarListaMuestras
+
+                        var btn = new Button
                         {
-                            Text = "Procesar",
+                            Text = esVistaRecepcionados ? "Procesar" : "Ver Detalles",
                             Location = new Point(750, 15),
                             Size = new Size(80, 30),
-                            Tag = pac.IdMuestra 
+                            // ***** CAMBIO AQUÍ: Guarda el objeto 'pac' COMPLETO en el Tag *****
+                            Tag = pac
+                            // ***** FIN CAMBIO *****
                         };
-
                         btn.Click += BtnAccion_Click;
                         panel.Controls.Add(btn);
-                 
-                    
-                        lblPaciente.BackColor = panel.BackColor; 
+                        // --- Fin Creación ---
+
+                        // --- Lógica de Resaltado (Corregida) ---
+                        lblPaciente.BackColor = panel.BackColor; // Color normal por defecto
+                        string textoBusqueda = txtSearch.Text.Trim(); // Necesita el texto actual
                         if (!string.IsNullOrWhiteSpace(textoBusqueda))
                         {
-                            bool coincidenciaEncontrada = (pac.Paciente.IndexOf(textoBusqueda, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                                           pac.NumeroMuestra.ToString().Contains(textoBusqueda));
-                            if (coincidenciaEncontrada) { lblPaciente.BackColor = Color.Yellow; }
+                            bool coincidencia = (pac.Paciente.IndexOf(textoBusqueda, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                 pac.NumeroMuestra.ToString().Contains(textoBusqueda));
+                            if (coincidencia)
+                            {
+                                lblPaciente.BackColor = Color.Yellow; // Resalta si coincide
+                            }
                         }
+                        // --- Fin Resaltado ---
 
-                        pnlPacientes.Controls.Add(panel);
+                        // --- Añadir y Ordenar Panel (Tu método que funciona) ---
+                        pnlPacientes.Controls.Add(panel); // Añade el panel
+                        pnlPacientes.Controls.SetChildIndex(panel, 0); // Mueve al índice 0 para tu layout
+                                                                       // --- Fin Añadir y Ordenar ---
 
-                       
-
-                        pnlPacientes.Controls.SetChildIndex(panel, 0);
-
-                    }
-                }
-                else // Si no hay pacientes
-                {
-                    pnlPacientes.Controls.Add(new Label
-
-                    {
-
-                        // Ajusta el texto si quieres ser más específico sobre la fecha
-
-                        Text = "No se encontró ninguna muestra para el proyecto y fecha seleccionados.",
-
-                        Location = new Point(10, 40),
-
-                        AutoSize = true,
-
-                        Font = new Font("Segoe UI", 9, FontStyle.Bold),
-
-                        ForeColor = Color.DarkOrange // Cambié el color para diferenciarlo de un error
-
-                    });
-                }
-
-               
-                if (panelesData.Any())
-                {
-                    pnlPacientes.Controls.AddRange(panelesData.ToArray());
-                }
-
+                    } // Fin foreach
+                } // Fin else (si hay pacientes)
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar las muestras: {ex.Message}", "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Muestra un mensaje de error si algo falla al mostrar los datos
+                MessageBox.Show($"Error al mostrar las muestras: {ex.Message}", "Error de Interfaz", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             finally
             {
-                pnlPacientes.ResumeLayout(true); 
+                // Reanuda el layout del panel para que se apliquen todos los cambios visuales
+                pnlPacientes.ResumeLayout(true);
+
+                // Opcional: Intenta devolver el foco al control que lo tenía antes de recargar
+                // focusedControl?.Focus();
             }
         }
 
@@ -193,13 +229,42 @@ namespace ZasTrack.Forms.Examenes
             RecargarListaSiEsNecesario();
         }
 
+        // En wExamenesNoRecep.cs
+
         private void BtnAccion_Click(object sender, EventArgs e)
         {
-            if (sender is Button btn && btn.Tag is int idMuestra)
+            // Verifica que el sender sea un Button y que su Tag SÍ sea un MuestraInfoViewModel
+            if (sender is Button btn && btn.Tag is MuestraInfoViewModel pac)
             {
-                MessageBox.Show($"Procesar muestra ID: {idMuestra}"); 
+                // ¡Ahora SÍ tenemos acceso a 'pac' aquí!
 
-              
+                // Obtenemos el idMuestra directamente del objeto 'pac' también
+                int idMuestra = pac.IdMuestra;
+
+                if (mostrandoRecepcionados) // Botón "Procesar"
+                {
+                    // Usamos las propiedades del objeto 'pac' recuperado del Tag
+                    using (var modalForm = new wProcesarResultados(pac.IdMuestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente))
+                    {
+                        DialogResult result = modalForm.ShowDialog(this);
+                        if (result == DialogResult.OK) { RecargarListaSiEsNecesario(); }
+                    }
+                }
+                else // Botón "Ver Detalles"
+                {
+                    // Usamos las propiedades del objeto 'pac' recuperado del Tag
+                    using (var modalForm = new wProcesarResultados(pac.IdMuestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente, modoVista: true)) // Pasamos modoVista
+                    {
+                        modalForm.ShowDialog(this);
+                        // Quizás refrescar si se edita algo
+                        // if (modalForm.DialogResult == DialogResult.OK) { RecargarListaSiEsNecesario(); }
+                    }
+                }
+            }
+            else
+            {
+                // Opcional: Mostrar un error si el Tag no es lo esperado (no debería pasar)
+                MessageBox.Show("Error: No se pudo obtener la información de la muestra desde el botón.", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -213,20 +278,48 @@ namespace ZasTrack.Forms.Examenes
              };
 
 
-   
+
         private void RecargarListaSiEsNecesario()
         {
             if (ultimoProyectoSeleccionado != -1)
             {
+                // 1. Recopila TODOS los filtros actuales
                 List<int> tiposSeleccionados = ObtenerTiposExamenSeleccionados();
                 DateTime fechaSeleccionada = dtpFechaRecepcion.Value.Date;
-                string textoBusqueda = txtSearch.Text.Trim();
+                string textoBusqueda = txtSearch.Text.Trim(); // Asume que txtSearch es el nombre correcto
 
-                CargarPacientesPorProyecto(ultimoProyectoSeleccionado, fechaSeleccionada, tiposSeleccionados, textoBusqueda);
+                List<MuestraInfoViewModel> pacientes = new List<MuestraInfoViewModel>(); // Inicializa lista
+
+                try
+                {
+                    // --- Decide qué método del repositorio llamar ---
+                    if (mostrandoRecepcionados)
+                    {
+                        // Llama al método existente para pendientes/recepcionados
+                        pacientes = examenRepository.ObtenerPacientesPorProyecto(ultimoProyectoSeleccionado, fechaSeleccionada, tiposSeleccionados, textoBusqueda);
+                    }
+                    else // Estamos mostrando los Procesados
+                    {
+                        // Llama al NUEVO método para procesados (¡asegúrate que exista en ExamenRepository!)
+                        pacientes = examenRepository.ObtenerPacientesProcesados(ultimoProyectoSeleccionado, fechaSeleccionada, tiposSeleccionados, textoBusqueda);
+                        // ¡¡La línea que asignaba una lista vacía aquí FUE BORRADA!!
+                    }
+                    // --- Fin decisión ---
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener la lista de muestras: {ex.Message}", "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    pacientes = new List<MuestraInfoViewModel>(); // Asegura lista vacía en caso de error
+                }
+
+                // 4. Llama al método que DIBUJA la lista, pasando los datos y el modo
+                MostrarListaMuestras(pacientes, mostrandoRecepcionados); // Llama al método renombrado
             }
             else
             {
+                // Si no hay proyecto, limpia y muestra títulos
                 pnlPacientes.Controls.Clear();
+                AddTitlePanel();
             }
         }
         private List<int> ObtenerTiposExamenSeleccionados()
@@ -278,6 +371,49 @@ namespace ZasTrack.Forms.Examenes
                 e.SuppressKeyPress = true; 
             }
         }
+        private void btnVerRecepcionados_Click(object sender, EventArgs e)
+        {
+            if (!mostrandoRecepcionados) // Solo recarga si no estaba ya activa
+            {
+                mostrandoRecepcionados = true;
+                ActualizarAparienciaBotonesVista(); // Actualiza qué botón se ve activo
+                RecargarListaSiEsNecesario();    // Recarga la lista para la nueva vista
+            }
+        }
+
+        private void btnVerProcesados_Click(object sender, EventArgs e)
+        {
+            if (mostrandoRecepcionados) // Solo recarga si no estaba ya activa
+            {
+                mostrandoRecepcionados = false;
+                ActualizarAparienciaBotonesVista(); // Actualiza qué botón se ve activo
+                RecargarListaSiEsNecesario();    // Recarga la lista para la nueva vista
+            }
+        }
+
+
+        private void ActualizarAparienciaBotonesVista()
+        {
+            // Asume que tus botones se llaman btnVerRecepcionados y btnVerProcesados
+            // Puedes ajustar los colores o usar FlatStyle, etc.
+            if (mostrandoRecepcionados)
+            {
+                btnVerRecepcionados.BackColor = Color.DodgerBlue; // Color activo
+                btnVerRecepcionados.ForeColor = Color.White;
+                btnVerProcesados.BackColor = SystemColors.Control; // Color inactivo
+                btnVerProcesados.ForeColor = SystemColors.ControlText;
+            }
+            else
+            {
+                btnVerRecepcionados.BackColor = SystemColors.Control; // Color inactivo
+                btnVerRecepcionados.ForeColor = SystemColors.ControlText;
+                btnVerProcesados.BackColor = Color.MediumSeaGreen; // Color activo
+                btnVerProcesados.ForeColor = Color.White;
+            }
+        }
+
+
+
         #region RecargarLista Windows Metodos
         private void dtpFechaRecepcion_ValueChanged(object sender, EventArgs e)
         {

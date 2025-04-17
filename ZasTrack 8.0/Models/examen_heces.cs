@@ -6,6 +6,7 @@
             public string color { get; set; }
             public string consistencia { get; set; }
             public bool parasitos { get; set; }
-            public string observacion { get; set; }
+        public bool procesado { get; set; }
+        public string observacion { get; set; }
         }
     }

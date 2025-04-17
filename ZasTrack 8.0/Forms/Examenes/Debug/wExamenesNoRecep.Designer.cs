@@ -35,8 +35,8 @@
             panel1 = new Panel();
             label2 = new Label();
             cmbProyecto = new ComboBox();
-            btnNoProcesados = new Button();
-            btnProcesados = new Button();
+            btnVerRecepcionados = new Button();
+            btnVerProcesados = new Button();
             pnlPacientes = new Panel();
             pnlSearchFiltro = new Panel();
             dtpFechaRecepcion = new DateTimePicker();
@@ -70,8 +70,8 @@
             pnlContProc.Controls.Add(btnLimpiarFiltros);
             pnlContProc.Controls.Add(btnActualizar);
             pnlContProc.Controls.Add(panel1);
-            pnlContProc.Controls.Add(btnNoProcesados);
-            pnlContProc.Controls.Add(btnProcesados);
+            pnlContProc.Controls.Add(btnVerRecepcionados);
+            pnlContProc.Controls.Add(btnVerProcesados);
             pnlContProc.Dock = DockStyle.Top;
             pnlContProc.Location = new Point(0, 0);
             pnlContProc.Name = "pnlContProc";
@@ -128,23 +128,23 @@
             cmbProyecto.TabIndex = 38;
             cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
-            // btnNoProcesados
+            // btnVerRecepcionados
             // 
-            btnNoProcesados.Location = new Point(12, 7);
-            btnNoProcesados.Name = "btnNoProcesados";
-            btnNoProcesados.Size = new Size(249, 30);
-            btnNoProcesados.TabIndex = 2;
-            btnNoProcesados.Text = "Recepcionados";
-            btnNoProcesados.UseVisualStyleBackColor = true;
+            btnVerRecepcionados.Location = new Point(12, 7);
+            btnVerRecepcionados.Name = "btnVerRecepcionados";
+            btnVerRecepcionados.Size = new Size(249, 30);
+            btnVerRecepcionados.TabIndex = 2;
+            btnVerRecepcionados.Text = "Recepcionados";
+            btnVerRecepcionados.UseVisualStyleBackColor = true;
             // 
-            // btnProcesados
+            // btnVerProcesados
             // 
-            btnProcesados.Location = new Point(282, 7);
-            btnProcesados.Name = "btnProcesados";
-            btnProcesados.Size = new Size(241, 30);
-            btnProcesados.TabIndex = 1;
-            btnProcesados.Text = "Procesados";
-            btnProcesados.UseVisualStyleBackColor = true;
+            btnVerProcesados.Location = new Point(282, 7);
+            btnVerProcesados.Name = "btnVerProcesados";
+            btnVerProcesados.Size = new Size(241, 30);
+            btnVerProcesados.TabIndex = 1;
+            btnVerProcesados.Text = "Procesados";
+            btnVerProcesados.UseVisualStyleBackColor = true;
             // 
             // pnlPacientes
             // 
@@ -250,8 +250,8 @@
         private Panel panel1;
         private Label label2;
         private ComboBox cmbProyecto;
-        private Button btnNoProcesados;
-        private Button btnProcesados;
+        private Button btnVerRecepcionados;
+        private Button btnVerProcesados;
         private Panel pnlPacientes;
         private Panel pnlSearchFiltro;
         private TextBox txtSearch;

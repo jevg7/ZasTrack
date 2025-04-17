@@ -186,3 +186,4 @@ C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTra
 C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.BHC.resources
 C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.wExamenesNoRecep.resources
 C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.Debug.wRecepcionados.resources
+C:\Users\Alex\source\repos\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Examenes.Debug.wProcesarResultados.resources
