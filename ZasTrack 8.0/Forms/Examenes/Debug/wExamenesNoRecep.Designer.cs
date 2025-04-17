@@ -1,6 +1,6 @@
 ﻿namespace ZasTrack.Forms.Examenes
 {
-    partial class wExamenesTest
+    partial class wExamenesNoRecep
     {
         /// <summary>
         /// Required designer variable.
@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             pnlContenedor = new Panel();
-            pnlFecha = new Panel();
-            dtpFechaRecepcion = new DateTimePicker();
             pnlContProc = new Panel();
+            btnLimpiarFiltros = new Button();
+            btnActualizar = new Button();
             panel1 = new Panel();
             label2 = new Label();
             cmbProyecto = new ComboBox();
@@ -39,18 +39,21 @@
             btnProcesados = new Button();
             pnlPacientes = new Panel();
             pnlSearchFiltro = new Panel();
-            txtBuscar = new TextBox();
-            cmbFiltros = new ComboBox();
+            dtpFechaRecepcion = new DateTimePicker();
+            gbFiltroTipo = new GroupBox();
+            chkFiltroSangre = new CheckBox();
+            chkFiltroHeces = new CheckBox();
+            chkFiltroOrina = new CheckBox();
+            txtSearch = new TextBox();
             pnlContenedor.SuspendLayout();
-            pnlFecha.SuspendLayout();
             pnlContProc.SuspendLayout();
             panel1.SuspendLayout();
             pnlSearchFiltro.SuspendLayout();
+            gbFiltroTipo.SuspendLayout();
             SuspendLayout();
             // 
             // pnlContenedor
             // 
-            pnlContenedor.Controls.Add(pnlFecha);
             pnlContenedor.Controls.Add(pnlContProc);
             pnlContenedor.Controls.Add(pnlPacientes);
             pnlContenedor.Controls.Add(pnlSearchFiltro);
@@ -62,24 +65,10 @@
             pnlContenedor.TabIndex = 1;
             pnlContenedor.Paint += panel1_Paint;
             // 
-            // pnlFecha
-            // 
-            pnlFecha.Controls.Add(dtpFechaRecepcion);
-            pnlFecha.Location = new Point(3, 92);
-            pnlFecha.Name = "pnlFecha";
-            pnlFecha.Size = new Size(1181, 31);
-            pnlFecha.TabIndex = 3;
-            pnlFecha.Paint += panel2_Paint;
-            // 
-            // dtpFechaRecepcion
-            // 
-            dtpFechaRecepcion.Location = new Point(19, 5);
-            dtpFechaRecepcion.Name = "dtpFechaRecepcion";
-            dtpFechaRecepcion.Size = new Size(255, 23);
-            dtpFechaRecepcion.TabIndex = 4;
-            // 
             // pnlContProc
             // 
+            pnlContProc.Controls.Add(btnLimpiarFiltros);
+            pnlContProc.Controls.Add(btnActualizar);
             pnlContProc.Controls.Add(panel1);
             pnlContProc.Controls.Add(btnNoProcesados);
             pnlContProc.Controls.Add(btnProcesados);
@@ -89,6 +78,26 @@
             pnlContProc.Size = new Size(1184, 42);
             pnlContProc.TabIndex = 2;
             // 
+            // btnLimpiarFiltros
+            // 
+            btnLimpiarFiltros.Location = new Point(905, 7);
+            btnLimpiarFiltros.Name = "btnLimpiarFiltros";
+            btnLimpiarFiltros.Size = new Size(75, 31);
+            btnLimpiarFiltros.TabIndex = 5;
+            btnLimpiarFiltros.Text = "Limpiar";
+            btnLimpiarFiltros.UseVisualStyleBackColor = true;
+            btnLimpiarFiltros.Click += btnLimpiarFiltros_Click;
+            // 
+            // btnActualizar
+            // 
+            btnActualizar.Location = new Point(818, 7);
+            btnActualizar.Name = "btnActualizar";
+            btnActualizar.Size = new Size(77, 31);
+            btnActualizar.TabIndex = 5;
+            btnActualizar.Text = "Actualizar";
+            btnActualizar.UseVisualStyleBackColor = true;
+            btnActualizar.Click += btnActualizar_Click_1;
+            // 
             // panel1
             // 
             panel1.BackColor = SystemColors.ActiveCaptionText;
@@ -97,7 +106,7 @@
             panel1.Location = new Point(566, 7);
             panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(246, 34);
+            panel1.Size = new Size(246, 31);
             panel1.TabIndex = 0;
             // 
             // label2
@@ -115,15 +124,15 @@
             cmbProyecto.FormattingEnabled = true;
             cmbProyecto.Location = new Point(87, 3);
             cmbProyecto.Name = "cmbProyecto";
-            cmbProyecto.Size = new Size(121, 23);
+            cmbProyecto.Size = new Size(156, 23);
             cmbProyecto.TabIndex = 38;
             cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
             // btnNoProcesados
             // 
-            btnNoProcesados.Location = new Point(22, 7);
+            btnNoProcesados.Location = new Point(12, 7);
             btnNoProcesados.Name = "btnNoProcesados";
-            btnNoProcesados.Size = new Size(239, 30);
+            btnNoProcesados.Size = new Size(249, 30);
             btnNoProcesados.TabIndex = 2;
             btnNoProcesados.Text = "Recepcionados";
             btnNoProcesados.UseVisualStyleBackColor = true;
@@ -140,38 +149,81 @@
             // pnlPacientes
             // 
             pnlPacientes.AutoScroll = true;
-            pnlPacientes.Location = new Point(0, 129);
+            pnlPacientes.Location = new Point(0, 92);
             pnlPacientes.Name = "pnlPacientes";
-            pnlPacientes.Size = new Size(1152, 532);
+            pnlPacientes.Size = new Size(1152, 569);
             pnlPacientes.TabIndex = 1;
             pnlPacientes.Paint += pnlPacientes_Paint;
             // 
             // pnlSearchFiltro
             // 
-            pnlSearchFiltro.Controls.Add(txtBuscar);
-            pnlSearchFiltro.Controls.Add(cmbFiltros);
+            pnlSearchFiltro.Controls.Add(dtpFechaRecepcion);
+            pnlSearchFiltro.Controls.Add(gbFiltroTipo);
+            pnlSearchFiltro.Controls.Add(txtSearch);
             pnlSearchFiltro.Location = new Point(0, 43);
             pnlSearchFiltro.Name = "pnlSearchFiltro";
             pnlSearchFiltro.Size = new Size(1184, 43);
             pnlSearchFiltro.TabIndex = 0;
             // 
-            // txtBuscar
+            // dtpFechaRecepcion
             // 
-            txtBuscar.Location = new Point(284, 9);
-            txtBuscar.Name = "txtBuscar";
-            txtBuscar.Size = new Size(564, 23);
-            txtBuscar.TabIndex = 1;
-            txtBuscar.Text = "Buscar por Codigo o por Nombre";
+            dtpFechaRecepcion.Location = new Point(12, 11);
+            dtpFechaRecepcion.Name = "dtpFechaRecepcion";
+            dtpFechaRecepcion.Size = new Size(255, 23);
+            dtpFechaRecepcion.TabIndex = 4;
+            dtpFechaRecepcion.ValueChanged += dtpFechaRecepcion_ValueChanged_1;
             // 
-            // cmbFiltros
+            // gbFiltroTipo
             // 
-            cmbFiltros.FormattingEnabled = true;
-            cmbFiltros.Location = new Point(22, 9);
-            cmbFiltros.Name = "cmbFiltros";
-            cmbFiltros.Size = new Size(256, 23);
-            cmbFiltros.TabIndex = 0;
+            gbFiltroTipo.Controls.Add(chkFiltroSangre);
+            gbFiltroTipo.Controls.Add(chkFiltroHeces);
+            gbFiltroTipo.Controls.Add(chkFiltroOrina);
+            gbFiltroTipo.Location = new Point(852, 5);
+            gbFiltroTipo.Name = "gbFiltroTipo";
+            gbFiltroTipo.Size = new Size(233, 35);
+            gbFiltroTipo.TabIndex = 2;
+            gbFiltroTipo.TabStop = false;
+            gbFiltroTipo.Text = "Filtrar por Tipo Requerido:";
             // 
-            // wExamenesTest
+            // chkFiltroSangre
+            // 
+            chkFiltroSangre.AutoSize = true;
+            chkFiltroSangre.Location = new Point(134, 16);
+            chkFiltroSangre.Name = "chkFiltroSangre";
+            chkFiltroSangre.Size = new Size(62, 19);
+            chkFiltroSangre.TabIndex = 2;
+            chkFiltroSangre.Text = "Sangre";
+            chkFiltroSangre.UseVisualStyleBackColor = true;
+            // 
+            // chkFiltroHeces
+            // 
+            chkFiltroHeces.AutoSize = true;
+            chkFiltroHeces.Location = new Point(70, 16);
+            chkFiltroHeces.Name = "chkFiltroHeces";
+            chkFiltroHeces.Size = new Size(58, 19);
+            chkFiltroHeces.TabIndex = 1;
+            chkFiltroHeces.Text = "Heces";
+            chkFiltroHeces.UseVisualStyleBackColor = true;
+            // 
+            // chkFiltroOrina
+            // 
+            chkFiltroOrina.AutoSize = true;
+            chkFiltroOrina.Location = new Point(9, 16);
+            chkFiltroOrina.Name = "chkFiltroOrina";
+            chkFiltroOrina.Size = new Size(55, 19);
+            chkFiltroOrina.TabIndex = 0;
+            chkFiltroOrina.Text = "Orina";
+            chkFiltroOrina.UseVisualStyleBackColor = true;
+            // 
+            // txtSearch
+            // 
+            txtSearch.Location = new Point(282, 11);
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "Buscar por Codigo o por Nombre";
+            txtSearch.Size = new Size(564, 23);
+            txtSearch.TabIndex = 1;
+            // 
+            // wExamenesNoRecep
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -179,15 +231,16 @@
             Controls.Add(pnlContenedor);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(3, 2, 3, 2);
-            Name = "wExamenesTest";
+            Name = "wExamenesNoRecep";
             Text = "wExamenesTest";
             pnlContenedor.ResumeLayout(false);
-            pnlFecha.ResumeLayout(false);
             pnlContProc.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             pnlSearchFiltro.ResumeLayout(false);
             pnlSearchFiltro.PerformLayout();
+            gbFiltroTipo.ResumeLayout(false);
+            gbFiltroTipo.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -201,9 +254,13 @@
         private Button btnProcesados;
         private Panel pnlPacientes;
         private Panel pnlSearchFiltro;
-        private TextBox txtBuscar;
-        private ComboBox cmbFiltros;
-        private Panel pnlFecha;
+        private TextBox txtSearch;
+        private Button btnActualizar;
+        private GroupBox gbFiltroTipo;
+        private CheckBox chkFiltroSangre;
+        private CheckBox chkFiltroHeces;
+        private CheckBox chkFiltroOrina;
         private DateTimePicker dtpFechaRecepcion;
+        private Button btnLimpiarFiltros;
     }
 }

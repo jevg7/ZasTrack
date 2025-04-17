@@ -4,13 +4,13 @@
     <Compile Update="Forms\Dashboard\wDashboard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\Debug\wExamenesTest.cs">
+    <Compile Update="Forms\Examenes\Debug\wExamenesNoRecep.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Examenes\Debug\wRecepcionados.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\ExamWrite\BHC.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Forms\Examenes\Debug\wNoProcesados.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\Debug\wProcesados.cs">

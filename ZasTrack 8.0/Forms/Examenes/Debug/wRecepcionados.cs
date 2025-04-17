@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ZasTrack.Forms.Examenes.Debug
 {
-    public partial class wNoProcesados : Form
+    public partial class wRecepcionados : Form
     {
-        public wNoProcesados()
+        public wRecepcionados()
         {
             InitializeComponent();
         }

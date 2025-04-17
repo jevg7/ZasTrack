@@ -64,7 +64,7 @@ namespace ZasTrack
         }
         private void btnExamenes_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new wExamenesTest());
+            Abrir_Form(new wExamenesNoRecep());
         }
         #endregion
 
