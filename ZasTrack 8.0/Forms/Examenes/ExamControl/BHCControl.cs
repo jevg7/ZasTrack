@@ -15,10 +15,26 @@ namespace ZasTrack.Forms.Examenes.ExamWrite // Revisa el namespace
         public BHCControl()
         {
             InitializeComponent();
-            // Usar TextChanged para cálculo en tiempo real
+
+            // Asignación de TextChanged para cálculos (esto ya lo tenías)
             txtGlobulosRojos.TextChanged += CamposClave_TextChanged;
             txtHematocrito.TextChanged += CamposClave_TextChanged;
             txtHemoglobina.TextChanged += CamposClave_TextChanged;
+
+            // ***** NUEVO: Asignar KeyPress para validación numérica en TODOS los campos *****
+            txtGlobulosRojos.KeyPress += NumericTextBox_KeyPress;
+            txtHematocrito.KeyPress += NumericTextBox_KeyPress;
+            txtHemoglobina.KeyPress += NumericTextBox_KeyPress;
+            txtLeucocitos.KeyPress += NumericTextBox_KeyPress;
+            txtMCV.KeyPress += NumericTextBox_KeyPress;
+            txtMCH.KeyPress += NumericTextBox_KeyPress;
+            txtMCHC.KeyPress += NumericTextBox_KeyPress;
+            txtNeutrofilos.KeyPress += NumericTextBox_KeyPress;
+            txtLinfocitos.KeyPress += NumericTextBox_KeyPress;
+            txtMonocitos.KeyPress += NumericTextBox_KeyPress;
+            txtEosinofilos.KeyPress += NumericTextBox_KeyPress;
+            txtBasofilos.KeyPress += NumericTextBox_KeyPress;
+            // ***** FIN NUEVO *****
         }
 
         /// <summary>
@@ -249,6 +265,44 @@ namespace ZasTrack.Forms.Examenes.ExamWrite // Revisa el namespace
 
 
             return true; // Todo válido
+        }
+        private void NumericTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Obtiene la cultura invariante para usar '.' como separador SIEMPRE
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            string decimalSeparator = culture.NumberFormat.NumberDecimalSeparator; // Probablemente "."
+
+            // Permite números (0-9)
+            if (char.IsDigit(e.KeyChar))
+            {
+                e.Handled = false; // Permite la tecla
+                return;
+            }
+
+            // Permite la tecla Backspace (borrar)
+            if (e.KeyChar == (char)Keys.Back)
+            {
+                e.Handled = false;
+                return;
+            }
+
+            // Permite el separador decimal (ej: '.') SI AÚN NO EXISTE en el TextBox
+            TextBox txt = sender as TextBox;
+            if (e.KeyChar.ToString() == decimalSeparator && !string.IsNullOrEmpty(txt?.Text) && !txt.Text.Contains(decimalSeparator))
+            {
+                e.Handled = false;
+                return;
+            }
+
+            // Permite otras teclas de control (como Ctrl+C, Ctrl+V - OJO: Pegar puede meter texto inválido)
+            // if (char.IsControl(e.KeyChar))
+            // {
+            //     e.Handled = false;
+            //     return;
+            // }
+
+            // Si no es ninguna de las teclas permitidas, CANCELA la pulsación
+            e.Handled = true;
         }
 
 

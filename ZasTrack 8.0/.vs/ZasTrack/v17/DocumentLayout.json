@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\bhccontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\bhccontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\forms\\examenes\\examcontrol\\bhccontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\bhccontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -64,7 +64,7 @@
               "RelativeDocumentMoniker": "Forms\\Examenes\\ExamControl\\BHCControl.cs",
               "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\BHCControl.cs",
               "RelativeToolTip": "Forms\\Examenes\\ExamControl\\BHCControl.cs",
-              "ViewState": "AgIAAOAAAAAAAAAAAAAhwAgBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADcAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-18T03:43:21.643Z",
               "EditorCaption": ""
@@ -78,8 +78,7 @@
               "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\BHCControl.cs [Dise\u00F1o]",
               "RelativeToolTip": "Forms\\Examenes\\ExamControl\\BHCControl.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-18T03:43:20.311Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2025-04-18T03:43:20.311Z"
             }
           ]
         },
