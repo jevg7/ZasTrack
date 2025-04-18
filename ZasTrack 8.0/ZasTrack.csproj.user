@@ -4,7 +4,7 @@
     <Compile Update="Forms\Dashboard\wDashboard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\Debug\wExamenesNoRecep.cs">
+    <Compile Update="Forms\Examenes\Debug\wExamenes.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\Debug\wProcesarResultados.cs">
@@ -26,9 +26,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\ExamWrite\EGO.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Forms\Examenes\wExamenes.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Muestras\wMuestras.cs">

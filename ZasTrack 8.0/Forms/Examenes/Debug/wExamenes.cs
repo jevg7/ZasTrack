@@ -11,7 +11,7 @@ using ZasTrack.Repositories;
 
 namespace ZasTrack.Forms.Examenes
 {
-    public partial class wExamenesNoRecep : Form
+    public partial class wExamenes : Form
     {
         private ProyectoRepository proyectoRepository;
         private ExamenRepository examenRepository;
@@ -20,7 +20,7 @@ namespace ZasTrack.Forms.Examenes
         private bool mostrandoRecepcionados = true; // Inicia mostrando Recepcionados
 
 
-        public wExamenesNoRecep()
+        public wExamenes()
         {
             InitializeComponent(); 
             proyectoRepository = new ProyectoRepository();

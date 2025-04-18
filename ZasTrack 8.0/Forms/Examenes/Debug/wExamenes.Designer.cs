@@ -1,6 +1,6 @@
 ﻿namespace ZasTrack.Forms.Examenes
 {
-    partial class wExamenesNoRecep
+    partial class wExamenes
     {
         /// <summary>
         /// Required designer variable.
