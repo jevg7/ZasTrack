@@ -16,5 +16,10 @@ namespace ZasTrack.Forms.Examenes
         {
             InitializeComponent();
         }
+
+        private void EGH_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

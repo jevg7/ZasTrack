@@ -269,7 +269,369 @@ public class ExamenRepository
         return tiposPendientes;
     }
     // ***** FIN NUEVO MÉTODO *****
+    public bool GuardarResultadoHeces(examen_heces datosHeces, int idMuestra, int idPaciente)
+    {
+        int idExamen;
+        const int ID_TIPO_EXAMEN_HECES = 2; // Asumiendo ID 2 = Heces
 
+        using (var conn = DatabaseConnection.GetConnection())
+        {
+            conn.Open();
+            using (var transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    // PASO 1: Buscar o Crear cabecera 'examen' (Idéntico a Orina, solo cambia ID_TIPO_EXAMEN)
+                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @idMuestra AND id_tipo_examen = @idTipoExamen";
+                    int? examenExistenteId = null;
+                    using (var checkCmd = new NpgsqlCommand(checkQuery, conn, transaction))
+                    {
+                        checkCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        checkCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_HECES); // <- Usa ID Heces
+                        var result = checkCmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value) examenExistenteId = Convert.ToInt32(result);
+                    }
+
+                    if (examenExistenteId.HasValue)
+                    {
+                        idExamen = examenExistenteId.Value;
+                        string updateExamenQuery = "UPDATE examen SET fecha_procesamiento = @fechaProc WHERE id_examen = @idExamen";
+                        using (var updateCmd = new NpgsqlCommand(updateExamenQuery, conn, transaction))
+                        {
+                            updateCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
+                            updateCmd.Parameters.AddWithValue("@idExamen", idExamen);
+                            updateCmd.ExecuteNonQuery();
+                        }
+                        Console.WriteLine($"DEBUG: Registro examen {idExamen} actualizado (Heces).");
+                    }
+                    else
+                    {
+                        string insertExamenQuery = @"INSERT INTO examen (id_paciente, id_tipo_examen, id_muestra, fecha_procesamiento, fecha_recepcion)
+                                                     VALUES (@idPaciente, @idTipoExamen, @idMuestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @idMuestra LIMIT 1))
+                                                     RETURNING id_examen;";
+                        using (var insertCmd = new NpgsqlCommand(insertExamenQuery, conn, transaction))
+                        {
+                            insertCmd.Parameters.AddWithValue("@idPaciente", idPaciente);
+                            insertCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_HECES); // <- Usa ID Heces
+                            insertCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                            insertCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
+                            idExamen = Convert.ToInt32(insertCmd.ExecuteScalar());
+                        }
+                        Console.WriteLine($"DEBUG: Registro examen {idExamen} creado (Heces).");
+                    }
+
+                    // PASO 2: Insertar o Actualizar resultados en 'examen_heces'
+                    string insertHecesQuery = @"
+                        INSERT INTO examen_heces (
+                            id_examen, color, consistencia, parasitos, observacion, procesado
+                        ) VALUES (
+                            @idExamen, @color, @consistencia, @parasitos, @observacion, TRUE
+                        )
+                        ON CONFLICT (id_examen) DO UPDATE SET
+                            color = EXCLUDED.color, consistencia = EXCLUDED.consistencia,
+                            parasitos = EXCLUDED.parasitos, observacion = EXCLUDED.observacion,
+                            procesado = TRUE; -- Asegura que quede procesado
+                        ";
+
+                    using (var cmdHeces = new NpgsqlCommand(insertHecesQuery, conn, transaction))
+                    {
+                        cmdHeces.Parameters.AddWithValue("@idExamen", idExamen);
+                        cmdHeces.Parameters.AddWithValue("@color", (object)datosHeces.color ?? DBNull.Value);
+                        cmdHeces.Parameters.AddWithValue("@consistencia", (object)datosHeces.consistencia ?? DBNull.Value);
+                        cmdHeces.Parameters.AddWithValue("@parasitos", (object)datosHeces.parasitos ?? DBNull.Value); // Ahora es string
+                        cmdHeces.Parameters.AddWithValue("@observacion", (object)datosHeces.observacion ?? DBNull.Value);
+                        // procesado = TRUE está en la query
+
+                        cmdHeces.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    Console.WriteLine($"DEBUG: Resultados Heces para examen {idExamen} guardados.");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ERROR al guardar resultado de Heces: {ex.Message}");
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+    }
+    // ***** FIN MÉTODO HECES *****
+    public bool GuardarResultadoSangre(examen_sangre datosSangre, int idMuestra, int idPaciente)
+    {
+        int idExamen;
+        const int ID_TIPO_EXAMEN_SANGRE = 3; // Asumiendo ID 3 = Sangre
+
+        using (var conn = DatabaseConnection.GetConnection())
+        {
+            conn.Open();
+            using (var transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    // PASO 1: Buscar o Crear cabecera 'examen' (Idéntico a Orina, solo cambia ID_TIPO_EXAMEN)
+                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @idMuestra AND id_tipo_examen = @idTipoExamen";
+                    int? examenExistenteId = null;
+                    using (var checkCmd = new NpgsqlCommand(checkQuery, conn, transaction))
+                    {
+                        checkCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        checkCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_SANGRE); // <- Usa ID Sangre
+                        var result = checkCmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value) examenExistenteId = Convert.ToInt32(result);
+                    }
+
+                    if (examenExistenteId.HasValue)
+                    {
+                        idExamen = examenExistenteId.Value;
+                        string updateExamenQuery = "UPDATE examen SET fecha_procesamiento = @fechaProc WHERE id_examen = @idExamen";
+                        using (var updateCmd = new NpgsqlCommand(updateExamenQuery, conn, transaction))
+                        {
+                            updateCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
+                            updateCmd.Parameters.AddWithValue("@idExamen", idExamen);
+                            updateCmd.ExecuteNonQuery();
+                        }
+                        Console.WriteLine($"DEBUG: Registro examen {idExamen} actualizado (Sangre).");
+                    }
+                    else
+                    {
+                        string insertExamenQuery = @"INSERT INTO examen (id_paciente, id_tipo_examen, id_muestra, fecha_procesamiento, fecha_recepcion)
+                                                     VALUES (@idPaciente, @idTipoExamen, @idMuestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @idMuestra LIMIT 1))
+                                                     RETURNING id_examen;";
+                        using (var insertCmd = new NpgsqlCommand(insertExamenQuery, conn, transaction))
+                        {
+                            insertCmd.Parameters.AddWithValue("@idPaciente", idPaciente);
+                            insertCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_SANGRE); // <- Usa ID Sangre
+                            insertCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                            insertCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
+                            idExamen = Convert.ToInt32(insertCmd.ExecuteScalar());
+                        }
+                        Console.WriteLine($"DEBUG: Registro examen {idExamen} creado (Sangre).");
+                    }
+
+                    // PASO 2: Insertar o Actualizar resultados en 'examen_sangre'
+                    string insertSangreQuery = @"
+                        INSERT INTO examen_sangre (
+                            id_examen, globulos_rojos, hematocrito, hemoglobina, leucocitos,
+                            mcv, mch, mchc, neutrofilos, linfocitos, monocitos, eosinofilos,
+                            basofilos, observacion, procesado
+                        ) VALUES (
+                            @idExamen, @gr, @hto, @hb, @leuco, @mcv, @mch, @mchc,
+                            @neu, @lin, @mono, @eos, @bas, @obs, TRUE
+                        )
+                        ON CONFLICT (id_examen) DO UPDATE SET
+                            globulos_rojos = EXCLUDED.globulos_rojos, hematocrito = EXCLUDED.hematocrito,
+                            hemoglobina = EXCLUDED.hemoglobina, leucocitos = EXCLUDED.leucocitos,
+                            mcv = EXCLUDED.mcv, mch = EXCLUDED.mch, mchc = EXCLUDED.mchc,
+                            neutrofilos = EXCLUDED.neutrofilos, linfocitos = EXCLUDED.linfocitos,
+                            monocitos = EXCLUDED.monocitos, eosinofilos = EXCLUDED.eosinofilos,
+                            basofilos = EXCLUDED.basofilos, observacion = EXCLUDED.observacion,
+                            procesado = TRUE; -- Asegura que quede procesado
+                        ";
+
+                    using (var cmdSangre = new NpgsqlCommand(insertSangreQuery, conn, transaction))
+                    {
+                        // Añadir todos los parámetros desde el objeto datosSangre
+                        cmdSangre.Parameters.AddWithValue("@idExamen", idExamen);
+                        cmdSangre.Parameters.AddWithValue("@gr", datosSangre.globulos_rojos);
+                        cmdSangre.Parameters.AddWithValue("@hto", datosSangre.hematocrito);
+                        cmdSangre.Parameters.AddWithValue("@hb", datosSangre.hemoglobina);
+                        cmdSangre.Parameters.AddWithValue("@leuco", datosSangre.leucocitos);
+                        cmdSangre.Parameters.AddWithValue("@mcv", datosSangre.mcv);
+                        cmdSangre.Parameters.AddWithValue("@mch", datosSangre.mch);
+                        cmdSangre.Parameters.AddWithValue("@mchc", datosSangre.mchc);
+                        cmdSangre.Parameters.AddWithValue("@neu", datosSangre.neutrofilos);
+                        cmdSangre.Parameters.AddWithValue("@lin", datosSangre.linfocitos);
+                        cmdSangre.Parameters.AddWithValue("@mono", datosSangre.monocitos);
+                        cmdSangre.Parameters.AddWithValue("@eos", datosSangre.eosinofilos);
+                        cmdSangre.Parameters.AddWithValue("@bas", datosSangre.basofilos);
+                        cmdSangre.Parameters.AddWithValue("@obs", (object)datosSangre.observacion ?? DBNull.Value);
+                        // procesado = TRUE está en la query
+
+                        cmdSangre.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    Console.WriteLine($"DEBUG: Resultados Sangre para examen {idExamen} guardados.");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ERROR al guardar resultado de Sangre: {ex.Message}");
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+    }
+    // ***** FIN MÉTODO SANGRE *****
+
+    public bool GuardarResultadoOrina(examen_orina datosOrina, int idMuestra, int idPaciente)
+    {
+        int idExamen; // Guardará el ID del registro 'examen' (nuevo o existente)
+        const int ID_TIPO_EXAMEN_ORINA = 1; // Asumiendo que 1 es Orina
+
+        // Usamos una transacción para asegurar que todo se guarde o nada se guarde
+        using (var conn = DatabaseConnection.GetConnection())
+        {
+            conn.Open();
+            using (var transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    // PASO 1: Buscar o Crear el registro cabecera en la tabla 'examen'
+                    //         Asociado a esta muestra Y este tipo de examen.
+                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @idMuestra AND id_tipo_examen = @idTipoExamen";
+                    int? examenExistenteId = null;
+                    using (var checkCmd = new NpgsqlCommand(checkQuery, conn, transaction)) // Ejecuta dentro de la transacción
+                    {
+                        checkCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        checkCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_ORINA);
+                        var result = checkCmd.ExecuteScalar(); // Devuelve la primera columna de la primera fila, o null si no hay filas
+                        if (result != null && result != DBNull.Value)
+                        {
+                            examenExistenteId = Convert.ToInt32(result);
+                        }
+                    }
+
+                    if (examenExistenteId.HasValue)
+                    {
+                        // Si ya existe, usamos su ID y podríamos actualizar la fecha de procesamiento
+                        idExamen = examenExistenteId.Value;
+                        string updateExamenQuery = "UPDATE examen SET fecha_procesamiento = @fechaProc WHERE id_examen = @idExamen";
+                        using (var updateCmd = new NpgsqlCommand(updateExamenQuery, conn, transaction))
+                        {
+                            updateCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
+                            updateCmd.Parameters.AddWithValue("@idExamen", idExamen);
+                            updateCmd.ExecuteNonQuery();
+                        }
+                        Console.WriteLine($"DEBUG: Registro examen {idExamen} actualizado.");
+                    }
+                    else
+                    {
+                        // Si no existe, lo insertamos y obtenemos el nuevo ID
+                        string insertExamenQuery = @"
+                            INSERT INTO examen (id_paciente, id_tipo_examen, id_muestra, fecha_procesamiento, fecha_recepcion)
+                            VALUES (@idPaciente, @idTipoExamen, @idMuestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @idMuestra LIMIT 1))
+                            RETURNING id_examen;"; // RETURNING nos devuelve el ID recién creado
+                        using (var insertCmd = new NpgsqlCommand(insertExamenQuery, conn, transaction))
+                        {
+                            insertCmd.Parameters.AddWithValue("@idPaciente", idPaciente);
+                            insertCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_ORINA);
+                            insertCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                            insertCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
+                            // La fecha de recepción se toma de la tabla muestra en la misma query
+                            idExamen = Convert.ToInt32(insertCmd.ExecuteScalar()); // Obtiene el ID nuevo
+                        }
+                        Console.WriteLine($"DEBUG: Registro examen {idExamen} creado.");
+                    }
+
+                    // PASO 2: Insertar o Actualizar los resultados específicos en 'examen_orina'
+                    //         y poner procesado = true.
+                    //         (Este ejemplo asume INSERT, si permites editar, necesitarías lógica UPDATE)
+
+                    string insertOrinaQuery = @"
+    INSERT INTO examen_orina (
+        id_examen, color, ph, aspecto, densidad, leucocitos, hemoglobina,
+        nitritos, cetonas, urobilinogeno, bilirrubinas, proteina, glucosa,
+        celulas_epiteliales, bacterias, cristales, cilindros, eritrocitos, /* <-- Campo añadido al modelo */
+        leucocitos_micro, observaciones, procesado /* <-- Campo añadido al modelo */
+    ) VALUES (
+        @idExamen, @color, @ph, @aspecto, @densidad, @leucocitos, @hemoglobina,
+        @nitritos, @cetonas, @urobilinogeno, @bilirrubinas, @proteina, @glucosa,
+        @celulas, @bacterias, @cristales, @cilindros, @eritrocitos, /* <-- Parámetro añadido */
+        @leucoMicro, @obs, TRUE
+    )
+  ON CONFLICT (id_examen) DO UPDATE SET
+    color = EXCLUDED.color, ph = EXCLUDED.ph, aspecto = EXCLUDED.aspecto,
+    densidad = EXCLUDED.densidad, leucocitos = EXCLUDED.leucocitos, hemoglobina = EXCLUDED.hemoglobina,
+    nitritos = EXCLUDED.nitritos, cetonas = EXCLUDED.cetonas, urobilinogeno = EXCLUDED.urobilinogeno,
+    bilirrubinas = EXCLUDED.bilirrubinas, proteina = EXCLUDED.proteina, glucosa = EXCLUDED.glucosa,
+    celulas_epiteliales = EXCLUDED.celulas_epiteliales, -- <-- CORREGIDO
+    bacterias = EXCLUDED.bacterias, cristales = EXCLUDED.cristales,
+    cilindros = EXCLUDED.cilindros, eritrocitos = EXCLUDED.eritrocitos,
+    leucocitos_micro = EXCLUDED.leucocitos_micro, -- <-- CORREGIDO
+    observaciones = EXCLUDED.observaciones, -- <-- CORREGIDO
+    procesado = TRUE; -- Asegura que quede procesado
+    ";
+
+                    using (var cmdOrina = new NpgsqlCommand(insertOrinaQuery, conn, transaction))
+                    {
+                        // Añadir todos los parámetros desde el objeto datosOrina
+                        cmdOrina.Parameters.AddWithValue("@idExamen", idExamen);
+                        cmdOrina.Parameters.AddWithValue("@color", (object)datosOrina.color ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@ph", datosOrina.ph);
+                        cmdOrina.Parameters.AddWithValue("@aspecto", (object)datosOrina.aspecto ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@densidad", datosOrina.densidad);
+                        cmdOrina.Parameters.AddWithValue("@leucocitos", (object)datosOrina.leucocitos ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@hemoglobina", (object)datosOrina.hemoglobina ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@nitritos", (object)datosOrina.nitritos ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@cetonas", (object)datosOrina.cetonas ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@urobilinogeno", (object)datosOrina.urobilinogeno ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@bilirrubinas", (object)datosOrina.bilirrubinas ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@proteina", (object)datosOrina.proteina ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@glucosa", (object)datosOrina.glucosa ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@celulas", (object)datosOrina.celulas_epiteliales ?? DBNull.Value); // Ojo nombre parámetro
+                        cmdOrina.Parameters.AddWithValue("@bacterias", (object)datosOrina.bacterias ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@cristales", (object)datosOrina.cristales ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@cilindros", (object)datosOrina.cilindros ?? DBNull.Value);
+                        cmdOrina.Parameters.AddWithValue("@eritrocitos", (object)datosOrina.eritrocitos ?? DBNull.Value); // <-- Parámetro añadido
+                        cmdOrina.Parameters.AddWithValue("@leucoMicro", (object)datosOrina.leucocitos_micro ?? DBNull.Value);
+
+                        cmdOrina.Parameters.AddWithValue("@obs", (object)datosOrina.observaciones ?? DBNull.Value); // <-- Parámetro añadido
+
+                        cmdOrina.ExecuteNonQuery();
+
+                        // Si todo fue bien, confirma la transacción
+                        transaction.Commit();
+                        Console.WriteLine($"DEBUG: Resultados Orina para examen {idExamen} guardados.");
+                        return true; // Indica éxito
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Console.WriteLine($"Error de PostgreSQL: {ex.Message}");
+                    Console.WriteLine($"Código de error: {ex.SqlState}");
+                    throw; // Relanza la excepción para que el llamador pueda manejarla
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error general: {ex.Message}");
+                    Console.WriteLine(ex.StackTrace);
+                    throw; // Relanza la excepción para que el llamador pueda manejarla
+                }
+            } // La conexión se cierra automáticamente aquí
+        }
+    }
+    // ***** FIN NUEVO MÉTODO *****
+    // En ExamenRepository.cs
+    public int? ObtenerIdPacientePorMuestra(int idMuestra)
+    {
+        string query = "SELECT id_paciente FROM muestra WHERE id_muestra = @idMuestra LIMIT 1;";
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                    var result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return Convert.ToInt32(result);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener idPaciente para muestra {idMuestra}: {ex.Message}");
+            // Podrías lanzar una excepción o devolver null
+        }
+        return null; // Devuelve null si no se encuentra o hay error
+    }
 
 }
 

@@ -20,6 +20,7 @@
         public string cristales { get; set; }
         public string cilindros { get; set; }
         public string leucocitos_micro { get; set; }
+        public string eritrocitos { get; set; } 
         public bool procesado { get; set; }
         public string observaciones { get; set; }
 

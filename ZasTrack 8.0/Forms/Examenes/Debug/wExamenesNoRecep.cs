@@ -109,6 +109,7 @@ namespace ZasTrack.Forms.Examenes
             // Vuelve a añadir el panel de títulos (asegúrate que AddTitlePanel no tenga SetChildIndex)
             AddTitlePanel();
 
+
             try
             {
                 // Verifica si la lista de pacientes que se recibió está vacía

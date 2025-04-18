@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             pnlBotones = new Panel();
-            btnGuardarResultados = new Button();
             btnCancelar = new Button();
+            btnGuardarResultados = new Button();
             tabControlExamenes = new TabControl();
             pnlBotones.SuspendLayout();
             SuspendLayout();
@@ -40,31 +40,34 @@
             pnlBotones.Controls.Add(btnCancelar);
             pnlBotones.Controls.Add(btnGuardarResultados);
             pnlBotones.Dock = DockStyle.Bottom;
-            pnlBotones.Location = new Point(0, 400);
+            pnlBotones.Location = new Point(0, 511);
             pnlBotones.Name = "pnlBotones";
-            pnlBotones.Size = new Size(800, 50);
+            pnlBotones.Size = new Size(984, 50);
             pnlBotones.TabIndex = 0;
-            // 
-            // btnGuardarResultados
-            // 
-            btnGuardarResultados.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGuardarResultados.Location = new Point(434, 15);
-            btnGuardarResultados.Name = "btnGuardarResultados";
-            btnGuardarResultados.Size = new Size(354, 23);
-            btnGuardarResultados.TabIndex = 0;
-            btnGuardarResultados.Text = "&Guardar Resultados";
-            btnGuardarResultados.UseVisualStyleBackColor = true;
             // 
             // btnCancelar
             // 
             btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCancelar.CausesValidation = false;
-            btnCancelar.Location = new Point(263, 15);
+            btnCancelar.DialogResult = DialogResult.Cancel;
+            btnCancelar.Location = new Point(448, 10);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(135, 23);
+            btnCancelar.Size = new Size(135, 32);
             btnCancelar.TabIndex = 1;
             btnCancelar.Text = "&Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.Click += btnCancelar_Click;
+            // 
+            // btnGuardarResultados
+            // 
+            btnGuardarResultados.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnGuardarResultados.Location = new Point(618, 10);
+            btnGuardarResultados.Name = "btnGuardarResultados";
+            btnGuardarResultados.Size = new Size(354, 32);
+            btnGuardarResultados.TabIndex = 0;
+            btnGuardarResultados.Text = "&Guardar Resultados";
+            btnGuardarResultados.UseVisualStyleBackColor = true;
+            btnGuardarResultados.Click += btnGuardarResultados_Click;
             // 
             // tabControlExamenes
             // 
@@ -72,7 +75,7 @@
             tabControlExamenes.Location = new Point(0, 0);
             tabControlExamenes.Name = "tabControlExamenes";
             tabControlExamenes.SelectedIndex = 0;
-            tabControlExamenes.Size = new Size(800, 400);
+            tabControlExamenes.Size = new Size(984, 511);
             tabControlExamenes.TabIndex = 1;
             tabControlExamenes.SelectedIndexChanged += tabControlExamenes_SelectedIndexChanged;
             // 
@@ -80,7 +83,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(984, 561);
             Controls.Add(tabControlExamenes);
             Controls.Add(pnlBotones);
             FormBorderStyle = FormBorderStyle.FixedDialog;

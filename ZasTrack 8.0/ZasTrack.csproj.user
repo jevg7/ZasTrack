@@ -10,17 +10,20 @@
     <Compile Update="Forms\Examenes\Debug\wProcesarResultados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\Debug\wRecepcionados.cs">
-      <SubType>Form</SubType>
+    <Compile Update="Forms\Examenes\ExamControl\EGOControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\ExamWrite\BHC.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\Debug\wProcesados.cs">
-      <SubType>Form</SubType>
+    <Compile Update="Forms\Examenes\ExamControl\BHCControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\ExamWrite\EGH.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Examenes\ExamControl\EGHControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\ExamWrite\EGO.cs">
       <SubType>Form</SubType>
