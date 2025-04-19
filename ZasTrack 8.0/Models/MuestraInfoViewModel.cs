@@ -1,5 +1,5 @@
-﻿// Puedes poner esto en tu carpeta Models o en un lugar adecuado
-namespace ZasTrack.Models // O el namespace que uses para ViewModels/DTOs
+﻿// En MuestraInfoViewModel.cs
+namespace ZasTrack.Models
 {
     public class MuestraInfoViewModel
     {
@@ -9,6 +9,9 @@ namespace ZasTrack.Models // O el namespace que uses para ViewModels/DTOs
         public string Genero { get; set; }
         public int Edad { get; set; }
         public DateTime FechaRecepcion { get; set; }
-        public string ExamenesPendientesStr { get; set; } // Aquí irá la cadena agregada
+        public string ExamenesPendientesStr { get; set; }
+
+        public string ExamenesCompletadosStr { get; set; }
+
     }
 }

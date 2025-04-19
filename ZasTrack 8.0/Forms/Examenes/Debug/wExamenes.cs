@@ -70,6 +70,7 @@ namespace ZasTrack.Forms.Examenes
         }
         private void AddTitlePanel()
         {
+            // Verifica si ya existe por nombre para evitar duplicados
             if (pnlPacientes.Controls.ContainsKey("titlePanel")) return;
 
             var titlePanel = new Panel
@@ -77,18 +78,25 @@ namespace ZasTrack.Forms.Examenes
                 Height = 30,
                 Dock = DockStyle.Top,
                 BackColor = Color.LightGray,
-                Name = "titlePanel"
+                Name = "titlePanel" // Le damos nombre al panel contenedor
             };
-            
+
+            // Añade los otros labels como antes...
             titlePanel.Controls.Add(CreateLabel("Muestra", 10));
             titlePanel.Controls.Add(CreateLabel("Paciente", 120));
             titlePanel.Controls.Add(CreateLabel("Género", 270));
             titlePanel.Controls.Add(CreateLabel("Edad", 360));
-            titlePanel.Controls.Add(CreateLabel("Exámenes Pendientes", 420));
+
+            Label labelEstado = CreateLabel("Exámenes Pendientes", 420); // Texto inicial
+            labelEstado.Name = "lblTituloColumnaEstado"; // Nombre único
+            titlePanel.Controls.Add(labelEstado); // Añádelo al panel
+                                                  // ***** FIN CAMBIO *****
+
             titlePanel.Controls.Add(CreateLabel("Fecha Recepción", 600));
             titlePanel.Controls.Add(CreateLabel("Acciones", 750));
-           
+
             pnlPacientes.Controls.Add(titlePanel);
+            // No es necesario SetChildIndex si es el primero añadido después de Clear()
         }
 
 
@@ -98,17 +106,29 @@ namespace ZasTrack.Forms.Examenes
         // Recibe la lista de pacientes/muestras y un booleano indicando la vista actual
         private void MostrarListaMuestras(List<MuestraInfoViewModel> pacientes, bool esVistaRecepcionados)
         {
-            // Guarda el control que tenía el foco antes de refrescar
             Control focusedControl = this.ActiveControl;
-
-            // Suspende el layout del panel para evitar parpadeos mientras se añaden controles
             pnlPacientes.SuspendLayout();
-
-            // Limpia los controles existentes (excepto quizás el panel de título si se maneja diferente)
             pnlPacientes.Controls.Clear();
-            // Vuelve a añadir el panel de títulos (asegúrate que AddTitlePanel no tenga SetChildIndex)
-            AddTitlePanel();
+            AddTitlePanel(); // Añade títulos (ahora el label de estado tiene nombre)
 
+            // --- CÓDIGO CORREGIDO: Ajustar título de la columna de estado ---
+            // 1. Busca el panel de títulos por su nombre dentro de pnlPacientes
+            Panel panelDeTitulos = pnlPacientes.Controls.Find("titlePanel", false).FirstOrDefault() as Panel;
+
+            if (panelDeTitulos != null) // Si se encontró el panel de títulos...
+            {
+                // 2. Busca el Label específico por su nombre DENTRO del panel de títulos
+                Label lblTituloColumnaEstado = panelDeTitulos.Controls.Find("lblTituloColumnaEstado", false).FirstOrDefault() as Label;
+
+                if (lblTituloColumnaEstado != null) // Si se encontró el label...
+                {
+                    // 3. Cambia el texto según la vista
+                    lblTituloColumnaEstado.Text = esVistaRecepcionados ? "Exámenes Pendientes" : "Exámenes Realizados";
+                }
+                else { Console.WriteLine("WARN: No se encontró lblTituloColumnaEstado dentro de titlePanel."); }
+            }
+            else { Console.WriteLine("WARN: No se encontró titlePanel dentro de pnlPacientes."); }
+            // --- FIN CÓDIGO CORREGIDO ---
 
             try
             {
@@ -166,7 +186,13 @@ namespace ZasTrack.Forms.Examenes
 
                         // 4. Etiqueta Estado / Exámenes Pendientes (CONTENIDO CONDICIONAL)
                         //    (Opcional) Cambiar el título de la columna una sola vez fuera del loop si es necesario
-                        string estadoExamenesTexto = esVistaRecepcionados ? pac.ExamenesPendientesStr : "Completado";
+                        string estadoExamenesTexto = esVistaRecepcionados ? pac.ExamenesPendientesStr : pac.ExamenesCompletadosStr;
+
+                        // Fallback por si acaso viene vacío/null
+                        if (!esVistaRecepcionados && string.IsNullOrEmpty(estadoExamenesTexto))
+                        {
+                            estadoExamenesTexto = "[N/A]";
+                        }
                         panel.Controls.Add(CreateLabel(estadoExamenesTexto, 420));
 
                         // 5. Etiqueta Fecha Recepción

@@ -1,25 +1,31 @@
-﻿using Npgsql;
+﻿using Microsoft.VisualBasic.Logging;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using ZasTrack;
+using ZasTrack.Forms.Examenes.Debug;
+using ZasTrack.Forms.Muestras;
 using ZasTrack.Models; 
 public class ExamenRepository
 {
     // MeTODO COMPLETO CON TODOS LOS FILTROS
     public List<MuestraInfoViewModel> ObtenerPacientesPorProyecto(int idProyecto, DateTime fecha, List<int> tiposRequeridos, string textoBusqueda)
     {
+        // La base de la consulta sigue seleccionando los datos y agregando pendientes
         string queryBase = @"
             SELECT
                 m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
                 p.genero, p.edad, m.fecha_recepcion,
                 COALESCE(
                     STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
-                         e.id_examen IS NULL OR
-                         ( (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
-                           (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
-                           (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE) )
-                    ), 'Sin pendientes'
+                        te.activo = TRUE AND ( -- Asegura solo considerar activos
+                             e.id_examen IS NULL OR
+                             (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
+                             (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
+                             (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
+                        )
+                    ), '[Error al obtener pendientes]' -- Mensaje por si algo raro pasa
                 ) AS examenes_pendientes_str
             FROM muestra m
             INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
@@ -29,139 +35,58 @@ public class ExamenRepository
             LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
             LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
             LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-            ";
+            "; // Quitamos WHERE y GROUP BY para construirlos
 
         var whereClauses = new List<string>();
+        // Filtros existentes
         whereClauses.Add("m.id_proyecto = @idProyecto");
         whereClauses.Add("m.fecha_recepcion = @fechaRecepcion");
 
         if (tiposRequeridos != null && tiposRequeridos.Any())
         {
-            whereClauses.Add("EXISTS (SELECT 1 FROM muestra_examen me_f WHERE me_f.id_muestra = m.id_muestra AND me_f.id_tipo_examen = ANY(@p_tipos))");
+            whereClauses.Add(@"EXISTS (
+                                SELECT 1 FROM muestra_examen me_f
+                                JOIN tipo_examen te_f ON me_f.id_tipo_examen = te_f.id_tipo_examen
+                                WHERE me_f.id_muestra = m.id_muestra
+                                AND te_f.activo = TRUE
+                                AND me_f.id_tipo_examen = ANY(@p_tipos)
+                               )");
         }
 
-        if (!string.IsNullOrWhiteSpace(textoBusqueda))
-        {
-            // Busca en nombres, apellidos, código y número de muestra (como texto)
-            whereClauses.Add("(p.nombres ILIKE @p_texto OR p.apellidos ILIKE @p_texto OR p.codigo_beneficiario ILIKE @p_texto OR CAST(m.numero_muestra AS TEXT) ILIKE @p_texto)");
-        }
-
-
-        string queryFinal = queryBase + " WHERE " + string.Join(" AND ", whereClauses) +
-                           " GROUP BY m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion" +
-                           " ORDER BY m.numero_muestra;"; // Orden final
-
-        var resultados = new List<MuestraInfoViewModel>();
-        try
-        {
-            using (var conn = DatabaseConnection.GetConnection()) 
-            {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(queryFinal, conn))
-                {
-                    // Parámetros base
-                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                    cmd.Parameters.AddWithValue("@fechaRecepcion", fecha.Date);
-
-                    // Parámetro tipos (condicional)
-                    if (tiposRequeridos != null && tiposRequeridos.Any())
-                    {
-                        cmd.Parameters.AddWithValue("@p_tipos", tiposRequeridos);
-                    }
-
-                    // Parámetro para la búsqueda (condicional)
-                    if (!string.IsNullOrWhiteSpace(textoBusqueda))
-                    {
-                        // Añade comodines % para buscar coincidencias parciales
-                        cmd.Parameters.AddWithValue("@p_texto", $"%{textoBusqueda}%");
-                    }
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            // Llenado del ViewModel (sin cambios) REFERENCIA A MODEL TEMPORAL DE MUESTRAINFOVIEWMODEL
-                            resultados.Add(new MuestraInfoViewModel
-                            {
-                                IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
-                                NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
-                                Paciente = reader.GetString(reader.GetOrdinal("paciente")),
-                                Genero = reader.GetString(reader.GetOrdinal("genero")),
-                                Edad = reader.GetInt32(reader.GetOrdinal("edad")),
-                                FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
-                                ExamenesPendientesStr = reader.GetString(reader.GetOrdinal("examenes_pendientes_str"))
-                            });
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error al obtener pacientes filtrados: {ex.Message}");
-            throw;
-        }
-        return resultados;
-    }
-    // ***** NUEVO MÉTODO PARA OBTENER PROCESADOS *****
-    public List<MuestraInfoViewModel> ObtenerPacientesProcesados(int idProyecto, DateTime fecha, List<int> tiposRequeridos, string textoBusqueda)
-    {
-        // Selecciona la información base de la muestra y paciente
-        string queryBase = @"
-             SELECT
-                 m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
-                 p.genero, p.edad, m.fecha_recepcion
-             FROM muestra m
-             INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
-             ";
-
-        // Construcción dinámica del WHERE
-        var whereClauses = new List<string>();
-        whereClauses.Add("m.id_proyecto = @idProyecto");
-        whereClauses.Add("m.fecha_recepcion = @fechaRecepcion");
-
-        // Filtro por tipo REQUERIDO (opcional, pero puede ser útil para ver
-        // muestras procesadas que INCLUYERON ciertos exámenes)
-        if (tiposRequeridos != null && tiposRequeridos.Any())
-        {
-            whereClauses.Add("EXISTS (SELECT 1 FROM muestra_examen me_f WHERE me_f.id_muestra = m.id_muestra AND me_f.id_tipo_examen = ANY(@p_tipos))");
-        }
-
-        // Filtro por texto de búsqueda (igual que en el otro método)
         if (!string.IsNullOrWhiteSpace(textoBusqueda))
         {
             whereClauses.Add("(p.nombres ILIKE @p_texto OR p.apellidos ILIKE @p_texto OR p.codigo_beneficiario ILIKE @p_texto OR CAST(m.numero_muestra AS TEXT) ILIKE @p_texto)");
         }
 
-        // ***** LÓGICA CLAVE: Asegurar que NO existan exámenes PENDIENTES *****
+        // ***** CONDICIÓN NUEVA Y CLAVE *****
+        // Añade esta condición para asegurar que solo se incluyan muestras
+        // para las cuales SÍ existe al menos un examen todavía pendiente.
         whereClauses.Add(@"
-             NOT EXISTS (
-                 SELECT 1
-                 FROM muestra_examen me_pend
-                 JOIN tipo_examen te_pend ON me_pend.id_tipo_examen = te_pend.id_tipo_examen
-                 LEFT JOIN examen e_pend ON e_pend.id_muestra = me_pend.id_muestra AND e_pend.id_tipo_examen = me_pend.id_tipo_examen
-                 LEFT JOIN examen_orina eo_pend ON te_pend.id_tipo_examen = 1 AND eo_pend.id_examen = e_pend.id_examen
-                 LEFT JOIN examen_heces eh_pend ON te_pend.id_tipo_examen = 2 AND eh_pend.id_examen = e_pend.id_examen
-                 LEFT JOIN examen_sangre es_pend ON te_pend.id_tipo_examen = 3 AND es_pend.id_examen = e_pend.id_examen
-                 WHERE me_pend.id_muestra = m.id_muestra -- Para la muestra actual 'm'
-                   AND ( -- Condición para estar PENDIENTE (igual que en el STRING_AGG FILTER)
-                         e_pend.id_examen IS NULL OR
-                         (te_pend.id_tipo_examen = 1 AND eo_pend.procesado IS DISTINCT FROM TRUE) OR
-                         (te_pend.id_tipo_examen = 2 AND eh_pend.procesado IS DISTINCT FROM TRUE) OR
-                         (te_pend.id_tipo_examen = 3 AND es_pend.procesado IS DISTINCT FROM TRUE)
-                       )
-             )
-         ");
-        // ***** FIN LÓGICA CLAVE *****
-
-        // Asegurar que la muestra tenga al menos un examen asignado originalmente
-        // para no mostrar muestras vacías que nunca necesitaron procesamiento.
-        whereClauses.Add("EXISTS (SELECT 1 FROM muestra_examen me_any WHERE me_any.id_muestra = m.id_muestra)");
+            EXISTS (
+                SELECT 1
+                FROM muestra_examen me_pend
+                JOIN tipo_examen te_pend ON me_pend.id_tipo_examen = te_pend.id_tipo_examen
+                LEFT JOIN examen e_pend ON e_pend.id_muestra = me_pend.id_muestra AND e_pend.id_tipo_examen = me_pend.id_tipo_examen
+                LEFT JOIN examen_orina eo_pend ON te_pend.id_tipo_examen = 1 AND eo_pend.id_examen = e_pend.id_examen
+                LEFT JOIN examen_heces eh_pend ON te_pend.id_tipo_examen = 2 AND eh_pend.id_examen = e_pend.id_examen
+                LEFT JOIN examen_sangre es_pend ON te_pend.id_tipo_examen = 3 AND es_pend.id_examen = e_pend.id_examen
+                WHERE me_pend.id_muestra = m.id_muestra -- Vincula con la muestra externa 'm'
+                  AND te_pend.activo = TRUE             -- Solo tipos activos
+                  AND ( -- Condición de PENDIENTE (igual que en STRING_AGG)
+                        e_pend.id_examen IS NULL OR
+                        (te_pend.id_tipo_examen = 1 AND eo_pend.procesado IS DISTINCT FROM TRUE) OR
+                        (te_pend.id_tipo_examen = 2 AND eh_pend.procesado IS DISTINCT FROM TRUE) OR
+                        (te_pend.id_tipo_examen = 3 AND es_pend.procesado IS DISTINCT FROM TRUE)
+                      )
+            )
+        ");
+        // ***** FIN CONDICIÓN NUEVA *****
 
 
-        // Construir la consulta final (NO necesitamos GROUP BY aquí porque solo seleccionamos de muestra y paciente)
+        // Construye la query final
         string queryFinal = queryBase + " WHERE " + string.Join(" AND ", whereClauses) +
-                           " ORDER BY m.numero_muestra;"; // Orden ascendente
+                            " GROUP BY m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion" +
+                            " ORDER BY m.numero_muestra;";
 
         var resultados = new List<MuestraInfoViewModel>();
         try
@@ -171,10 +96,9 @@ public class ExamenRepository
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(queryFinal, conn))
                 {
-                    // Parámetros (igual que en el otro método)
+                    // Parámetros (sin cambios)
                     cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
                     cmd.Parameters.AddWithValue("@fechaRecepcion", fecha.Date);
-
                     if (tiposRequeridos != null && tiposRequeridos.Any())
                     {
                         cmd.Parameters.AddWithValue("@p_tipos", tiposRequeridos);
@@ -188,6 +112,9 @@ public class ExamenRepository
                     {
                         while (reader.Read())
                         {
+                            // Llenado del ViewModel (sin cambios)
+                            // La columna examenes_pendientes_str ahora NUNCA debería ser null
+                            // porque filtramos las muestras completadas con el EXISTS.
                             resultados.Add(new MuestraInfoViewModel
                             {
                                 IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
@@ -196,8 +123,7 @@ public class ExamenRepository
                                 Genero = reader.GetString(reader.GetOrdinal("genero")),
                                 Edad = reader.GetInt32(reader.GetOrdinal("edad")),
                                 FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
-                                // ***** CAMBIO: Para procesados, el estado es "Completado" *****
-                                ExamenesPendientesStr = "Completado"
+                                ExamenesPendientesStr = reader.GetString(reader.GetOrdinal("examenes_pendientes_str")) // Leer directo
                             });
                         }
                     }
@@ -206,13 +132,129 @@ public class ExamenRepository
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al obtener pacientes procesados: {ex.Message}");
-            // Considerar mejor logging/manejo de errores
+            Console.WriteLine($"Error en ObtenerPacientesPorProyecto MODIFICADO: {ex.Message}\nQuery: {queryFinal}"); // Loguea la query para depurar
             throw;
         }
         return resultados;
     }
-    // ***** FIN NUEVO MÉTODO *****
+    // ***** FIN MÉTODO MODIFICADO *****
+    // ***** NUEVO MÉTODO PARA OBTENER PROCESADOS *****
+
+    public List<MuestraInfoViewModel> ObtenerPacientesProcesados(int idProyecto, DateTime fecha, List<int> tiposRequeridos, string textoBusqueda)
+    {
+        // Consulta base modificada para incluir STRING_AGG de exámenes COMPLETADOS
+        string queryBase = @"
+        SELECT
+            m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
+            p.genero, p.edad, m.fecha_recepcion,
+            -- NUEVO: Agregamos los nombres de exámenes donde procesado = TRUE
+            COALESCE(
+                STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
+                    te.activo = TRUE AND (
+                         (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+                         (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+                         (te.id_tipo_examen = 3 AND es.procesado = TRUE)
+                    )
+                ), '[Ninguno?]' -- Texto si no encontrara (no debería pasar aquí)
+            ) AS examenes_completados_str -- Nombre de la nueva columna agregada
+        FROM muestra m
+        INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+        -- Joins necesarios para filtros Y para agregar nombres de examen completados
+        LEFT JOIN muestra_examen me ON m.id_muestra = me.id_muestra
+        LEFT JOIN tipo_examen te ON me.id_tipo_examen = te.id_tipo_examen
+        LEFT JOIN examen e ON e.id_muestra = m.id_muestra AND e.id_tipo_examen = te.id_tipo_examen
+        LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+        LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+        LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+        ";
+
+        var whereClauses = new List<string>();
+        whereClauses.Add("m.id_proyecto = @idProyecto");
+        whereClauses.Add("m.fecha_recepcion = @fechaRecepcion");
+
+        // Filtro por tipo REQUERIDO (si aplica a la vista de procesados)
+        if (tiposRequeridos != null && tiposRequeridos.Any())
+        {
+            whereClauses.Add(@"EXISTS (
+                            SELECT 1 FROM muestra_examen me_f
+                            JOIN tipo_examen te_f ON me_f.id_tipo_examen = te_f.id_tipo_examen
+                            WHERE me_f.id_muestra = m.id_muestra
+                            AND te_f.activo = TRUE
+                            AND me_f.id_tipo_examen = ANY(@p_tipos)
+                           )");
+        }
+
+        // Filtro por texto de búsqueda
+        if (!string.IsNullOrWhiteSpace(textoBusqueda))
+        {
+            whereClauses.Add("(p.nombres ILIKE @p_texto OR p.apellidos ILIKE @p_texto OR p.codigo_beneficiario ILIKE @p_texto OR CAST(m.numero_muestra AS TEXT) ILIKE @p_texto)");
+        }
+
+        // LÓGICA CLAVE: Asegurar que NO existan exámenes PENDIENTES (igual que antes)
+        whereClauses.Add(@"
+        NOT EXISTS (
+            SELECT 1
+            FROM muestra_examen me_pend
+            JOIN tipo_examen te_pend ON me_pend.id_tipo_examen = te_pend.id_tipo_examen
+            LEFT JOIN examen e_pend ON e_pend.id_muestra = me_pend.id_muestra AND e_pend.id_tipo_examen = me_pend.id_tipo_examen
+            LEFT JOIN examen_orina eo_pend ON te_pend.id_tipo_examen = 1 AND eo_pend.id_examen = e_pend.id_examen
+            LEFT JOIN examen_heces eh_pend ON te_pend.id_tipo_examen = 2 AND eh_pend.id_examen = e_pend.id_examen
+            LEFT JOIN examen_sangre es_pend ON te_pend.id_tipo_examen = 3 AND es_pend.id_examen = e_pend.id_examen
+            WHERE me_pend.id_muestra = m.id_muestra
+              AND te_pend.activo = TRUE
+              AND ( e_pend.id_examen IS NULL OR
+                    (te_pend.id_tipo_examen = 1 AND eo_pend.procesado IS DISTINCT FROM TRUE) OR
+                    (te_pend.id_tipo_examen = 2 AND eh_pend.procesado IS DISTINCT FROM TRUE) OR
+                    (te_pend.id_tipo_examen = 3 AND es_pend.procesado IS DISTINCT FROM TRUE) )
+        )
+    ");
+        // Asegurar que la muestra tuviera exámenes asignados
+        whereClauses.Add("EXISTS (SELECT 1 FROM muestra_examen me_any WHERE me_any.id_muestra = m.id_muestra)");
+
+
+        // Construir la query final CON GROUP BY porque usamos STRING_AGG
+        string queryFinal = queryBase + " WHERE " + string.Join(" AND ", whereClauses) +
+                            " GROUP BY m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion" + // Agrupa por las columnas NO agregadas
+                            " ORDER BY m.numero_muestra;";
+
+        var resultados = new List<MuestraInfoViewModel>();
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(queryFinal, conn))
+                {
+                    // Parámetros (igual que antes)
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    cmd.Parameters.AddWithValue("@fechaRecepcion", fecha.Date);
+                    if (tiposRequeridos != null && tiposRequeridos.Any()) { cmd.Parameters.AddWithValue("@p_tipos", tiposRequeridos); }
+                    if (!string.IsNullOrWhiteSpace(textoBusqueda)) { cmd.Parameters.AddWithValue("@p_texto", $"%{textoBusqueda}%"); }
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            resultados.Add(new MuestraInfoViewModel
+                            {
+                                IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                                NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                                Paciente = reader.GetString(reader.GetOrdinal("paciente")),
+                                Genero = reader.GetString(reader.GetOrdinal("genero")),
+                                Edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                                FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
+                                // Lee la nueva columna agregada
+                                ExamenesCompletadosStr = reader.GetString(reader.GetOrdinal("examenes_completados_str"))
+                                // ExamenesPendientesStr ya no es relevante aquí, pero puedes dejarla null o vacía en el ViewModel si quieres
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex) { Console.WriteLine($"Error en ObtenerPacientesProcesados MODIFICADO: {ex.Message}\nQuery: {queryFinal}"); throw; }
+        return resultados;
+    }
     public List<tipo_examen> ObtenerTiposExamenPendientesPorMuestra(int idMuestra)
     {
         var tiposPendientes = new List<tipo_examen>();
@@ -632,6 +674,236 @@ public class ExamenRepository
         }
         return null; // Devuelve null si no se encuentra o hay error
     }
+    /// <summary>
+    /// Obtiene la lista de tipos de examen que ya han sido marcados como procesados
+    /// para una muestra específica. Útil para el modo Ver/Editar.
+    /// </summary>
+    /// <param name="idMuestra">El ID de la muestra a consultar.</param>
+    /// <returns>Una lista de objetos tipo_examen procesados.</returns>
+    public List<tipo_examen> ObtenerTiposExamenProcesadosPorMuestra(int idMuestra)
+    {
+        var tiposProcesados = new List<tipo_examen>();
+        // Seleccionamos los tipos de examen que tienen una entrada correspondiente
+        // en la tabla 'examen' Y cuyo estado 'procesado' asociado es TRUE.
+        string query = @"
+            SELECT DISTINCT te.id_tipo_examen, te.nombre, te.activo
+            FROM examen e
+            INNER JOIN tipo_examen te ON e.id_tipo_examen = te.id_tipo_examen
+            LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+            LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+            LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+            WHERE e.id_muestra = @idMuestra
+              AND te.activo = TRUE
+              AND ( -- Condición para estar PROCESADO
+                    (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+                    (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+                    (te.id_tipo_examen = 3 AND es.procesado = TRUE)
+                  )
+            ORDER BY te.id_tipo_examen;
+        ";
 
-}
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            tiposProcesados.Add(new tipo_examen // Usa el nombre correcto de tu clase
+                            {
+                                id_tipo_examen = reader.GetInt32(reader.GetOrdinal("id_tipo_examen")),
+                                nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                                activo = reader.GetBoolean(reader.GetOrdinal("activo"))
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener tipos procesados para muestra {idMuestra}: {ex.Message}");
+            throw; // Relanza para que la capa superior se entere
+        }
+        return tiposProcesados;
+    }
+    // ***** FIN NUEVO MÉTODO *****
+        /// <summary>
+        /// Obtiene los datos guardados de un examen de orina para una muestra específica.
+        /// </summary>
+        /// <param name="idMuestra">ID de la muestra.</param>
+        /// <returns>Objeto examen_orina con los datos, o null si no se encuentra.</returns>
+        public examen_orina ObtenerResultadoOrina(int idMuestra)
+        {
+            examen_orina resultado = null;
+            const int ID_TIPO_EXAMEN_ORINA = 1;
+            // Busca en examen_orina a través de la tabla examen usando id_muestra y id_tipo_examen
+            string query = @"
+            SELECT eo.*
+            FROM examen_orina eo
+            JOIN examen e ON eo.id_examen = e.id_examen
+            WHERE e.id_muestra = @idMuestra AND e.id_tipo_examen = @idTipoExamen
+            LIMIT 1;
+        "; // LIMIT 1 por si acaso, aunque solo debería haber uno
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        cmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_ORINA);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read()) // Si encontró un resultado
+                            {
+                                resultado = new examen_orina
+                                {
+                                    // Mapea todas las columnas de examen_orina a las propiedades
+                                    id_examen = reader.GetInt32(reader.GetOrdinal("id_examen")),
+                                    color = reader.IsDBNull(reader.GetOrdinal("color")) ? null : reader.GetString(reader.GetOrdinal("color")),
+                                    ph = reader.GetDecimal(reader.GetOrdinal("ph")), // Asume que no es null en BD? O usa reader.IsDBNull
+                                    aspecto = reader.IsDBNull(reader.GetOrdinal("aspecto")) ? null : reader.GetString(reader.GetOrdinal("aspecto")),
+                                    densidad = reader.GetDecimal(reader.GetOrdinal("densidad")),
+                                    leucocitos = reader.IsDBNull(reader.GetOrdinal("leucocitos")) ? null : reader.GetString(reader.GetOrdinal("leucocitos")),
+                                    hemoglobina = reader.IsDBNull(reader.GetOrdinal("hemoglobina")) ? null : reader.GetString(reader.GetOrdinal("hemoglobina")),
+                                    nitritos = reader.IsDBNull(reader.GetOrdinal("nitritos")) ? null : reader.GetString(reader.GetOrdinal("nitritos")),
+                                    cetonas = reader.IsDBNull(reader.GetOrdinal("cetonas")) ? null : reader.GetString(reader.GetOrdinal("cetonas")),
+                                    urobilinogeno = reader.IsDBNull(reader.GetOrdinal("urobilinogeno")) ? null : reader.GetString(reader.GetOrdinal("urobilinogeno")),
+                                    bilirrubinas = reader.IsDBNull(reader.GetOrdinal("bilirrubinas")) ? null : reader.GetString(reader.GetOrdinal("bilirrubinas")),
+                                    proteina = reader.IsDBNull(reader.GetOrdinal("proteina")) ? null : reader.GetString(reader.GetOrdinal("proteina")),
+                                    glucosa = reader.IsDBNull(reader.GetOrdinal("glucosa")) ? null : reader.GetString(reader.GetOrdinal("glucosa")),
+                                    celulas_epiteliales = reader.IsDBNull(reader.GetOrdinal("celulas_epiteliales")) ? null : reader.GetString(reader.GetOrdinal("celulas_epiteliales")),
+                                    bacterias = reader.IsDBNull(reader.GetOrdinal("bacterias")) ? null : reader.GetString(reader.GetOrdinal("bacterias")),
+                                    cristales = reader.IsDBNull(reader.GetOrdinal("cristales")) ? null : reader.GetString(reader.GetOrdinal("cristales")),
+                                    cilindros = reader.IsDBNull(reader.GetOrdinal("cilindros")) ? null : reader.GetString(reader.GetOrdinal("cilindros")),
+                                    eritrocitos = reader.IsDBNull(reader.GetOrdinal("eritrocitos")) ? null : reader.GetString(reader.GetOrdinal("eritrocitos")),
+                                    leucocitos_micro = reader.IsDBNull(reader.GetOrdinal("leucocitos_micro")) ? null : reader.GetString(reader.GetOrdinal("leucocitos_micro")),
+                                    observaciones = reader.IsDBNull(reader.GetOrdinal("observaciones")) ? null : reader.GetString(reader.GetOrdinal("observaciones")),
+                                    procesado = reader.GetBoolean(reader.GetOrdinal("procesado"))
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener resultado de Orina para muestra {idMuestra}: {ex.Message}");
+                throw; // Relanza para manejo superior
+            }
+            return resultado;
+        }
+
+        /// <summary>
+        /// Obtiene los datos guardados de un examen de heces para una muestra específica.
+        /// </summary>
+        public examen_heces ObtenerResultadoHeces(int idMuestra)
+        {
+            examen_heces resultado = null;
+            const int ID_TIPO_EXAMEN_HECES = 2;
+            string query = @"
+            SELECT eh.*
+            FROM examen_heces eh
+            JOIN examen e ON eh.id_examen = e.id_examen
+            WHERE e.id_muestra = @idMuestra AND e.id_tipo_examen = @idTipoExamen
+            LIMIT 1;
+        ";
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                { /* ... (similar a Orina, abre conexión, crea comando con parámetros) ... */
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        cmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_HECES);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                resultado = new examen_heces
+                                {
+                                    id_examen = reader.GetInt32(reader.GetOrdinal("id_examen")),
+                                    color = reader.IsDBNull(reader.GetOrdinal("color")) ? null : reader.GetString(reader.GetOrdinal("color")),
+                                    consistencia = reader.IsDBNull(reader.GetOrdinal("consistencia")) ? null : reader.GetString(reader.GetOrdinal("consistencia")),
+                                    parasitos = reader.IsDBNull(reader.GetOrdinal("parasitos")) ? null : reader.GetString(reader.GetOrdinal("parasitos")), // Asegúrate que sea string en modelo
+                                    observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? null : reader.GetString(reader.GetOrdinal("observacion")),
+                                    procesado = reader.GetBoolean(reader.GetOrdinal("procesado"))
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { /* ... (Manejo de error similar a Orina) ... */ throw; }
+            return resultado;
+        }
+
+        /// <summary>
+        /// Obtiene los datos guardados de un examen de sangre (BHC) para una muestra específica.
+        /// </summary>
+        public examen_sangre ObtenerResultadoSangre(int idMuestra)
+        {
+            examen_sangre resultado = null;
+            const int ID_TIPO_EXAMEN_SANGRE = 3;
+            string query = @"
+            SELECT es.*
+            FROM examen_sangre es
+            JOIN examen e ON es.id_examen = e.id_examen
+            WHERE e.id_muestra = @idMuestra AND e.id_tipo_examen = @idTipoExamen
+            LIMIT 1;
+        ";
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                { /* ... (similar a Orina, abre conexión, crea comando con parámetros) ... */
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        cmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_SANGRE);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // Mapea TODOS los campos numéricos y de texto de examen_sangre
+                                resultado = new examen_sangre
+                                {
+                                    id_examen = reader.GetInt32(reader.GetOrdinal("id_examen")),
+                                    globulos_rojos = reader.GetDecimal(reader.GetOrdinal("globulos_rojos")), // Asume que no son null? O usa IsDBNull
+                                    hematocrito = reader.GetDecimal(reader.GetOrdinal("hematocrito")),
+                                    hemoglobina = reader.GetDecimal(reader.GetOrdinal("hemoglobina")),
+                                    leucocitos = reader.GetDecimal(reader.GetOrdinal("leucocitos")),
+                                    mcv = reader.GetDecimal(reader.GetOrdinal("mcv")),
+                                    mch = reader.GetDecimal(reader.GetOrdinal("mch")),
+                                    mchc = reader.GetDecimal(reader.GetOrdinal("mchc")),
+                                    neutrofilos = reader.GetDecimal(reader.GetOrdinal("neutrofilos")),
+                                    linfocitos = reader.GetDecimal(reader.GetOrdinal("linfocitos")),
+                                    monocitos = reader.GetDecimal(reader.GetOrdinal("monocitos")),
+                                    eosinofilos = reader.GetDecimal(reader.GetOrdinal("eosinofilos")),
+                                    basofilos = reader.GetDecimal(reader.GetOrdinal("basofilos")),
+                                    observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? null : reader.GetString(reader.GetOrdinal("observacion")),
+                                    procesado = reader.GetBoolean(reader.GetOrdinal("procesado"))
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { /* ... (Manejo de error similar a Orina) ... */ throw; }
+            return resultado;
+        }
+
+        // ***** FIN *****
+    }
 

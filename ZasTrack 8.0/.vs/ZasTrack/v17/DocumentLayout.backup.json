@@ -3,16 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\examenes\\debug\\wexamenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\debug\\wexamenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\models\\muestrainfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\muestrainfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\repositories\\examenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositories\\examenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\examenes\\debug\\wprocesarresultados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\debug\\wprocesarresultados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\forms\\examenes\\debug\\wprocesarresultados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\debug\\wprocesarresultados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\examenes\\debug\\wexamenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\debug\\wexamenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alex\\source\\repos\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -63,11 +83,75 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "wExamenes.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\Debug\\wExamenes.cs",
+              "RelativeDocumentMoniker": "Forms\\Examenes\\Debug\\wExamenes.cs",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\Debug\\wExamenes.cs*",
+              "RelativeToolTip": "Forms\\Examenes\\Debug\\wExamenes.cs*",
+              "ViewState": "AgIAAJ8AAAAAAAAAAAApwMQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T02:25:46.371Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MuestraInfoViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Models\\MuestraInfoViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\MuestraInfoViewModel.cs",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Models\\MuestraInfoViewModel.cs",
+              "RelativeToolTip": "Models\\MuestraInfoViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T02:25:02.283Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "wProcesarResultados.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\Debug\\wProcesarResultados.cs",
+              "RelativeDocumentMoniker": "Forms\\Examenes\\Debug\\wProcesarResultados.cs",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\Debug\\wProcesarResultados.cs",
+              "RelativeToolTip": "Forms\\Examenes\\Debug\\wProcesarResultados.cs",
+              "ViewState": "AgIAAEgBAAAAAAAAAAAAANMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T00:45:13.713Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "wExamenes.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\Debug\\wExamenes.cs",
+              "RelativeDocumentMoniker": "Forms\\Examenes\\Debug\\wExamenes.cs",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\Debug\\wExamenes.cs [Dise\u00F1o]*",
+              "RelativeToolTip": "Forms\\Examenes\\Debug\\wExamenes.cs [Dise\u00F1o]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T00:42:45.873Z",
+              "EditorCaption": " [Dise\u00F1o]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ExamenRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Repositories\\ExamenRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\ExamenRepository.cs",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Repositories\\ExamenRepository.cs",
+              "RelativeToolTip": "Repositories\\ExamenRepository.cs",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAmwI0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-19T00:42:06.28Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "EGHControl.cs",
               "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
               "RelativeDocumentMoniker": "Forms\\Examenes\\ExamControl\\EGHControl.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs*",
-              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGHControl.cs*",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
+              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGHControl.cs",
               "ViewState": "AgIAAIAAAAAAAAAAAAAuwJ8AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-18T21:37:11.845Z",
@@ -75,19 +159,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EGHControl.cs [Dise\u00F1o]",
+              "DocumentIndex": 6,
+              "Title": "EGHControl.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
               "RelativeDocumentMoniker": "Forms\\Examenes\\ExamControl\\EGHControl.cs",
-              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs [Dise\u00F1o]*",
-              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGHControl.cs [Dise\u00F1o]*",
+              "ToolTip": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs [Design]",
+              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGHControl.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-18T21:37:10.726Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "wProcesarResultados.cs [Dise\u00F1o]",
               "DocumentMoniker": "C:\\Users\\Alex\\source\\repos\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\Debug\\wProcesarResultados.cs",
               "RelativeDocumentMoniker": "Forms\\Examenes\\Debug\\wProcesarResultados.cs",

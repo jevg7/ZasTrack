@@ -80,7 +80,7 @@
             // 
             // btnLimpiarFiltros
             // 
-            btnLimpiarFiltros.Location = new Point(905, 7);
+            btnLimpiarFiltros.Location = new Point(874, 6);
             btnLimpiarFiltros.Name = "btnLimpiarFiltros";
             btnLimpiarFiltros.Size = new Size(75, 31);
             btnLimpiarFiltros.TabIndex = 5;
@@ -90,7 +90,7 @@
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(818, 7);
+            btnActualizar.Location = new Point(787, 6);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(77, 31);
             btnActualizar.TabIndex = 5;
@@ -103,7 +103,7 @@
             panel1.BackColor = SystemColors.ActiveCaptionText;
             panel1.Controls.Add(label2);
             panel1.Controls.Add(cmbProyecto);
-            panel1.Location = new Point(566, 7);
+            panel1.Location = new Point(535, 6);
             panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
             panel1.Size = new Size(246, 31);
@@ -223,7 +223,7 @@
             txtSearch.Size = new Size(564, 23);
             txtSearch.TabIndex = 1;
             // 
-            // wExamenesNoRecep
+            // wExamenes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -231,7 +231,7 @@
             Controls.Add(pnlContenedor);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(3, 2, 3, 2);
-            Name = "wExamenesNoRecep";
+            Name = "wExamenes";
             Text = "wExamenesTest";
             pnlContenedor.ResumeLayout(false);
             pnlContProc.ResumeLayout(false);

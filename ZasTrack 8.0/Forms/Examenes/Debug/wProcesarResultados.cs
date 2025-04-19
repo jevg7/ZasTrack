@@ -56,93 +56,160 @@ namespace ZasTrack.Forms.Examenes.Debug
         // --- Método para Cargar Pestañas Dinámicamente ---
         private void CargarPestanasExamenes()
         {
-            // Limpia cualquier pestaña que pudiera existir (del diseñador o de una carga anterior)
-            tabControlExamenes.TabPages.Clear();
+            tabControlExamenes.TabPages.Clear(); // Limpia siempre
 
-            // Por ahora, implementamos solo el modo "Procesar" (cuando se abre desde Recepcionados)
-            // La lógica para "Ver/Editar" la añadiremos después.
-            if (_esModoVistaOEditar) // Si _esModoVistaOEditar es true
-            {
-                // TODO: Lógica para modo Ver/Editar
-                // 1. Obtener los exámenes YA PROCESADOS para _idMuestra.
-                // 2. Crear pestañas para esos exámenes.
-                // 3. Crear los UserControls correspondientes.
-                // 4. Llamar a un método del repositorio para OBTENER los datos guardados de ese examen.
-                // 5. Llamar al método userControl.CargarDatos(datosObtenidos) para llenar los campos.
-                // 6. (Opcional) Deshabilitar controles si es solo "Ver".
+            // Determina si habilitar controles o no (por defecto, sí para procesar)
+            bool habilitarControles = true;
 
-                MessageBox.Show("DEBUG: Modo Ver/Editar - Lógica de carga de datos aún no implementada.", "Info", MessageBoxButtons.OK);
-                // Podrías añadir pestañas vacías o cerrar. Por ahora, no hace nada más.
-                return;
-            }
-
-            // --- Lógica para modo "Procesar" (Muestras Nuevas/Pendientes) ---
             try
             {
-                // 1. Obtiene la lista de objetos tipo_examen que están pendientes para esta muestra
-                List<tipo_examen> examenesPendientes = _examenRepository.ObtenerTiposExamenPendientesPorMuestra(_idMuestra);
+                List<tipo_examen> examenesParaMostrar;
 
-                // 2. Verifica si hay exámenes pendientes
-                if (!examenesPendientes.Any())
+                if (_esModoVistaOEditar) // --- LÓGICA PARA MODO VER/EDITAR ---
                 {
-                    MessageBox.Show("Esta muestra no tiene exámenes pendientes de procesar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    // Considera cerrar el formulario si no hay nada que hacer
-                    this.BeginInvoke(new Action(() => this.Close())); // Cierra de forma segura después de mostrar el mensaje
-                    return;
+                    habilitarControles = false; // Por defecto, en modo vista es solo lectura
+                                                // Podrías añadir un botón "Habilitar Edición" si quieres permitirla después
+
+                    // 1. Obtiene la lista de tipos YA PROCESADOS para esta muestra
+                    examenesParaMostrar = _examenRepository.ObtenerTiposExamenProcesadosPorMuestra(_idMuestra);
+
+                    if (!examenesParaMostrar.Any())
+                    {
+                        MessageBox.Show("No se encontraron exámenes procesados para esta muestra.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.BeginInvoke(new Action(() => this.Close()));
+                        return;
+                    }
+                }
+                else // --- LÓGICA PARA MODO PROCESAR (PENDIENTES) ---
+                {
+                    // 1. Obtiene la lista de tipos PENDIENTES (como antes)
+                    examenesParaMostrar = _examenRepository.ObtenerTiposExamenPendientesPorMuestra(_idMuestra);
+
+                    if (!examenesParaMostrar.Any())
+                    {
+                        MessageBox.Show("Esta muestra no tiene exámenes pendientes de procesar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.BeginInvoke(new Action(() => this.Close()));
+                        return;
+                    }
                 }
 
-                // 3. Si hay pendientes, crea una pestaña para cada uno
-                foreach (var tipoExamen in examenesPendientes)
+                // 2. Itera sobre la lista de exámenes (pendientes o procesados)
+                foreach (var tipoExamen in examenesParaMostrar)
                 {
                     // 3a. Crea la TabPage
-                    TabPage nuevaPestana = new TabPage(tipoExamen.nombre); // Título de la pestaña
-                    nuevaPestana.Name = "tab" + tipoExamen.nombre.Replace(" ", ""); // Nombre interno
-                                                                                    // Guarda el ID del tipo de examen en el Tag de la pestaña, puede ser útil después
+                    TabPage nuevaPestana = new TabPage(tipoExamen.nombre);
+                    nuevaPestana.Name = "tab" + tipoExamen.nombre.Replace(" ", "");
                     nuevaPestana.Tag = tipoExamen.id_tipo_examen;
 
-                    // 3b. Crea el UserControl correspondiente basado en el ID o Nombre
+                    // 3b. Crea el UserControl correspondiente
                     UserControl controlExamen = null;
-                    switch (tipoExamen.id_tipo_examen) // Asumiendo IDs 1, 2, 3
+                    object datosGuardados = null; // Variable para guardar los datos recuperados
+
+                    switch (tipoExamen.id_tipo_examen)
                     {
                         case 1: // Orina
-                            controlExamen = new EGOControl(); // Crea tu UserControl de Orina
+                            controlExamen = new EGOControl();
+                            if (_esModoVistaOEditar) // Si es modo vista, busca los datos
+                            {
+                                datosGuardados = _examenRepository.ObtenerResultadoOrina(_idMuestra);
+                            }
                             break;
                         case 2: // Heces
-                            controlExamen = new EGHControl(); // Crea tu UserControl de Heces
+                            controlExamen = new EGHControl();
+                            if (_esModoVistaOEditar)
+                            {
+                                datosGuardados = _examenRepository.ObtenerResultadoHeces(_idMuestra);
+                            }
                             break;
                         case 3: // Sangre
-                            controlExamen = new BHCControl(); // Crea tu UserControl de Sangre
+                            controlExamen = new BHCControl();
+                            if (_esModoVistaOEditar)
+                            {
+                                datosGuardados = _examenRepository.ObtenerResultadoSangre(_idMuestra);
+                            }
                             break;
                         default:
-
-                            controlExamen = new UserControl();
+                            controlExamen = new UserControl(); // Placeholder
                             controlExamen.Controls.Add(new Label { Text = $"Controles para '{tipoExamen.nombre}' no implementados.", Dock = DockStyle.Fill, ForeColor = Color.Red });
                             break;
                     }
 
-                    // 3c. Añade y configura el UserControl dentro de la TabPage
+                    // 3c. Añade y configura el UserControl
                     if (controlExamen != null)
                     {
-                        controlExamen.Dock = DockStyle.Fill; // Para que ocupe todo el espacio de la pestaña
+                        controlExamen.Dock = DockStyle.Fill;
                         nuevaPestana.Controls.Add(controlExamen);
 
+                        // 3d. Si estamos en modo Ver/Editar Y se encontraron datos, CARGA los datos
+                        if (_esModoVistaOEditar && datosGuardados != null)
+                        {
+                            // Llama al método CargarDatos específico del UserControl
+                            if (controlExamen is EGOControl ego && datosGuardados is examen_orina dataOrina) { ego.CargarDatos(dataOrina); }
+                            else if (controlExamen is EGHControl egh && datosGuardados is examen_heces dataHeces) { egh.CargarDatos(dataHeces); }
+                            else if (controlExamen is BHCControl bhc && datosGuardados is examen_sangre dataSangre) { bhc.CargarDatos(dataSangre); }
+                        }
+                        // Si es modo nuevo (Procesar), CargarDatos del UserControl pondrá los defaults si lo implementaste así
+                        else if (!_esModoVistaOEditar)
+                        {
+                            // Asegurarse de que se inicialicen los defaults llamando a CargarDatos(null)
+                            // si no lo hiciste en el constructor del UserControl
+                            if (controlExamen is EGOControl ego) ego.CargarDatos(null);
+                            else if (controlExamen is EGHControl egh) egh.CargarDatos(null);
+                            else if (controlExamen is BHCControl bhc) bhc.CargarDatos(null);
+                        }
+
+
+                        // 3e. Hacer controles solo lectura si estamos en modo Vista
+                        if (!habilitarControles) // Si habilitarControles es false (Modo Vista)
+                        {
+                            HacerControlesSoloLectura(controlExamen);
+                        }
                     }
 
-                    // 3d. Añade la TabPage completa al TabControl
+                    // 3f. Añade la nueva TabPage al TabControl
                     tabControlExamenes.TabPages.Add(nuevaPestana);
+                } // Fin foreach
+
+                // 4. Ajustar botones según el modo
+                if (!habilitarControles) // Si es modo solo lectura
+                {
+                    btnGuardarResultados.Enabled = false; // Deshabilita guardar
+                    btnGuardarResultados.Visible = false; // Oculta guardar
+                    btnCancelar.Text = "&Cerrar";        // Cambia texto de Cancelar a Cerrar
                 }
+                else
+                {
+                    btnGuardarResultados.Enabled = true;
+                    btnGuardarResultados.Visible = true;
+                    btnCancelar.Text = "&Cancelar";
+                }
+
             }
             catch (Exception ex)
             {
-                // Muestra un error si falla la carga de pestañas
-                MessageBox.Show($"Error al preparar las pestañas de exámenes: {ex.Message}", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // Podrías cerrar el formulario aquí también
+                MessageBox.Show($"Error al cargar las pestañas de exámenes: {ex.Message}", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.BeginInvoke(new Action(() => this.Close()));
             }
         }
         // --- Fin CargarPestanasExamenes ---
 
-
+        private void HacerControlesSoloLectura(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c is TextBox txt)
+                {
+                    txt.ReadOnly = true;
+                    txt.BackColor = SystemColors.Control; // Fondo gris para indicar que no se edita
+                }
+                else if (c.HasChildren) // Si es un contenedor (Panel, GroupBox), revisa dentro
+                {
+                    HacerControlesSoloLectura(c);
+                }
+                // Podrías añadir lógica para deshabilitar ComboBox, CheckBox si los tuvieras
+                // else if (c is ComboBox combo) { combo.Enabled = false; }
+            }
+        }
         // --- Click Guardar (A IMPLEMENTAR LÓGICA DE GUARDADO) ---
         // En wProcesarResultados.cs
 
