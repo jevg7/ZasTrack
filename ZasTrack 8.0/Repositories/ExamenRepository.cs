@@ -11,34 +11,32 @@ public class ExamenRepository
 {
     // MeTODO COMPLETO CON TODOS LOS FILTROS
     public List<MuestraInfoViewModel> ObtenerPacientesPorProyecto(int idProyecto, DateTime fecha, List<int> tiposRequeridos, string textoBusqueda)
-    {
-        // La base de la consulta sigue seleccionando los datos y agregando pendientes
-        string queryBase = @"
-            SELECT
-                m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
-                p.genero, p.edad, m.fecha_recepcion,
-                COALESCE(
-                    STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
-                        te.activo = TRUE AND ( -- Asegura solo considerar activos
-                             e.id_examen IS NULL OR
-                             (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
-                             (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
-                             (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
-                        )
-                    ), '[Error al obtener pendientes]' -- Mensaje por si algo raro pasa
-                ) AS examenes_pendientes_str
-            FROM muestra m
-            INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
-            LEFT JOIN muestra_examen me ON m.id_muestra = me.id_muestra
-            LEFT JOIN tipo_examen te ON me.id_tipo_examen = te.id_tipo_examen
-            LEFT JOIN examen e ON e.id_muestra = me.id_muestra AND e.id_tipo_examen = me.id_tipo_examen
-            LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
-            LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
-            LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-            "; // Quitamos WHERE y GROUP BY para construirlos
+{
+    string queryBase = @"
+        SELECT
+            m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
+            p.genero, p.edad, m.fecha_recepcion,
+            COALESCE(
+                STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
+                    te.activo = TRUE AND (
+                         e.id_examen IS NULL OR
+                         (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
+                         (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
+                         (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
+                    )
+                ), '[COMPLETADO - NO DEBERIA SALIR]' -- Mensaje si algo falla al filtrar
+            ) AS examenes_pendientes_str -- Sigue siendo la lista de PENDIENTES
+        FROM muestra m
+        INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+        LEFT JOIN muestra_examen me ON m.id_muestra = me.id_muestra
+        LEFT JOIN tipo_examen te ON me.id_tipo_examen = te.id_tipo_examen
+        LEFT JOIN examen e ON e.id_muestra = me.id_muestra AND e.id_tipo_examen = te.id_tipo_examen
+        LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+        LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+        LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+        ";
 
         var whereClauses = new List<string>();
-        // Filtros existentes
         whereClauses.Add("m.id_proyecto = @idProyecto");
         whereClauses.Add("m.fecha_recepcion = @fechaRecepcion");
 
@@ -58,29 +56,23 @@ public class ExamenRepository
             whereClauses.Add("(p.nombres ILIKE @p_texto OR p.apellidos ILIKE @p_texto OR p.codigo_beneficiario ILIKE @p_texto OR CAST(m.numero_muestra AS TEXT) ILIKE @p_texto)");
         }
 
-        // ***** CONDICIÓN NUEVA Y CLAVE *****
-        // Añade esta condición para asegurar que solo se incluyan muestras
+        //  condición para asegurar que solo se incluyan muestras
         // para las cuales SÍ existe al menos un examen todavía pendiente.
         whereClauses.Add(@"
-            EXISTS (
-                SELECT 1
-                FROM muestra_examen me_pend
-                JOIN tipo_examen te_pend ON me_pend.id_tipo_examen = te_pend.id_tipo_examen
-                LEFT JOIN examen e_pend ON e_pend.id_muestra = me_pend.id_muestra AND e_pend.id_tipo_examen = me_pend.id_tipo_examen
-                LEFT JOIN examen_orina eo_pend ON te_pend.id_tipo_examen = 1 AND eo_pend.id_examen = e_pend.id_examen
-                LEFT JOIN examen_heces eh_pend ON te_pend.id_tipo_examen = 2 AND eh_pend.id_examen = e_pend.id_examen
-                LEFT JOIN examen_sangre es_pend ON te_pend.id_tipo_examen = 3 AND es_pend.id_examen = e_pend.id_examen
-                WHERE me_pend.id_muestra = m.id_muestra -- Vincula con la muestra externa 'm'
-                  AND te_pend.activo = TRUE             -- Solo tipos activos
-                  AND ( -- Condición de PENDIENTE (igual que en STRING_AGG)
-                        e_pend.id_examen IS NULL OR
-                        (te_pend.id_tipo_examen = 1 AND eo_pend.procesado IS DISTINCT FROM TRUE) OR
-                        (te_pend.id_tipo_examen = 2 AND eh_pend.procesado IS DISTINCT FROM TRUE) OR
-                        (te_pend.id_tipo_examen = 3 AND es_pend.procesado IS DISTINCT FROM TRUE)
-                      )
-            )
-        ");
-        // ***** FIN CONDICIÓN NUEVA *****
+        EXISTS (
+            SELECT 1 FROM muestra_examen me_pend
+            JOIN tipo_examen te_pend ON me_pend.id_tipo_examen = te_pend.id_tipo_examen
+            LEFT JOIN examen e_pend ON e_pend.id_muestra = me_pend.id_muestra AND e_pend.id_tipo_examen = me_pend.id_tipo_examen
+            LEFT JOIN examen_orina eo_pend ON te_pend.id_tipo_examen = 1 AND eo_pend.id_examen = e_pend.id_examen
+            LEFT JOIN examen_heces eh_pend ON te_pend.id_tipo_examen = 2 AND eh_pend.id_examen = e_pend.id_examen
+            LEFT JOIN examen_sangre es_pend ON te_pend.id_tipo_examen = 3 AND es_pend.id_examen = e_pend.id_examen
+            WHERE me_pend.id_muestra = m.id_muestra AND te_pend.activo = TRUE
+              AND ( e_pend.id_examen IS NULL OR
+                    (te_pend.id_tipo_examen = 1 AND eo_pend.procesado IS DISTINCT FROM TRUE) OR
+                    (te_pend.id_tipo_examen = 2 AND eh_pend.procesado IS DISTINCT FROM TRUE) OR
+                    (te_pend.id_tipo_examen = 3 AND es_pend.procesado IS DISTINCT FROM TRUE) )
+        )
+    ");
 
 
         // Construye la query final
@@ -139,40 +131,38 @@ public class ExamenRepository
     }
     // ***** FIN MÉTODO MODIFICADO *****
     // ***** NUEVO MÉTODO PARA OBTENER PROCESADOS *****
-
     public List<MuestraInfoViewModel> ObtenerPacientesProcesados(int idProyecto, DateTime fecha, List<int> tiposRequeridos, string textoBusqueda)
     {
-        // Consulta base modificada para incluir STRING_AGG de exámenes COMPLETADOS
+        // La base de la consulta incluye el STRING_AGG para COMPLETADOS
         string queryBase = @"
-        SELECT
-            m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
-            p.genero, p.edad, m.fecha_recepcion,
-            -- NUEVO: Agregamos los nombres de exámenes donde procesado = TRUE
-            COALESCE(
-                STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
-                    te.activo = TRUE AND (
-                         (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
-                         (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
-                         (te.id_tipo_examen = 3 AND es.procesado = TRUE)
-                    )
-                ), '[Ninguno?]' -- Texto si no encontrara (no debería pasar aquí)
-            ) AS examenes_completados_str -- Nombre de la nueva columna agregada
-        FROM muestra m
-        INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
-        -- Joins necesarios para filtros Y para agregar nombres de examen completados
-        LEFT JOIN muestra_examen me ON m.id_muestra = me.id_muestra
-        LEFT JOIN tipo_examen te ON me.id_tipo_examen = te.id_tipo_examen
-        LEFT JOIN examen e ON e.id_muestra = m.id_muestra AND e.id_tipo_examen = te.id_tipo_examen
-        LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
-        LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
-        LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-        ";
+    SELECT
+        m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
+        p.genero, p.edad, m.fecha_recepcion,
+        COALESCE(
+            STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
+                te.activo = TRUE AND (
+                     (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+                     (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+                     (te.id_tipo_examen = 3 AND es.procesado = TRUE)
+                )
+            ), '[Ninguno?]'
+        ) AS examenes_completados_str
+    FROM muestra m
+    INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+    LEFT JOIN muestra_examen me ON m.id_muestra = me.id_muestra
+    LEFT JOIN tipo_examen te ON me.id_tipo_examen = te.id_tipo_examen
+    LEFT JOIN examen e ON e.id_muestra = m.id_muestra AND e.id_tipo_examen = te.id_tipo_examen
+    LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+    LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+    LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+    ";
 
         var whereClauses = new List<string>();
+        // Filtros estándar
         whereClauses.Add("m.id_proyecto = @idProyecto");
         whereClauses.Add("m.fecha_recepcion = @fechaRecepcion");
 
-        // Filtro por tipo REQUERIDO (si aplica a la vista de procesados)
+        // Filtro por tipo REQUERIDO (si se marca un checkbox, muestra procesados que lo incluían)
         if (tiposRequeridos != null && tiposRequeridos.Any())
         {
             whereClauses.Add(@"EXISTS (
@@ -190,31 +180,30 @@ public class ExamenRepository
             whereClauses.Add("(p.nombres ILIKE @p_texto OR p.apellidos ILIKE @p_texto OR p.codigo_beneficiario ILIKE @p_texto OR CAST(m.numero_muestra AS TEXT) ILIKE @p_texto)");
         }
 
-        // LÓGICA CLAVE: Asegurar que NO existan exámenes PENDIENTES (igual que antes)
+        // ***** CONDICIÓN CLAVE PARA ESTA VISTA *****
+        // Incluir si EXISTE al menos UN examen PROCESADO
         whereClauses.Add(@"
-        NOT EXISTS (
+        EXISTS (
             SELECT 1
-            FROM muestra_examen me_pend
-            JOIN tipo_examen te_pend ON me_pend.id_tipo_examen = te_pend.id_tipo_examen
-            LEFT JOIN examen e_pend ON e_pend.id_muestra = me_pend.id_muestra AND e_pend.id_tipo_examen = me_pend.id_tipo_examen
-            LEFT JOIN examen_orina eo_pend ON te_pend.id_tipo_examen = 1 AND eo_pend.id_examen = e_pend.id_examen
-            LEFT JOIN examen_heces eh_pend ON te_pend.id_tipo_examen = 2 AND eh_pend.id_examen = e_pend.id_examen
-            LEFT JOIN examen_sangre es_pend ON te_pend.id_tipo_examen = 3 AND es_pend.id_examen = e_pend.id_examen
-            WHERE me_pend.id_muestra = m.id_muestra
-              AND te_pend.activo = TRUE
-              AND ( e_pend.id_examen IS NULL OR
-                    (te_pend.id_tipo_examen = 1 AND eo_pend.procesado IS DISTINCT FROM TRUE) OR
-                    (te_pend.id_tipo_examen = 2 AND eh_pend.procesado IS DISTINCT FROM TRUE) OR
-                    (te_pend.id_tipo_examen = 3 AND es_pend.procesado IS DISTINCT FROM TRUE) )
+            FROM examen e_proc -- Busca directamente en examen (que implica que hay resultado)
+            LEFT JOIN examen_orina eo_proc ON e_proc.id_tipo_examen = 1 AND eo_proc.id_examen = e_proc.id_examen
+            LEFT JOIN examen_heces eh_proc ON e_proc.id_tipo_examen = 2 AND eh_proc.id_examen = e_proc.id_examen
+            LEFT JOIN examen_sangre es_proc ON e_proc.id_tipo_examen = 3 AND es_proc.id_examen = e_proc.id_examen
+            WHERE e_proc.id_muestra = m.id_muestra -- Vincula con la muestra externa 'm'
+              AND ( -- Condición de PROCESADO
+                    (e_proc.id_tipo_examen = 1 AND eo_proc.procesado = TRUE) OR
+                    (e_proc.id_tipo_examen = 2 AND eh_proc.procesado = TRUE) OR
+                    (e_proc.id_tipo_examen = 3 AND es_proc.procesado = TRUE)
+                  )
         )
     ");
-        // Asegurar que la muestra tuviera exámenes asignados
-        whereClauses.Add("EXISTS (SELECT 1 FROM muestra_examen me_any WHERE me_any.id_muestra = m.id_muestra)");
+        // ***** FIN CONDICIÓN CLAVE *****
 
+        // ¡Ya NO necesitamos la condición NOT EXISTS (pending) aquí!
 
-        // Construir la query final CON GROUP BY porque usamos STRING_AGG
+        // Construcción final (CON GROUP BY porque usamos STRING_AGG)
         string queryFinal = queryBase + " WHERE " + string.Join(" AND ", whereClauses) +
-                            " GROUP BY m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion" + // Agrupa por las columnas NO agregadas
+                            " GROUP BY m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion" +
                             " ORDER BY m.numero_muestra;";
 
         var resultados = new List<MuestraInfoViewModel>();
@@ -235,6 +224,7 @@ public class ExamenRepository
                     {
                         while (reader.Read())
                         {
+                            // Llenado del ViewModel
                             resultados.Add(new MuestraInfoViewModel
                             {
                                 IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
@@ -243,9 +233,10 @@ public class ExamenRepository
                                 Genero = reader.GetString(reader.GetOrdinal("genero")),
                                 Edad = reader.GetInt32(reader.GetOrdinal("edad")),
                                 FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
-                                // Lee la nueva columna agregada
-                                ExamenesCompletadosStr = reader.GetString(reader.GetOrdinal("examenes_completados_str"))
-                                // ExamenesPendientesStr ya no es relevante aquí, pero puedes dejarla null o vacía en el ViewModel si quieres
+                                // Lee la columna con la lista de completados
+                                ExamenesCompletadosStr = reader.IsDBNull(reader.GetOrdinal("examenes_completados_str")) ? "" : reader.GetString(reader.GetOrdinal("examenes_completados_str")),
+                                // ExamenesPendientesStr se puede omitir o poner vacío
+                                ExamenesPendientesStr = "" // O null, según tu ViewModel
                             });
                         }
                     }

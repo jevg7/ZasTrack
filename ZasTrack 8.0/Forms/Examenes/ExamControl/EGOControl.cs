@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Drawing;        // Necesario para Font, Point, Color etc.
-using System.Globalization;  // Necesario para CultureInfo
+using System.Drawing;     
+using System.Globalization;  
 using System.Windows.Forms;
-using ZasTrack.Models;      // Asegúrate que examen_orina esté en este namespace
+using ZasTrack.Models;
 
-namespace ZasTrack.Forms.Examenes.ExamWrite // Asegúrate que este sea el namespace correcto
+namespace ZasTrack.Forms.Examenes.ExamWrite
 {
-    // Asegúrate que herede de UserControl y sea 'partial'
     public partial class EGOControl : UserControl
     {
-        // Constructor (normalmente solo llama a InitializeComponent)
+        private bool _isDirty = false;
+        public bool IsDirty => _isDirty;
         public EGOControl()
         {
             InitializeComponent();
@@ -72,6 +72,15 @@ namespace ZasTrack.Forms.Examenes.ExamWrite // Asegúrate que este sea el namesp
             txtCilindros.Text = datos.cilindros ?? "";
             // txtObservacionesOrina.Text = datos.observaciones ?? ""; // Si añades TextBox para observaciones
         }
+        private void InputTextBox_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = sender as TextBox;
+            // Si no está en estado default (gris), marca como modificado
+            if (txt != null && !(txt.Tag is bool && (bool)txt.Tag == true))
+            {
+                _isDirty = true;
+            }
+        }
 
         /// <summary>
         /// Lee los datos de los TextBoxes, los valida, y devuelve un objeto examen_orina.
@@ -127,19 +136,69 @@ namespace ZasTrack.Forms.Examenes.ExamWrite // Asegúrate que este sea el namesp
         /// <returns>True si todos los datos son válidos, False en caso contrario.</returns>
         private bool ValidarEntradasEGO()
         {
-              if (!string.IsNullOrWhiteSpace(txtPh.Text) && !decimal.TryParse(txtPh.Text, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out _))
+            // Lista de TODOS los TextBoxes que deben ser validados (obligatorios y/o numéricos)
+            // ¡Asegúrate que los nombres coincidan con tu diseñador!
+            TextBox[] todosLosCampos = {
+        txtColor, txtAspecto, txtPh, txtDensidad, txtLeucocitos, txtNitritos,
+        txtProteina, txtGlucosa, txtCetonas, txtUrobilinogeno, txtBilirrubinas,
+        txtHemoglobina, txtCelulasEpiteliales, txtLeucocitosMicro, txtEritrocitos,
+        txtBacterias, txtCristales, txtCilindros
+        // Añade aquí txtObservacionesOrina si lo implementas
+    };
+
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            NumberStyles style = NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign;
+
+            // --- 1. Validar que NINGÚN campo esté vacío ---
+            foreach (TextBox txt in todosLosCampos)
             {
-                MessageBox.Show("El valor de pH ingresado no es un número válido...", "Validación Orina", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPh.Focus(); txtPh.SelectAll(); return false;
+                // Usa IsNullOrWhiteSpace para detectar vacío o solo espacios
+                if (string.IsNullOrWhiteSpace(txt.Text))
+                {
+                    // Intenta obtener el nombre descriptivo del Label asociado
+                    Label lblAsociado = EncontrarLabelPara(txt);
+                    string nombreCampo = lblAsociado?.Text ?? txt.Name.Substring(3); // Usa texto del label o deriva del nombre del txt
+
+                    MessageBox.Show($"El campo '{nombreCampo}' no puede estar vacío.",
+                                    "Validación Orina - Campo Requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txt.Focus(); // Pone el foco en el campo vacío
+                    return false; // Validación fallida, no necesita seguir
+                }
             }
-            // Validación para Densidad (numérico si se ingresa)
-            if (!string.IsNullOrWhiteSpace(txtDensidad.Text) && !decimal.TryParse(txtDensidad.Text, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out _))
+
+            // --- 2. Validar formato numérico para campos específicos ---
+            //    (Solo si pasaron la validación de no estar vacíos)
+
+            // Validar pH
+            if (!decimal.TryParse(txtPh.Text, style, culture, out _))
             {
-                MessageBox.Show("El valor de Densidad ingresado no es un número válido...", "Validación Orina", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtDensidad.Focus(); txtDensidad.SelectAll(); return false;
+                MessageBox.Show("El valor de pH ingresado no es un número válido (use '.' como separador decimal).", "Validación Orina - Formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPh.Focus();
+                txtPh.SelectAll();
+                return false;
             }
-        
+
+            // Validar Densidad
+            if (!decimal.TryParse(txtDensidad.Text, style, culture, out _))
+            {
+                MessageBox.Show("El valor de Densidad ingresado no es un número válido (use '.' como separador decimal).", "Validación Orina - Formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDensidad.Focus();
+                txtDensidad.SelectAll();
+                return false;
+            }
+
+            // --- 3. Añadir aquí otras validaciones específicas si las necesitas ---
+            //     (Ej. rangos numéricos, valores específicos permitidos para textos)
+
+            // Si pasó todas las validaciones
             return true;
+        }
+
+        // --- Asegúrate de tener esta función auxiliar ---
+        private Label EncontrarLabelPara(TextBox txt)
+        {
+            string nombreLabel = "lbl" + txt.Name.Substring(3);
+            return this.Controls.OfType<Label>().FirstOrDefault(lbl => lbl.Name.Equals(nombreLabel, StringComparison.OrdinalIgnoreCase));
         }
 
         // Aquí puedes añadir más lógica o eventos privados si son necesarios
@@ -148,5 +207,5 @@ namespace ZasTrack.Forms.Examenes.ExamWrite // Asegúrate que este sea el namesp
         {
 
         }
-    } // Fin clase EGOControl
-} // Fin namespace
+    } // Fin clase EGOControl // Fin namespace
+}

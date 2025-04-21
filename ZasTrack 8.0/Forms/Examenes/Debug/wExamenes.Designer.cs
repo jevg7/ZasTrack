@@ -145,6 +145,7 @@
             btnVerProcesados.TabIndex = 1;
             btnVerProcesados.Text = "Procesados";
             btnVerProcesados.UseVisualStyleBackColor = true;
+            btnVerProcesados.Click += btnVerProcesados_Click_1;
             // 
             // pnlPacientes
             // 

@@ -29,28 +29,39 @@
         private void InitializeComponent()
         {
             pnlBotones = new Panel();
-            btnCancelar = new Button();
             btnGuardarResultados = new Button();
+            btnCancelar = new Button();
+            btnGuardarActual = new Button();
             tabControlExamenes = new TabControl();
             pnlBotones.SuspendLayout();
             SuspendLayout();
             // 
             // pnlBotones
             // 
-            pnlBotones.Controls.Add(btnCancelar);
             pnlBotones.Controls.Add(btnGuardarResultados);
+            pnlBotones.Controls.Add(btnCancelar);
+            pnlBotones.Controls.Add(btnGuardarActual);
             pnlBotones.Dock = DockStyle.Bottom;
             pnlBotones.Location = new Point(0, 511);
             pnlBotones.Name = "pnlBotones";
             pnlBotones.Size = new Size(984, 50);
             pnlBotones.TabIndex = 0;
             // 
+            // btnGuardarResultados
+            // 
+            btnGuardarResultados.Location = new Point(637, 10);
+            btnGuardarResultados.Name = "btnGuardarResultados";
+            btnGuardarResultados.Size = new Size(335, 32);
+            btnGuardarResultados.TabIndex = 2;
+            btnGuardarResultados.Text = "Guardar Todo y Cerrar";
+            btnGuardarResultados.UseVisualStyleBackColor = true;
+            // 
             // btnCancelar
             // 
             btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCancelar.CausesValidation = false;
             btnCancelar.DialogResult = DialogResult.Cancel;
-            btnCancelar.Location = new Point(448, 10);
+            btnCancelar.Location = new Point(339, 10);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(135, 32);
             btnCancelar.TabIndex = 1;
@@ -58,16 +69,16 @@
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
             // 
-            // btnGuardarResultados
+            // btnGuardarActual
             // 
-            btnGuardarResultados.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGuardarResultados.Location = new Point(618, 10);
-            btnGuardarResultados.Name = "btnGuardarResultados";
-            btnGuardarResultados.Size = new Size(354, 32);
-            btnGuardarResultados.TabIndex = 0;
-            btnGuardarResultados.Text = "&Guardar Resultados";
-            btnGuardarResultados.UseVisualStyleBackColor = true;
-            btnGuardarResultados.Click += btnGuardarResultados_Click;
+            btnGuardarActual.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnGuardarActual.Location = new Point(480, 10);
+            btnGuardarActual.Name = "btnGuardarActual";
+            btnGuardarActual.Size = new Size(151, 32);
+            btnGuardarActual.TabIndex = 0;
+            btnGuardarActual.Text = "Guardar Actual";
+            btnGuardarActual.UseVisualStyleBackColor = true;
+            btnGuardarActual.Click += btnGuardarActual_Click;
             // 
             // tabControlExamenes
             // 
@@ -101,7 +112,8 @@
 
         private Panel pnlBotones;
         private Button btnCancelar;
-        private Button btnGuardarResultados;
+        private Button btnGuardarActual;
         private TabControl tabControlExamenes;
+        private Button btnGuardarResultados;
     }
 }

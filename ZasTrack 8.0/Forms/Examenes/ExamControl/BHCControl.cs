@@ -9,9 +9,9 @@ namespace ZasTrack.Forms.Examenes.ExamWrite // Revisa el namespace
 {
     public partial class BHCControl : UserControl
     {
-        // Bandera para evitar cálculos recursivos
-        private bool _isCalculating = false;
-
+        private bool _isCalculating = false; 
+        private bool _isDirty = false;       
+        public bool IsDirty => _isDirty;
         public BHCControl()
         {
             InitializeComponent();
@@ -43,6 +43,16 @@ namespace ZasTrack.Forms.Examenes.ExamWrite // Revisa el namespace
         private void CamposClave_TextChanged(object sender, EventArgs e)
         {
             CalcularIndices();
+        }
+        private void Generic_TextChanged(object sender, EventArgs e)
+        {
+            // Marca como sucio si el cambio no es programático (gris)
+            // y si no estamos en medio de un cálculo automático
+            TextBox txt = sender as TextBox;
+            if (!_isCalculating && txt != null && !(txt.Tag is bool && (bool)txt.Tag == true))
+            {
+                _isDirty = true;
+            }
         }
 
         /// <summary>

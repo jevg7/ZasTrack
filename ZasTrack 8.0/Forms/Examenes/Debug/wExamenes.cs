@@ -22,7 +22,7 @@ namespace ZasTrack.Forms.Examenes
 
         public wExamenes()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             proyectoRepository = new ProyectoRepository();
             examenRepository = new ExamenRepository();
 
@@ -37,7 +37,7 @@ namespace ZasTrack.Forms.Examenes
             btnClearFilters.Click += btnLimpiarFiltros_Click; // Evento para botón Limpiar
             btnVerRecepcionados.Click += btnVerRecepcionados_Click; // <- Verifica nombre btnVerRecepcionados
             btnVerProcesados.Click += btnVerProcesados_Click;   // <- Verifica nombre btnVerProcesados
-            
+
 
             dtpFechaRecepcion.Value = DateTime.Today;
             CargarProyectos();
@@ -51,8 +51,8 @@ namespace ZasTrack.Forms.Examenes
             cmbProyecto.DataSource = proyectos;
             cmbProyecto.DisplayMember = "nombre";
             cmbProyecto.ValueMember = "id_proyecto";
-            cmbProyecto.SelectedIndex = -1; 
-            pnlPacientes.Controls.Clear(); 
+            cmbProyecto.SelectedIndex = -1;
+            pnlPacientes.Controls.Clear();
         }
 
         private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
@@ -60,7 +60,7 @@ namespace ZasTrack.Forms.Examenes
             if (cmbProyecto.SelectedItem is Proyecto p)
             {
                 ultimoProyectoSeleccionado = p.id_proyecto;
-                RecargarListaSiEsNecesario(); 
+                RecargarListaSiEsNecesario();
             }
             else
             {
@@ -299,9 +299,9 @@ namespace ZasTrack.Forms.Examenes
              => new Label
              {
                  Text = text,
-                 Location = new Point(x, 5), 
+                 Location = new Point(x, 5),
                  AutoSize = true,
-                 Font = new Font("Segoe UI", 9) 
+                 Font = new Font("Segoe UI", 9)
              };
 
 
@@ -356,7 +356,7 @@ namespace ZasTrack.Forms.Examenes
             if (chkFiltroHeces.Checked) tipos.Add(2); // ID Heces = 2
             if (chkFiltroSangre.Checked) tipos.Add(3); // ID Sangre = 3
             return tipos;
-        }          
+        }
 
         private void btnLimpiarFiltros_Click(object sender, EventArgs e)
         {
@@ -386,7 +386,7 @@ namespace ZasTrack.Forms.Examenes
             // Actualizar estado y limpiar panel
             ultimoProyectoSeleccionado = -1;
             pnlPacientes.Controls.Clear();
-          
+
 
         }
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -394,8 +394,8 @@ namespace ZasTrack.Forms.Examenes
             // Enter en el cuadro
             if (e.KeyCode == Keys.Enter)
             {
-                RecargarListaSiEsNecesario(); 
-                e.SuppressKeyPress = true; 
+                RecargarListaSiEsNecesario();
+                e.SuppressKeyPress = true;
             }
         }
         private void btnVerRecepcionados_Click(object sender, EventArgs e)
@@ -446,7 +446,7 @@ namespace ZasTrack.Forms.Examenes
         {
             RecargarListaSiEsNecesario(); // Usa el método centralizado
         }
-      
+
         private void FiltroTipoExamen_CheckedChanged(object sender, EventArgs e)
         {
             RecargarListaSiEsNecesario(); // Recarga al cambiar checkbox
@@ -476,5 +476,9 @@ namespace ZasTrack.Forms.Examenes
 
         #endregion
 
+        private void btnVerProcesados_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

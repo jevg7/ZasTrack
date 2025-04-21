@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Logging;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZasTrack.Forms.Examenes.ExamWrite;
 using ZasTrack.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ZasTrack.Forms.Examenes.Debug
 {
@@ -173,14 +178,14 @@ namespace ZasTrack.Forms.Examenes.Debug
                 // 4. Ajustar botones según el modo
                 if (!habilitarControles) // Si es modo solo lectura
                 {
-                    btnGuardarResultados.Enabled = false; // Deshabilita guardar
-                    btnGuardarResultados.Visible = false; // Oculta guardar
+                    btnGuardarActual.Enabled = false; // Deshabilita guardar
+                    btnGuardarActual.Visible = false; // Oculta guardar
                     btnCancelar.Text = "&Cerrar";        // Cambia texto de Cancelar a Cerrar
                 }
                 else
                 {
-                    btnGuardarResultados.Enabled = true;
-                    btnGuardarResultados.Visible = true;
+                    btnGuardarActual.Enabled = true;
+                    btnGuardarActual.Visible = true;
                     btnCancelar.Text = "&Cancelar";
                 }
 
@@ -211,146 +216,136 @@ namespace ZasTrack.Forms.Examenes.Debug
             }
         }
         // --- Click Guardar (A IMPLEMENTAR LÓGICA DE GUARDADO) ---
+
+
         // En wProcesarResultados.cs
+        // REEMPLAZA COMPLETAMENTE el método btnGuardarResultados_Click
 
-        private void btnGuardarResultados_Click(object sender, EventArgs e)
+        private void btnGuardarActual_Click(object sender, EventArgs e)
         {
-            // --- 1. Obtener idPaciente ---
-            //    (Necesitamos añadir este método simple al ExamenRepository)
-            int? idPacienteNullable = _examenRepository.ObtenerIdPacientePorMuestra(_idMuestra);
-            if (!idPacienteNullable.HasValue)
+            // 1. Obtener la pestaña activa y el UserControl asociado
+            if (tabControlExamenes.SelectedTab == null)
             {
-                MessageBox.Show("Error fatal: No se pudo obtener la información del paciente para esta muestra. No se puede guardar.",
-                                "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; // Detiene el proceso
-            }
-            int idPaciente = idPacienteNullable.Value; // Tenemos el id del paciente
-
-            // --- 2. Validar y Recolectar Datos de las Pestañas Visibles ---
-            bool todosLosDatosSonValidos = true;
-            examen_orina datosOrina = null;
-            examen_heces datosHeces = null;
-            examen_sangre datosSangre = null;
-
-            // Deshabilita botones y muestra cursor de espera mientras procesamos
-            btnGuardarResultados.Enabled = false;
-            btnCancelar.Enabled = false;
-            this.Cursor = Cursors.WaitCursor;
-
-            foreach (TabPage tabPage in tabControlExamenes.TabPages)
-            {
-                // Asume que el UserControl es el primer (y único) control en la pestaña
-                if (tabPage.Controls.Count > 0 && tabPage.Controls[0] is UserControl controlExamen)
-                {
-                    // Llama a ObtenerDatos() según el tipo de UserControl
-                    // ObtenerDatos() debe validar internamente y devolver null si falla
-                    if (controlExamen is EGOControl ego)
-                    {
-                        datosOrina = ego.ObtenerDatos();
-                        if (datosOrina == null) // Validación falló dentro de ObtenerDatos
-                        {
-                            todosLosDatosSonValidos = false;
-                            tabControlExamenes.SelectedTab = tabPage; // Muestra la pestaña con error
-                            break; // Detiene la recolección
-                        }
-                    }
-                    else if (controlExamen is EGHControl egh) // Asume nombre correcto
-                    {
-                        datosHeces = egh.ObtenerDatos();
-                        if (datosHeces == null)
-                        {
-                            todosLosDatosSonValidos = false;
-                            tabControlExamenes.SelectedTab = tabPage;
-                            break;
-                        }
-                    }
-                    else if (controlExamen is BHCControl bhc) // Asume nombre correcto
-                    {
-                        datosSangre = bhc.ObtenerDatos();
-                        if (datosSangre == null)
-                        {
-                            todosLosDatosSonValidos = false;
-                            tabControlExamenes.SelectedTab = tabPage;
-                            break;
-                        }
-                    }
-                    // Añadir 'else if' para otros tipos de examen si los tienes
-                }
-            } // Fin foreach TabPage
-
-            // Si alguna validación interna falló, se mostró mensaje desde ObtenerDatos/Validar...
-            // y detenemos el proceso aquí antes de intentar guardar.
-            if (!todosLosDatosSonValidos)
-            {
-                // Rehabilita botones y restaura cursor
-                btnGuardarResultados.Enabled = true;
-                btnCancelar.Enabled = true;
-                this.Cursor = Cursors.Default;
-                MessageBox.Show("Por favor, corrija los errores indicados antes de guardar.", "Validación Fallida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Sale del método Guardar
+                MessageBox.Show("No hay ninguna pestaña de examen seleccionada.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
 
-            // --- 3. Si TODO es válido, intentar guardar en la BD ---
-            bool guardadoGeneralExitoso = true; // Bandera para saber si todo se guardó
+            TabPage tabActiva = tabControlExamenes.SelectedTab;
+            UserControl controlExamenActivo = null;
 
-            try
+            if (tabActiva.Controls.Count > 0 && tabActiva.Controls[0] is UserControl uc)
             {
-                // Intenta guardar cada resultado que se haya recolectado
-                // Nota: Cada llamada al repositorio maneja su propia transacción interna
-                if (datosOrina != null)
-                {
-                    if (!_examenRepository.GuardarResultadoOrina(datosOrina, _idMuestra, idPaciente))
-                    {
-                        guardadoGeneralExitoso = false; // Marca que algo falló
-                                                        // El método del repositorio ya debería haber mostrado/logueado un error más específico
-                    }
-                }
-
-                if (guardadoGeneralExitoso && datosHeces != null) // Solo sigue si no ha fallado nada antes
-                {
-                    if (!_examenRepository.GuardarResultadoHeces(datosHeces, _idMuestra, idPaciente))
-                    {
-                        guardadoGeneralExitoso = false;
-                    }
-                }
-
-                if (guardadoGeneralExitoso && datosSangre != null) // Solo sigue si no ha fallado nada antes
-                {
-                    if (!_examenRepository.GuardarResultadoSangre(datosSangre, _idMuestra, idPaciente))
-                    {
-                        guardadoGeneralExitoso = false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Captura cualquier error inesperado (ej. de conexión a BD)
-                guardadoGeneralExitoso = false;
-                MessageBox.Show($"Error inesperado al guardar resultados: {ex.Message}\n{ex.StackTrace}", "Error Crítico de Guardado", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                // Siempre rehabilita botones y cursor
-                btnGuardarResultados.Enabled = true;
-                btnCancelar.Enabled = true;
-                this.Cursor = Cursors.Default;
-            }
-
-
-            // --- 4. Cerrar el modal SOLO si TODO se guardó correctamente ---
-            if (guardadoGeneralExitoso)
-            {
-                MessageBox.Show("Resultados guardados exitosamente.", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK; // Indica éxito al formulario padre (wExamenesNoRecep)
-                this.Close(); // Cierra este modal
+                controlExamenActivo = uc;
             }
             else
             {
-                MessageBox.Show("No se pudieron guardar todos los resultados. Por favor, revise los datos o contacte al administrador.", "Error al Guardar", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // El modal NO se cierra, permitiendo al usuario reintentar o cancelar.
+                MessageBox.Show($"No se encontró el control de examen dentro de la pestaña '{tabActiva.Text}'.", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 2. Validar y Obtener Datos del UserControl activo
+            object datosObtenidos = null;
+            bool validacionOk = false;
+
+            try
+            {
+                if (controlExamenActivo is EGOControl egoCtrl) { datosObtenidos = egoCtrl.ObtenerDatos(); }
+                else if (controlExamenActivo is EGHControl eghCtrl) { datosObtenidos = eghCtrl.ObtenerDatos(); }
+                else if (controlExamenActivo is BHCControl bhcCtrl) { datosObtenidos = bhcCtrl.ObtenerDatos(); }
+                // Añade 'else if' para otros tipos de UserControl si los tienes
+
+                validacionOk = (datosObtenidos != null);
+            }
+            catch (NotImplementedException exNIE)
+            {
+                MessageBox.Show($"La función para obtener/validar datos de '{tabActiva.Text}' aún no está implementada en su UserControl.\nDetalle: {exNIE.Message}", "Función Faltante", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                validacionOk = false;
+            }
+            catch (Exception exVal)
+            {
+                MessageBox.Show($"Ocurrió un error inesperado durante la validación de '{tabActiva.Text}':\n{exVal.Message}", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                validacionOk = false;
+                Console.WriteLine($"ERROR en ObtenerDatos para {tabActiva.Text}: {exVal.ToString()}");
+            }
+
+            if (!validacionOk)
+            {
+                tabControlExamenes.SelectedTab = tabActiva;
+                return;
+            }
+
+            // 3. Obtener idPaciente
+            int? idPacienteNullable = null;
+            try
+            {
+                idPacienteNullable = _examenRepository.ObtenerIdPacientePorMuestra(_idMuestra);
+            }
+            catch (Exception exRepo)
+            {
+                MessageBox.Show($"Error al consultar la base de datos para obtener el paciente:\n{exRepo.Message}", "Error de Conexión/Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"ERROR en ObtenerIdPacientePorMuestra: {exRepo.ToString()}");
+                return;
+            }
+
+            if (!idPacienteNullable.HasValue)
+            {
+                MessageBox.Show("Error Crítico: No se pudo encontrar el ID del paciente asociado a esta muestra en la base de datos.", "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            int idPaciente = idPacienteNullable.Value;
+
+            // 4. Proceder a guardar los datos validados
+            bool guardadoExitoso = false;
+            string nombreExamenActual = tabActiva.Text;
+
+            btnGuardarActual.Enabled = false;
+            if (!_esModoVistaOEditar) btnGuardarResultados.Enabled = false;
+            btnCancelar.Enabled = false;
+            this.Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                if (datosObtenidos is examen_orina dataOrina)
+                {
+                    guardadoExitoso = _examenRepository.GuardarResultadoOrina(dataOrina, _idMuestra, idPaciente);
+                }
+                else if (datosObtenidos is examen_heces dataHeces)
+                {
+                    guardadoExitoso = _examenRepository.GuardarResultadoHeces(dataHeces, _idMuestra, idPaciente);
+                }
+                else if (datosObtenidos is examen_sangre dataSangre)
+                {
+                    guardadoExitoso = _examenRepository.GuardarResultadoSangre(dataSangre, _idMuestra, idPaciente);
+                }
+                // Añade 'else if' para otros tipos si los tienes
+            }
+            catch (Exception exGuardado)
+            {
+                guardadoExitoso = false;
+                Console.WriteLine($"ERROR guardando {nombreExamenActual}: {exGuardado.ToString()}");
+                MessageBox.Show($"Ocurrió un error inesperado al intentar guardar los resultados de '{nombreExamenActual}':\n{exGuardado.Message}",
+                                "Error de Guardado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnGuardarActual.Enabled = true;
+                if (!_esModoVistaOEditar) { btnGuardarResultados.Enabled = true; }
+                btnCancelar.Enabled = true;
+                this.Cursor = Cursors.Default;
+            }
+
+            // 5. Mostrar Mensaje Final y actualizar color de pestaña
+            if (guardadoExitoso)
+            {
+                MessageBox.Show($"Los resultados del examen de '{nombreExamenActual}' se han guardado correctamente.",
+                                "Guardado Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // --- INICIO: Marcar pestaña como guardada ---
+                tabActiva.BackColor = Color.LightGreen; // Cambia el color de fondo
+                                                        // --- FIN: Marcar pestaña como guardada ---
             }
         }
-        // --- Fin Click Guardar ---
+
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             // Si asignaste DialogResult=Cancel en diseñador, esta línea no es estrictamente necesaria
@@ -363,9 +358,184 @@ namespace ZasTrack.Forms.Examenes.Debug
 
         }
 
-        private void btnGuardarResultados_Click_1(object sender, EventArgs e)
+        private async void btnGuardarResultados_Click(object sender, EventArgs e)
         {
+            // --- 1. Obtener idPaciente ---
+            int? idPacienteNullable = _examenRepository.ObtenerIdPacientePorMuestra(_idMuestra);
+            if (!idPacienteNullable.HasValue)
+            {
+                MessageBox.Show("Error Crítico: No se pudo obtener la información del paciente.", "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            int idPaciente = idPacienteNullable.Value;
 
+            // --- 2. Validar TODAS las pestañas VISIBLES ---
+            bool validacionGeneralOK = true;
+            var datosValidosPorPestana = new List<(TabPage Tab, int TipoExamenId, object Data)>();
+            List<string> examenesConErrorValidacion = new List<string>();
+
+            // Deshabilita UI mientras valida
+            //btnGuardarActual.Enabled = false; // Asegúrate que este botón exista si lo vas a deshabilitar
+            btnGuardarResultados.Enabled = false;
+            btnCancelar.Enabled = false;
+            this.Cursor = Cursors.WaitCursor;
+
+            // Primero, valida todo lo visible
+            foreach (TabPage tabPage in tabControlExamenes.TabPages)
+            {
+                if (tabPage.Controls.Count > 0 && tabPage.Controls[0] is UserControl controlExamen)
+                {
+                    object datosObtenidos = null;
+                    int tipoExamenId = (tabPage.Tag is int id) ? id : 0;
+
+                    // Llama a ObtenerDatos (que valida internamente)
+                    if (controlExamen is EGOControl egoCtrl) { datosObtenidos = egoCtrl.ObtenerDatos(); }
+                    else if (controlExamen is EGHControl eghCtrl) { datosObtenidos = eghCtrl.ObtenerDatos(); }
+                    else if (controlExamen is BHCControl bhcCtrl) { datosObtenidos = bhcCtrl.ObtenerDatos(); }
+                    // ... otros tipos ...
+
+                    if (datosObtenidos == null) // Validación falló para esta pestaña
+                    {
+                        validacionGeneralOK = false;
+                        examenesConErrorValidacion.Add(tabPage.Text);
+                    }
+                    else
+                    {
+                        if (tipoExamenId != 0)
+                        {
+                            datosValidosPorPestana.Add((tabPage, tipoExamenId, datosObtenidos));
+                        }
+                    }
+                }
+            }
+
+            // --- 3. Si ALGUNA validación falló, informar TODOS los errores y detener ---
+            if (!validacionGeneralOK)
+            {
+                // Intenta enfocar la primera pestaña con error
+                var primeraTabConError = tabControlExamenes.TabPages.Cast<TabPage>()
+                                            .FirstOrDefault(t => examenesConErrorValidacion.Contains(t.Text));
+                if (primeraTabConError != null)
+                {
+                    tabControlExamenes.SelectedTab = primeraTabConError;
+                }
+
+                MessageBox.Show($"Corrija los errores de validación en: {string.Join(", ", examenesConErrorValidacion)}.\nNo se guardó ningún resultado.",
+                                "Validación Fallida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // Rehabilita UI y sale
+                //if (btnGuardarActual != null) btnGuardarActual.Enabled = true; // Si existe
+                btnGuardarResultados.Enabled = true; btnCancelar.Enabled = true; this.Cursor = Cursors.Default;
+                return;
+            }
+
+            // --- 4. Si no hay nada válido para guardar ---
+            if (datosValidosPorPestana.Count == 0)
+            {
+                MessageBox.Show("No se encontraron datos válidos para guardar en las pestañas visibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Rehabilita UI y sale
+                //if (btnGuardarActual != null) btnGuardarActual.Enabled = true; // Si existe
+                btnGuardarResultados.Enabled = true; btnCancelar.Enabled = true; this.Cursor = Cursors.Default;
+                return;
+            }
+
+            // --- 5. Confirmación del Usuario ANTES de guardar ---
+            bool guardarConfirmado = true;
+            if (datosValidosPorPestana.Count > 1) // Pregunta si hay más de uno
+            {
+                string nombresExamenesValidos = string.Join(", ", datosValidosPorPestana.Select(d => d.Tab.Text));
+                var confirmResult = MessageBox.Show($"Se validaron correctamente los resultados para: {nombresExamenesValidos}.\n\n¿Desea guardar estos {datosValidosPorPestana.Count} resultado(s)?",
+                                                    "Confirmar Guardado", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                guardarConfirmado = (confirmResult == DialogResult.Yes);
+            }
+            else // Si solo hay uno, pregunta por ese
+            {
+                var confirmResult = MessageBox.Show($"Se validaron correctamente los resultados para: {datosValidosPorPestana[0].Tab.Text}.\n\n¿Desea guardar este resultado?",
+                                                    "Confirmar Guardado", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                guardarConfirmado = (confirmResult == DialogResult.Yes);
+            }
+
+            if (!guardarConfirmado)
+            {
+                // Usuario canceló, rehabilita UI y sale
+                //if (btnGuardarActual != null) btnGuardarActual.Enabled = true; // Si existe
+                btnGuardarResultados.Enabled = true; btnCancelar.Enabled = true; this.Cursor = Cursors.Default;
+                return;
+            }
+
+            // --- 6. Si usuario confirma, GUARDAR los datos validados ---
+            bool guardadoGeneralExitoso = true;
+            int examenesGuardados = 0;
+            List<string> examenesConErrorGuardado = new List<string>();
+
+            try // Envuelve TODO el bloque de guardado
+            {
+                // Itera SOLO sobre los datos que validaron y que el usuario confirmó guardar
+                foreach (var itemGuardar in datosValidosPorPestana)
+                {
+                    bool guardadoOkEsteExamen = false;
+                    string nombreExamenActual = itemGuardar.Tab.Text;
+
+                    try // Intenta guardar este examen individualmente
+                    {
+                        if (itemGuardar.Data is examen_orina dataOrina) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoOrina(dataOrina, _idMuestra, idPaciente); }
+                        else if (itemGuardar.Data is examen_heces dataHeces) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoHeces(dataHeces, _idMuestra, idPaciente); }
+                        else if (itemGuardar.Data is examen_sangre dataSangre) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoSangre(dataSangre, _idMuestra, idPaciente); }
+                        // ... otros tipos ...
+
+                        if (!guardadoOkEsteExamen) // Si el repositorio devolvió false
+                        {
+                            guardadoGeneralExitoso = false;
+                            examenesConErrorGuardado.Add(nombreExamenActual);
+                        }
+                        else
+                        {
+                            examenesGuardados++;
+                        }
+                    }
+                    catch (Exception exGuardado) // Captura error de BD al guardar ESTE examen
+                    {
+                        guardadoGeneralExitoso = false; examenesConErrorGuardado.Add(nombreExamenActual);
+                        Console.WriteLine($"ERROR guardando {nombreExamenActual}: {exGuardado.Message}");
+                        // Podrías añadir más detalles al log aquí si es necesario
+                    }
+                } // Fin foreach datosParaGuardar
+            }
+            catch (Exception exGeneral) // Captura error inesperado fuera del loop de guardado (poco probable)
+            {
+                guardadoGeneralExitoso = false;
+                MessageBox.Show($"Ocurrió un error general inesperado antes de poder guardar todos los resultados:\n{exGeneral.Message}", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"ERROR GENERAL en btnGuardarResultados_Click: {exGeneral.ToString()}");
+            }
+            finally
+            {
+                // Rehabilita UI INDEPENDIENTEMENTE del resultado
+                //if (btnGuardarActual != null) btnGuardarActual.Enabled = true; // Si existe
+                // Solo rehabilita si no estamos en modo vista (donde ya estaba deshabilitado)
+                if (!_esModoVistaOEditar) { btnGuardarResultados.Enabled = true; }
+                btnCancelar.Enabled = true;
+                this.Cursor = Cursors.Default;
+            }
+
+            // --- 7. Mensajes Finales y Cierre ---
+            if (!guardadoGeneralExitoso) // Si hubo error al guardar AL MENOS UNO de los confirmados
+            {
+                MessageBox.Show($"Se intentó guardar los exámenes validados. Ocurrió un error al guardar: {string.Join(", ", examenesConErrorGuardado)}.\n{(examenesGuardados > 0 ? $"Los otros {examenesGuardados} resultados válidos sí pudieron guardarse." : "Ningún resultado fue guardado.")}",
+                                "Error Parcial de Guardado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // NO CERRAMOS el modal para que el usuario vea qué falló o intente de nuevo.
+            }
+            else if (examenesGuardados > 0) // Si no hubo errores Y se guardó al menos uno (todos los confirmados)
+            {
+                MessageBox.Show($"Se guardaron exitosamente los resultados de {examenesGuardados} examen(es).",
+                                "Guardado Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK; // Indica éxito para refrescar la lista anterior
+                this.Close(); // Cierra el formulario
+            }
+            else // No hubo errores, pero no se guardó nada (quizás el usuario canceló?)
+            {
+                // Este caso es cubierto por la confirmación previa, pero por si acaso.
+                MessageBox.Show("No se guardó ningún resultado en esta operación.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // No cerramos
+            }
         }
     }
 
