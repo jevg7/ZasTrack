@@ -130,7 +130,7 @@ public class ExamenRepository
         return resultados;
     }
     // ***** FIN MÉTODO MODIFICADO *****
-    // ***** NUEVO MÉTODO PARA OBTENER PROCESADOS *****
+  
     public List<MuestraInfoViewModel> ObtenerPacientesProcesados(int idProyecto, DateTime fecha, List<int> tiposRequeridos, string textoBusqueda)
     {
         // La base de la consulta incluye el STRING_AGG para COMPLETADOS
@@ -301,7 +301,6 @@ public class ExamenRepository
         }
         return tiposPendientes;
     }
-    // ***** FIN NUEVO MÉTODO *****
     public bool GuardarResultadoHeces(examen_heces datosHeces, int idMuestra, int idPaciente)
     {
         int idExamen;
@@ -391,7 +390,6 @@ public class ExamenRepository
             }
         }
     }
-    // ***** FIN MÉTODO HECES *****
     public bool GuardarResultadoSangre(examen_sangre datosSangre, int idMuestra, int idPaciente)
     {
         int idExamen;
@@ -498,7 +496,6 @@ public class ExamenRepository
             }
         }
     }
-    // ***** FIN MÉTODO SANGRE *****
 
     public bool GuardarResultadoOrina(examen_orina datosOrina, int idMuestra, int idPaciente)
     {
@@ -637,7 +634,6 @@ public class ExamenRepository
             } // La conexión se cierra automáticamente aquí
         }
     }
-    // ***** FIN NUEVO MÉTODO *****
     // En ExamenRepository.cs
     public int? ObtenerIdPacientePorMuestra(int idMuestra)
     {
@@ -723,7 +719,6 @@ public class ExamenRepository
         }
         return tiposProcesados;
     }
-    // ***** FIN NUEVO MÉTODO *****
         /// <summary>
         /// Obtiene los datos guardados de un examen de orina para una muestra específica.
         /// </summary>
@@ -894,7 +889,101 @@ public class ExamenRepository
             catch (Exception ex) { /* ... (Manejo de error similar a Orina) ... */ throw; }
             return resultado;
         }
-
-        // ***** FIN *****
+    public Dictionary<string, int> CountPendientesByTypeByProject(int idProyecto)
+    {
+        var counts = new Dictionary<string, int>();
+        string query = @"
+        SELECT
+            te.nombre,
+            COUNT(DISTINCT me.id_muestra) -- O COUNT(*) si quieres contar exámenes individuales pendientes
+        FROM tipo_examen te
+        INNER JOIN muestra_examen me ON te.id_tipo_examen = me.id_tipo_examen
+        INNER JOIN muestra m ON me.id_muestra = m.id_muestra
+        LEFT JOIN examen e ON e.id_muestra = me.id_muestra AND e.id_tipo_examen = te.id_tipo_examen
+        LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+        LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+        LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+        WHERE m.id_proyecto = @idProyecto
+          AND te.activo = TRUE
+          AND (
+              e.id_examen IS NULL OR
+              (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
+              (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
+              (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
+          )
+        GROUP BY te.nombre
+        ORDER BY te.nombre;
+    ";
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // Usa GetInt64 por si acaso el COUNT es muy grande
+                            counts.Add(reader.GetString(0), Convert.ToInt32(reader.GetInt64(1)));
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en CountPendientesByTypeByProject: {ex.Message}");
+            throw;
+        }
+        return counts;
     }
+
+    // NUEVO MÉTODO para procesados hoy
+    public int CountProcesadosByProjectAndDate(int idProyecto, DateTime fecha)
+    {
+        string query = @"
+        SELECT COUNT(e.id_examen)
+        FROM examen e
+        INNER JOIN muestra m ON e.id_muestra = m.id_muestra
+        INNER JOIN tipo_examen te ON e.id_tipo_examen = te.id_tipo_examen
+        LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+        LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+        LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+        WHERE m.id_proyecto = @idProyecto
+          AND e.fecha_procesamiento::date = @fecha -- Filtra por fecha de procesamiento
+          AND te.activo = TRUE -- Opcional
+          AND ( -- Condición de PROCESADO
+              (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+              (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+              (te.id_tipo_examen = 3 AND es.procesado = TRUE)
+          );
+    ";
+        int count = 0;
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    cmd.Parameters.AddWithValue("@fecha", fecha.Date);
+                    var result = cmd.ExecuteScalar();
+                    count = (result == null || result == DBNull.Value) ? 0 : Convert.ToInt32(result);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en CountProcesadosByProjectAndDate: {ex.Message}");
+            throw;
+        }
+        return count;
+    }
+
+    // ***** FIN *****
+}
 

@@ -1,4 +1,4 @@
-﻿using Npgsql;
+﻿    using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -74,6 +74,21 @@ namespace ZasTrack.Forms.Muestras
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+           BuscarPac();
+        }
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Enter en el cuadro
+            if (e.KeyCode == Keys.Enter)
+            {
+               BuscarPac();
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        #region Metodos
+        private void BuscarPac()
+        {
             string criterio = txtBuscar.Text.Trim();
             int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
             List<pacientes> pacientes = pacienteRepository.BuscarPacientes(criterio, idProyecto);
@@ -98,8 +113,6 @@ namespace ZasTrack.Forms.Muestras
 
             }
         }
-
-        #region Metodos
         private void LimpiarCampos(bool limpiarProyecto = true)
         {
             txtPaciente.Clear();
@@ -115,18 +128,48 @@ namespace ZasTrack.Forms.Muestras
             }
         }
 
+        // En wMuestras.cs
+
         private void guardarMuestra()
         {
-            if (string.IsNullOrWhiteSpace(txtFecha.Text) || string.IsNullOrWhiteSpace(txtPaciente.Text) || string.IsNullOrWhiteSpace(txtMuestrasId.Text))
+            // Validación campos básicos
+            if (string.IsNullOrWhiteSpace(txtFecha.Text) || string.IsNullOrWhiteSpace(txtPaciente.Text) /* || string.IsNullOrWhiteSpace(txtMuestrasId.Text) */ )
             {
-                MessageBox.Show("Por favor, llene todos los campos");
+                // CORREGIDO: MessageBoxIcon.Warning
+                MessageBox.Show("Por favor, busque un paciente y asegúrese de que el proyecto esté seleccionado.", "Campos Incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            int idProyecto = (cmbProyecto.SelectedItem as Proyecto)?.id_proyecto ?? -1;
+            // Validación selección paciente
+            if (string.IsNullOrWhiteSpace(txtIdPaciente.Text) || !int.TryParse(txtIdPaciente.Text, out _))
+            {
+                // CORREGIDO: MessageBoxIcon.Warning
+                MessageBox.Show("Debe buscar y seleccionar un paciente válido antes de guardar.", "Paciente no Seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtBuscar.Focus();
+                return;
+            }
+            // Validación selección proyecto
+            if (cmbProyecto.SelectedItem == null || !(cmbProyecto.SelectedItem is Proyecto) || ((Proyecto)cmbProyecto.SelectedItem).id_proyecto <= 0)
+            {
+                // CORREGIDO: MessageBoxIcon.Warning
+                MessageBox.Show("Debe seleccionar un proyecto válido.", "Proyecto no Seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbProyecto.Focus();
+                return;
+            }
+            // Validación tipo examen
+            if (!chkOrina.Checked && !chkHeces.Checked && !chkSangre.Checked)
+            {
+                // CORREGIDO: MessageBoxIcon.Warning
+                MessageBox.Show("Debe seleccionar al menos un tipo de examen.", "Tipo Examen Requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // chkOrina.Focus(); // Opcional
+                return;
+            }
+
+
+            int idProyecto = (cmbProyecto.SelectedItem as Proyecto).id_proyecto;
             DateTime fechaActual = DateTime.Now.Date;
             int numeroMuestra = muestraRepository.ObtenerUltimaMuestra(idProyecto, fechaActual) + 1;
 
-            // 1. Primero crea y guarda la muestra
+            // 1. Crear y guardar la muestra
             Muestra muestra = new Muestra()
             {
                 IdProyecto = idProyecto,
@@ -135,21 +178,59 @@ namespace ZasTrack.Forms.Muestras
                 FechaRecepcion = fechaActual
             };
 
-            int idMuestra = muestraRepository.GuardarMuestras(muestra);
+            int idMuestra = 0;
+            try
+            {
+                idMuestra = muestraRepository.GuardarMuestras(muestra);
+            }
+            catch (Exception exGuardadoMuestra)
+            {
+                // CORREGIDO: MessageBoxIcon.Error
+                MessageBox.Show($"Error al guardar la cabecera de la muestra:\n{exGuardadoMuestra.Message}", "Error Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"ERROR GuardarMuestras: {exGuardadoMuestra.ToString()}");
+                return;
+            }
 
-            // 2. Luego vincula los exámenes
-            if (chkOrina.Checked)
-                muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 1 });
+            // 2. Vincular exámenes
+            if (idMuestra > 0)
+            {
+                try
+                {
+                    if (chkOrina.Checked)
+                        muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 1 });
 
-            if (chkHeces.Checked)
-                muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 2 });
+                    if (chkHeces.Checked)
+                        muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 2 });
 
-            if (chkSangre.Checked)
-                muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 3 });
+                    if (chkSangre.Checked)
+                        muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 3 });
 
-            MessageBox.Show("Muestra guardada correctamente");
-            LimpiarCampos();
-        }
+                    // CORREGIDO: MessageBoxIcon.Information
+                    MessageBox.Show($"Muestra #{numeroMuestra} guardada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // --- MANTIENE LA CORRECCIÓN ANTERIOR ---
+                    LimpiarCampos(false); // Llama a limpiar SIN borrar el proyecto
+                                          // --- FIN CORRECCIÓN ANTERIOR ---
+
+                    txtBuscar.Clear();
+                    txtBuscar.Focus();
+                }
+                catch (Exception exVinculacion)
+                {
+                    // CORREGIDO: MessageBoxIcon.Error
+                    MessageBox.Show($"Se guardó la muestra #{numeroMuestra}, pero ocurrió un error al vincular los tipos de examen:\n{exVinculacion.Message}\n\nRevise la configuración o intente editar la muestra.", "Error al Vincular Exámenes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Console.WriteLine($"ERROR Vinculando Exámenes para Muestra ID {idMuestra}: {exVinculacion.ToString()}");
+                    LimpiarCampos(false); // Limpia igual para la siguiente
+                    txtBuscar.Clear();
+                    txtBuscar.Focus();
+                }
+            }
+            else
+            {
+                // CORREGIDO: MessageBoxIcon.Error
+                MessageBox.Show("No se pudo obtener un ID válido al guardar la muestra. No se vincularon exámenes.", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        } // Fin guardarMuestra
         private void fechaLock()
         {
             txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");

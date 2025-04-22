@@ -21,7 +21,7 @@ namespace ZasTrack
         {
             InitializeComponent();
         }
-        private void Abrir_Form(object formhijo)
+        public void Abrir_Form(object formhijo)
         {
 
             if (this.pnlContenedor.Controls.Count > 0)
@@ -60,7 +60,7 @@ namespace ZasTrack
 
         private void btnDashBoard_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new Forms.Dashboard.wDashboard());
+            Abrir_Form(new Forms.Dashboard.wDashboard(this));
         }
         private void btnExamenes_Click(object sender, EventArgs e)
         {

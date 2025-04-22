@@ -1,4 +1,4 @@
-﻿using Npgsql;
+﻿    using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -258,39 +258,38 @@ namespace ZasTrack.Forms.Examenes
 
         // En wExamenesNoRecep.cs
 
+        // En wExamenes.cs
+
         private void BtnAccion_Click(object sender, EventArgs e)
         {
-            // Verifica que el sender sea un Button y que su Tag SÍ sea un MuestraInfoViewModel
             if (sender is Button btn && btn.Tag is MuestraInfoViewModel pac)
             {
-                // ¡Ahora SÍ tenemos acceso a 'pac' aquí!
-
-                // Obtenemos el idMuestra directamente del objeto 'pac' también
-                int idMuestra = pac.IdMuestra;
+                // Variable para guardar el resultado del dialogo
+                DialogResult result = DialogResult.None;
 
                 if (mostrandoRecepcionados) // Botón "Procesar"
                 {
-                    // Usamos las propiedades del objeto 'pac' recuperado del Tag
                     using (var modalForm = new wProcesarResultados(pac.IdMuestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente))
                     {
-                        DialogResult result = modalForm.ShowDialog(this);
-                        if (result == DialogResult.OK) { RecargarListaSiEsNecesario(); }
-                    }
+                        // Muestra el formulario modal
+                        result = modalForm.ShowDialog(this);
+                    } // El 'using' asegura que se liberen recursos aquí
                 }
                 else // Botón "Ver Detalles"
                 {
-                    // Usamos las propiedades del objeto 'pac' recuperado del Tag
-                    using (var modalForm = new wProcesarResultados(pac.IdMuestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente, modoVista: true)) // Pasamos modoVista
+                    using (var modalForm = new wProcesarResultados(pac.IdMuestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente, modoVista: true))
                     {
-                        modalForm.ShowDialog(this);
-                        // Quizás refrescar si se edita algo
-                        // if (modalForm.DialogResult == DialogResult.OK) { RecargarListaSiEsNecesario(); }
-                    }
+                        // Muestra el formulario modal en modo vista
+                        result = modalForm.ShowDialog(this);
+                    } // El 'using' asegura que se liberen recursos aquí
                 }
+
+                // Recargar SIEMPRE después de cerrar el modal
+                RecargarListaSiEsNecesario();
+
             }
             else
             {
-                // Opcional: Mostrar un error si el Tag no es lo esperado (no debería pasar)
                 MessageBox.Show("Error: No se pudo obtener la información de la muestra desde el botón.", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }

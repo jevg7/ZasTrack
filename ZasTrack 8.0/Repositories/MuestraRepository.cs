@@ -91,6 +91,32 @@ namespace ZasTrack.Repositories
             }
             return ultimaMuestra;
         }
+        public int CountByProjectAndDate(int idProyecto, DateTime fecha)
+        {
+            // Compara solo la parte de la fecha
+            string query = "SELECT COUNT(id_muestra) FROM muestra WHERE id_proyecto = @idProyecto AND fecha_recepcion::date = @fecha";
+            int count = 0;
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open(); // Considerar OpenAsync si el repo es async
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                        cmd.Parameters.AddWithValue("@fecha", fecha.Date); // Asegura comparar solo fecha
+                        var result = cmd.ExecuteScalar(); // Puede ser null si no hay filas
+                        count = (result == null || result == DBNull.Value) ? 0 : Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en CountByProjectAndDate: {ex.Message}");
+                throw; // O manejar el error como prefieras
+            }
+            return count;
+        }
     }
 }
 

@@ -31,14 +31,18 @@
             lblBienvDash = new Label();
             lblBienvenido = new Label();
             tlpIndices = new TableLayoutPanel();
-            pnlInformes = new Panel();
-            lblInfomes = new Label();
-            pnlExamenesRev = new Panel();
-            lblExamenesRev = new Label();
+            pnlAccionRapida = new Panel();
+            btnAccionVerPendientes = new Button();
+            btnAccionNuevaMuestra = new Button();
+            lblAccionRapida = new Label();
             pnlPacientesTotal = new Panel();
             lblPacientesTotal = new Label();
             pnlMuestrasDia = new Panel();
             lblMuestrasDia = new Label();
+            pnlExamenesRev = new Panel();
+            lblExamenesRev = new Label();
+            pnlInformes = new Panel();
+            lblInfomes = new Label();
             cmbProyecto = new ComboBox();
             tlpGraficas = new TableLayoutPanel();
             pnlMuestrasProc = new Panel();
@@ -51,10 +55,11 @@
             pnlExamenesUltimos = new Panel();
             lblExamenesUltimos = new Label();
             tlpIndices.SuspendLayout();
-            pnlInformes.SuspendLayout();
-            pnlExamenesRev.SuspendLayout();
+            pnlAccionRapida.SuspendLayout();
             pnlPacientesTotal.SuspendLayout();
             pnlMuestrasDia.SuspendLayout();
+            pnlExamenesRev.SuspendLayout();
+            pnlInformes.SuspendLayout();
             tlpGraficas.SuspendLayout();
             pnlMuestrasProc.SuspendLayout();
             pnlTipoExamenes.SuspendLayout();
@@ -86,15 +91,17 @@
             // 
             // tlpIndices
             // 
-            tlpIndices.ColumnCount = 4;
-            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.3861F));
-            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49.6139F));
-            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 272F));
-            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 259F));
-            tlpIndices.Controls.Add(pnlInformes, 3, 0);
-            tlpIndices.Controls.Add(pnlExamenesRev, 2, 0);
+            tlpIndices.ColumnCount = 5;
+            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 53.7074165F));
+            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46.2925835F));
+            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 234F));
+            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 191F));
+            tlpIndices.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 175F));
+            tlpIndices.Controls.Add(pnlAccionRapida, 4, 0);
             tlpIndices.Controls.Add(pnlPacientesTotal, 0, 0);
             tlpIndices.Controls.Add(pnlMuestrasDia, 1, 0);
+            tlpIndices.Controls.Add(pnlExamenesRev, 2, 0);
+            tlpIndices.Controls.Add(pnlInformes, 3, 0);
             tlpIndices.Location = new Point(47, 140);
             tlpIndices.Name = "tlpIndices";
             tlpIndices.RowCount = 1;
@@ -102,46 +109,52 @@
             tlpIndices.Size = new Size(1100, 140);
             tlpIndices.TabIndex = 4;
             // 
-            // pnlInformes
+            // pnlAccionRapida
             // 
-            pnlInformes.Controls.Add(lblInfomes);
-            pnlInformes.Location = new Point(843, 3);
-            pnlInformes.Name = "pnlInformes";
-            pnlInformes.Size = new Size(252, 134);
-            pnlInformes.TabIndex = 6;
+            pnlAccionRapida.Controls.Add(btnAccionVerPendientes);
+            pnlAccionRapida.Controls.Add(btnAccionNuevaMuestra);
+            pnlAccionRapida.Controls.Add(lblAccionRapida);
+            pnlAccionRapida.Location = new Point(927, 3);
+            pnlAccionRapida.Name = "pnlAccionRapida";
+            pnlAccionRapida.Size = new Size(170, 134);
+            pnlAccionRapida.TabIndex = 7;
             // 
-            // lblInfomes
+            // btnAccionVerPendientes
             // 
-            lblInfomes.AutoSize = true;
-            lblInfomes.Location = new Point(17, 11);
-            lblInfomes.Name = "lblInfomes";
-            lblInfomes.Size = new Size(95, 15);
-            lblInfomes.TabIndex = 0;
-            lblInfomes.Text = "Informes del dia:";
+            btnAccionVerPendientes.Location = new Point(17, 68);
+            btnAccionVerPendientes.Name = "btnAccionVerPendientes";
+            btnAccionVerPendientes.Size = new Size(137, 23);
+            btnAccionVerPendientes.TabIndex = 2;
+            btnAccionVerPendientes.Text = "Ver Pendientes";
+            btnAccionVerPendientes.UseVisualStyleBackColor = true;
+            btnAccionVerPendientes.Click += btnAccionVerPendientes_Click;
             // 
-            // pnlExamenesRev
+            // btnAccionNuevaMuestra
             // 
-            pnlExamenesRev.Controls.Add(lblExamenesRev);
-            pnlExamenesRev.Location = new Point(571, 3);
-            pnlExamenesRev.Name = "pnlExamenesRev";
-            pnlExamenesRev.Size = new Size(252, 134);
-            pnlExamenesRev.TabIndex = 6;
+            btnAccionNuevaMuestra.Location = new Point(17, 29);
+            btnAccionNuevaMuestra.Name = "btnAccionNuevaMuestra";
+            btnAccionNuevaMuestra.Size = new Size(137, 23);
+            btnAccionNuevaMuestra.TabIndex = 1;
+            btnAccionNuevaMuestra.Text = "Nueva Muestra";
+            btnAccionNuevaMuestra.UseVisualStyleBackColor = true;
+            btnAccionNuevaMuestra.Click += btnAccionNuevaMuestra_Click;
             // 
-            // lblExamenesRev
+            // lblAccionRapida
             // 
-            lblExamenesRev.AutoSize = true;
-            lblExamenesRev.Location = new Point(14, 11);
-            lblExamenesRev.Name = "lblExamenesRev";
-            lblExamenesRev.Size = new Size(109, 15);
-            lblExamenesRev.TabIndex = 0;
-            lblExamenesRev.Text = "Examenes a Revisar";
+            lblAccionRapida.AutoSize = true;
+            lblAccionRapida.Location = new Point(35, 11);
+            lblAccionRapida.Name = "lblAccionRapida";
+            lblAccionRapida.Size = new Size(99, 15);
+            lblAccionRapida.TabIndex = 0;
+            lblAccionRapida.Text = "Acciones Rapidas";
+            lblAccionRapida.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // pnlPacientesTotal
             // 
             pnlPacientesTotal.Controls.Add(lblPacientesTotal);
             pnlPacientesTotal.Location = new Point(3, 3);
             pnlPacientesTotal.Name = "pnlPacientesTotal";
-            pnlPacientesTotal.Size = new Size(252, 134);
+            pnlPacientesTotal.Size = new Size(238, 134);
             pnlPacientesTotal.TabIndex = 5;
             pnlPacientesTotal.Paint += pnlPacientesTotal_Paint;
             // 
@@ -157,9 +170,9 @@
             // pnlMuestrasDia
             // 
             pnlMuestrasDia.Controls.Add(lblMuestrasDia);
-            pnlMuestrasDia.Location = new Point(289, 3);
+            pnlMuestrasDia.Location = new Point(271, 3);
             pnlMuestrasDia.Name = "pnlMuestrasDia";
-            pnlMuestrasDia.Size = new Size(252, 134);
+            pnlMuestrasDia.Size = new Size(203, 134);
             pnlMuestrasDia.TabIndex = 6;
             pnlMuestrasDia.Paint += pnlMuestrasDia_Paint;
             // 
@@ -171,6 +184,41 @@
             lblMuestrasDia.Size = new Size(96, 15);
             lblMuestrasDia.TabIndex = 0;
             lblMuestrasDia.Text = "Muestras de Hoy";
+            // 
+            // pnlExamenesRev
+            // 
+            pnlExamenesRev.Controls.Add(lblExamenesRev);
+            pnlExamenesRev.Location = new Point(502, 3);
+            pnlExamenesRev.Name = "pnlExamenesRev";
+            pnlExamenesRev.Size = new Size(179, 134);
+            pnlExamenesRev.TabIndex = 6;
+            // 
+            // lblExamenesRev
+            // 
+            lblExamenesRev.AutoSize = true;
+            lblExamenesRev.Location = new Point(14, 11);
+            lblExamenesRev.Name = "lblExamenesRev";
+            lblExamenesRev.Size = new Size(65, 15);
+            lblExamenesRev.TabIndex = 0;
+            lblExamenesRev.Text = "Pendientes";
+            // 
+            // pnlInformes
+            // 
+            pnlInformes.Controls.Add(lblInfomes);
+            pnlInformes.Location = new Point(736, 3);
+            pnlInformes.Name = "pnlInformes";
+            pnlInformes.Size = new Size(171, 134);
+            pnlInformes.TabIndex = 6;
+            // 
+            // lblInfomes
+            // 
+            lblInfomes.AutoSize = true;
+            lblInfomes.ImageAlign = ContentAlignment.TopLeft;
+            lblInfomes.Location = new Point(17, 11);
+            lblInfomes.Name = "lblInfomes";
+            lblInfomes.Size = new Size(109, 15);
+            lblInfomes.TabIndex = 0;
+            lblInfomes.Text = "Examenes a Revisar";
             // 
             // cmbProyecto
             // 
@@ -297,14 +345,16 @@
             Text = "z|";
             Load += wDashboard_Load;
             tlpIndices.ResumeLayout(false);
-            pnlInformes.ResumeLayout(false);
-            pnlInformes.PerformLayout();
-            pnlExamenesRev.ResumeLayout(false);
-            pnlExamenesRev.PerformLayout();
+            pnlAccionRapida.ResumeLayout(false);
+            pnlAccionRapida.PerformLayout();
             pnlPacientesTotal.ResumeLayout(false);
             pnlPacientesTotal.PerformLayout();
             pnlMuestrasDia.ResumeLayout(false);
             pnlMuestrasDia.PerformLayout();
+            pnlExamenesRev.ResumeLayout(false);
+            pnlExamenesRev.PerformLayout();
+            pnlInformes.ResumeLayout(false);
+            pnlInformes.PerformLayout();
             tlpGraficas.ResumeLayout(false);
             pnlMuestrasProc.ResumeLayout(false);
             pnlMuestrasProc.PerformLayout();
@@ -344,5 +394,9 @@
         private Label lblExamenesTipos;
         private Label lblMuestrasUltimas;
         private Label lblExamenesUltimos;
+        private Panel pnlAccionRapida;
+        private Button btnAccionVerPendientes;
+        private Button btnAccionNuevaMuestra;
+        private Label lblAccionRapida;
     }
 }
