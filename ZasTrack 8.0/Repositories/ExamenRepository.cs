@@ -984,6 +984,70 @@ public class ExamenRepository
         return count;
     }
 
+    // Devuelve info de los últimos N exámenes procesados de un proyecto
+    public List<ExamenProcesadoInfo> GetUltimosExamenesProcesadosPorProyecto(int idProyecto, int limite = 5)
+    {
+        // Usa el namespace correcto para la clase auxiliar si la pusiste en otro lugar
+        // ej: var ultimosExamenes = new List<ZasTrack.Models.ExamenProcesadoInfo>();
+        var ultimosExamenes = new List<ExamenProcesadoInfo>();
+
+        // IMPORTANTE: Revisa que los nombres de tablas y columnas en esta consulta
+        // coincidan EXACTAMENTE con tu base de datos.
+        string query = @"
+                SELECT 
+                    m.numero_muestra, 
+                    p.nombres || ' ' || p.apellidos AS paciente, 
+                    te.nombre AS tipo_examen, 
+                    e.fecha_procesamiento
+                FROM examen e
+                INNER JOIN muestra m ON e.id_muestra = m.id_muestra
+                INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+                INNER JOIN tipo_examen te ON e.id_tipo_examen = te.id_tipo_examen
+                LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+                LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+                LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+                WHERE m.id_proyecto = @idProyecto
+                  AND ( -- Condición de PROCESADO
+                      (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+                      (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+                      (te.id_tipo_examen = 3 AND es.procesado = TRUE)
+                  )
+                ORDER BY e.fecha_procesamiento DESC, e.id_examen DESC
+                LIMIT @limite;
+            ";
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open(); // Considera OpenAsync si el método es async
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    cmd.Parameters.AddWithValue("@limite", limite);
+                    using (var reader = cmd.ExecuteReader()) // Considera ExecuteReaderAsync
+                    {
+                        while (reader.Read()) // Considera await reader.ReadAsync()
+                        {
+                            ultimosExamenes.Add(new ExamenProcesadoInfo // Usa el namespace correcto si es necesario
+                            {
+                                NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                                Paciente = reader.GetString(reader.GetOrdinal("paciente")),
+                                TipoExamen = reader.GetString(reader.GetOrdinal("tipo_examen")),
+                                FechaProcesamiento = reader.GetDateTime(reader.GetOrdinal("fecha_procesamiento"))
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en GetUltimosExamenesProcesadosPorProyecto: {ex.Message}");
+            // Considera loguear ex.ToString() para más detalle
+            throw; // O retorna lista vacía y maneja el error en el Dashboard
+        }
+        return ultimosExamenes;
+    }
     // ***** FIN *****
 }
 

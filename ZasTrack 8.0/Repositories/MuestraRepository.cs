@@ -117,6 +117,60 @@ namespace ZasTrack.Repositories
             }
             return count;
         }
+        public List<MuestraInfoViewModel> GetUltimasMuestrasPorProyecto(int idProyecto, int limite = 5) // limite=5 por defecto
+        {
+            var ultimasMuestras = new List<MuestraInfoViewModel>();
+            // Unimos muestra con pacientes, filtramos por proyecto, ordenamos descendente por fecha/ID y limitamos
+            string query = @"
+        SELECT 
+            m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente, 
+            m.fecha_recepcion 
+        FROM muestra m
+        INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+        WHERE m.id_proyecto = @idProyecto
+        ORDER BY m.fecha_recepcion DESC, m.id_muestra DESC 
+        LIMIT @limite;
+    ";
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                        cmd.Parameters.AddWithValue("@limite", limite);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                // Creamos un ViewModel simplificado o reusamos MuestraInfoViewModel
+                                // Asegúrate que MuestraInfoViewModel tenga las propiedades necesarias
+                                ultimasMuestras.Add(new MuestraInfoViewModel
+                                {
+                                    IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                                    NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                                    Paciente = reader.GetString(reader.GetOrdinal("paciente")),
+                                    FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
+                                    // Otras propiedades del ViewModel pueden quedar null o vacías
+                                    Genero = "",
+                                    Edad = 0,
+                                    ExamenesPendientesStr = "",
+                                    ExamenesCompletadosStr = ""
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en GetUltimasMuestrasPorProyecto: {ex.Message}");
+                throw; // O retorna lista vacía
+            }
+            return ultimasMuestras;
+        }
+        
     }
 }
 

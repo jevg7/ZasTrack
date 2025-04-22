@@ -62,84 +62,138 @@ namespace ZasTrack.Forms.Dashboard
             CargarDatosDashboard(null);
         }
 
-        private void CargarDatosDashboard(int? idProyectoSeleccionado)
-        {
-            // Limpia o muestra estado inicial si no hay proyecto
-            if (!idProyectoSeleccionado.HasValue || idProyectoSeleccionado <= 0)
+            private void CargarDatosDashboard(int? idProyectoSeleccionado)
             {
-                lblPacientesTotal.Text = "Total Pacientes:\n-";
-                lblMuestrasDia.Text = "Muestras Hoy:\n-";
-                lblExamenesRev.Text = "Exámenes Pendientes:\n-"; // Label para desglose
-                lblInfomes.Text = "Procesados Hoy:\n-"; // Usamos lblInfomes para esto
-                                                        // TODO: Limpiar paneles de gráficas/listas si es necesario
-                return;
-            }
-
-            int idProyecto = idProyectoSeleccionado.Value;
-            DateTime hoy = DateTime.Today;
-
-            // Muestra un estado de carga (opcional)
-            lblPacientesTotal.Text = "Total Pacientes:\nCargando...";
-            lblMuestrasDia.Text = "Muestras Hoy:\nCargando...";
-            lblExamenesRev.Text = "Exámenes Pendientes:\nCargando...";
-            lblInfomes.Text = "Procesados Hoy:\nCargando...";
-            Application.DoEvents(); // Permite que la UI se refresque
-
-            try
-            {
-                // --- Obtener Datos de Repositorios ---
-
-                // 1. Total Pacientes (Usa tu método existente)
-                int totalPacientes = pacienteRepository.obtTotalPacientes(idProyecto);
-                lblPacientesTotal.Text = $"Total Pacientes:\n{totalPacientes}";
-
-                // 2. Muestras Hoy (Necesita CountByProjectAndDate en MuestraRepository)
-                int muestrasHoy = muestraRepository.CountByProjectAndDate(idProyecto, hoy);
-                lblMuestrasDia.Text = $"Muestras Hoy:\n{muestrasHoy}";
-
-                // 3. Exámenes Pendientes (Desglose) (Necesita CountPendientesByTypeByProject en ExamenRepository)
-                Dictionary<string, int> pendientesPorTipo = examenRepository.CountPendientesByTypeByProject(idProyecto);
-                StringBuilder sbPendientes = new StringBuilder("Pendientes:\n"); // Título más corto
-                if (pendientesPorTipo.Any())
+                // --- Limpieza inicial o estado "Sin Proyecto" ---
+                if (!idProyectoSeleccionado.HasValue || idProyectoSeleccionado <= 0)
                 {
-                    // Crea líneas separadas para cada tipo
-                    foreach (var kvp in pendientesPorTipo.OrderBy(x => x.Key))
+                    lblPacientesTotal.Text = "Total Pacientes:\n-";
+                    lblMuestrasDia.Text = "Muestras Hoy:\n-";
+                    lblExamenesRev.Text = "Exámenes Pendientes:\n-";
+                    lblInfomes.Text = "Procesados Hoy:\n-";
+
+                    // Limpia paneles de listas
+                    pnlMuestrasUltimas.Controls.Clear();
+                    pnlMuestrasUltimas.Controls.Add(lblMuestrasUltimas); // Readiciona el título
+                    pnlExamenesUltimos.Controls.Clear();
+                    pnlExamenesUltimos.Controls.Add(lblExamenesUltimos); // Readiciona el título
+                    return;
+                }
+
+                int idProyecto = idProyectoSeleccionado.Value;
+                DateTime hoy = DateTime.Today;
+
+                // --- Estado de Carga ---
+                lblPacientesTotal.Text = "Total Pacientes:\nCargando...";
+                lblMuestrasDia.Text = "Muestras Hoy:\nCargando...";
+                lblExamenesRev.Text = "Exámenes Pendientes:\nCargando...";
+                lblInfomes.Text = "Procesados Hoy:\nCargando...";
+                // Limpia paneles de listas (quitando contenido anterior, no el título)
+                LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
+                LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
+                Application.DoEvents();
+
+                try
+                {
+                    // --- Carga de KPIs (código existente) ---
+                    int totalPacientes = pacienteRepository.obtTotalPacientes(idProyecto);
+                    lblPacientesTotal.Text = $"Total Pacientes:\n{totalPacientes}";
+
+                    int muestrasHoy = muestraRepository.CountByProjectAndDate(idProyecto, hoy);
+                    lblMuestrasDia.Text = $"Muestras Hoy:\n{muestrasHoy}";
+
+                    Dictionary<string, int> pendientesPorTipo = examenRepository.CountPendientesByTypeByProject(idProyecto);
+                    StringBuilder sbPendientes = new StringBuilder("Pendientes:\n");
+                if (pendientesPorTipo.Any()) // Verifica si el diccionario tiene resultados
+                {
+                    // Itera sobre cada par (NombreExamen, Conteo) en el diccionario
+                    foreach (var kvp in pendientesPorTipo.OrderBy(x => x.Key)) // Ordena alfabéticamente por nombre de examen
                     {
+                        // Añade una línea por cada tipo de examen pendiente y su conteo
                         sbPendientes.AppendLine($"{kvp.Key}: {kvp.Value}");
                     }
                 }
                 else
                 {
+                    // Si no hay pendientes, añade un mensaje indicándolo
                     sbPendientes.Append("Ninguno");
                 }
-                // Ajusta el tamaño del Label si es necesario o usa un control más grande
-                lblExamenesRev.Text = sbPendientes.ToString().TrimEnd();
-                lblExamenesRev.AutoSize = false; // Para que respete el tamaño del panel
-                lblExamenesRev.Size = pnlExamenesRev.ClientSize; // Ajusta al tamaño del panel
-                lblExamenesRev.TextAlign = ContentAlignment.TopLeft;
 
+                lblExamenesRev.Text = sbPendientes.ToString().TrimEnd();                    // ... (ajustes de tamaño/alineación para lblExamenesRev) ...
 
-                // 4. Procesados Hoy (Necesita CountProcesadosByProjectAndDate en ExamenRepository)
                 int procesadosHoy = examenRepository.CountProcesadosByProjectAndDate(idProyecto, hoy);
-                lblInfomes.Text = $"Procesados Hoy:\n{procesadosHoy}";
+                    lblInfomes.Text = $"Procesados Hoy:\n{procesadosHoy}";
 
-                // --- Llamadas futuras para gráficas/listas ---
-                // CargarGraficaMuestrasProcesadas(idProyecto);
-                // CargarListaUltimasMuestras(idProyecto);
 
+                    // --- INICIO: Cargar Última Actividad ---
+
+                    // Cargar Últimas Muestras
+                    var ultimasMuestras = muestraRepository.GetUltimasMuestrasPorProyecto(idProyecto, 5); // Obtiene las últimas 5
+                    MostrarListaEnPanel(pnlMuestrasUltimas, lblMuestrasUltimas, ultimasMuestras.Cast<object>().ToList(), item =>
+                        $"#{((MuestraInfoViewModel)item).NumeroMuestra} - {((MuestraInfoViewModel)item).Paciente} ({((MuestraInfoViewModel)item).FechaRecepcion:dd/MM/yy})"
+                    );
+
+                    // Cargar Últimos Exámenes Procesados
+                    var ultimosExamenes = examenRepository.GetUltimosExamenesProcesadosPorProyecto(idProyecto, 5); // Obtiene los últimos 5
+                    MostrarListaEnPanel(pnlExamenesUltimos, lblExamenesUltimos, ultimosExamenes.Cast<object>().ToList(), item =>
+                         $"#{((ExamenProcesadoInfo)item).NumeroMuestra} - {((ExamenProcesadoInfo)item).Paciente} ({((ExamenProcesadoInfo)item).TipoExamen} - {((ExamenProcesadoInfo)item).FechaProcesamiento:dd/MM/yy HH:mm})"
+                    );
+
+                    // --- FIN: Cargar Última Actividad ---
+
+                }
+                catch (Exception ex)
+                {
+                    // ... (Manejo de error existente) ...
+                    // Asegurarse de limpiar paneles de listas también en caso de error
+                    LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
+                    LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
+                    lblMuestrasUltimas.Text += "\nError al cargar"; // Añadir mensaje de error al título
+                    lblExamenesUltimos.Text += "\nError al cargar";
+                }
             }
-            catch (Exception ex)
+        private void LimpiarPanelDinamico(Panel panel, Label tituloLabel)
+        {
+            // Guarda los controles que NO son el título
+            var controlesAEliminar = panel.Controls.Cast<Control>().Where(c => c != tituloLabel).ToList();
+            foreach (var c in controlesAEliminar)
             {
-                MessageBox.Show($"Error al cargar los datos del dashboard: {ex.Message}", "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Console.WriteLine($"ERROR CargarDatosDashboard: {ex.ToString()}");
-                // Mostrar estado de error en labels
-                lblPacientesTotal.Text = "Total Pacientes:\nError";
-                lblMuestrasDia.Text = "Muestras Hoy:\nError";
-                lblExamenesRev.Text = "Exámenes Pendientes:\nError";
-                lblInfomes.Text = "Procesados Hoy:\nError";
+                panel.Controls.Remove(c);
+                c.Dispose(); // Libera recursos
             }
+            // Asegura que el título quede posicionado correctamente (si es necesario)
+            tituloLabel.Location = new Point(10, 10); // O la posición original
+            tituloLabel.BringToFront();
         }
 
+        // Muestra una lista de objetos en un panel creando Labels dinámicos
+        private void MostrarListaEnPanel(Panel panel, Label tituloLabel, List<object> items, Func<object, string> formatoItem)
+        {
+            LimpiarPanelDinamico(panel, tituloLabel); // Limpia contenido previo
+
+            if (items == null || !items.Any())
+            {
+                Label lblVacio = new Label();
+                lblVacio.Text = "(Ninguno)";
+                lblVacio.ForeColor = SystemColors.GrayText;
+                lblVacio.AutoSize = true;
+                lblVacio.Location = new Point(tituloLabel.Left, tituloLabel.Bottom + 5); // Debajo del título
+                panel.Controls.Add(lblVacio);
+                return;
+            }
+
+            int topPosition = tituloLabel.Bottom + 5; // Posición inicial debajo del título
+            foreach (var item in items)
+            {
+                Label lblItem = new Label();
+                lblItem.Text = formatoItem(item); // Usa la función de formato para obtener el texto
+                lblItem.AutoSize = true;
+                lblItem.Location = new Point(tituloLabel.Left, topPosition); // Alineado con el título
+                lblItem.MaximumSize = new Size(panel.ClientSize.Width - tituloLabel.Left - 5, 0); // Evita que se salga del panel
+                panel.Controls.Add(lblItem);
+                topPosition += lblItem.Height + 2; // Siguiente posición vertical
+            }
+        }
         private void cboProyecto_SelectedIndexChanged(object sender, EventArgs e)
         {
             int? idProyectoSeleccionado = null;
