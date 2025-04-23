@@ -155,8 +155,6 @@ C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Estudiantes.wVerPaciente.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.wMain.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wAñadirProyecto.resources
-C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wEditarProyecto.resources
-C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wEliminarProyecto.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wProyectos.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Properties.Resources.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.csproj.GenerateResource.cache

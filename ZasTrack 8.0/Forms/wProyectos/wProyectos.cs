@@ -23,6 +23,11 @@ namespace ZasTrack.Forms.wProyectos
             InitializeComponent();
             proyectoRepository = new ProyectoRepository(); // Inicializar el repositorio
         }      
+        private void wProyectos_Load(object sender, EventArgs e)
+        {
+            Abrir_Form(new ZasTrack.Forms.wProyectos.wVerProyecto());
+            
+        }
 
         private void btnAggProyect_Click1(object sender, EventArgs e)
         {
@@ -53,7 +58,6 @@ namespace ZasTrack.Forms.wProyectos
 
         private void editarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new Forms.wEditarProyecto());
         }
 
         private void verProyectoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -63,7 +67,6 @@ namespace ZasTrack.Forms.wProyectos
 
         private void eliminarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new Forms.wEliminarProyecto());
         }
         #region Windows Form Designer generated code
         private void tsmiAñadirProyectos_Click(object sender, EventArgs e)
@@ -71,10 +74,7 @@ namespace ZasTrack.Forms.wProyectos
 
         }
 
-        private void wProyectos_Load(object sender, EventArgs e)
-        {
-
-        }
+   
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {

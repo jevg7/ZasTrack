@@ -29,101 +29,83 @@
         private void InitializeComponent()
         {
             flpProyList = new FlowLayoutPanel();
-            vScrollBar1 = new VScrollBar();
             pnlCargando = new Panel();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            vScrollBar2 = new VScrollBar();
-            flowLayoutPanel2 = new FlowLayoutPanel();
-            vScrollBar3 = new VScrollBar();
-            flpProyList.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
-            flowLayoutPanel2.SuspendLayout();
+            pnlBotones = new Panel();
+            btnVerArchivados = new Button();
+            btnVerActivos = new Button();
+            pnlBotones.SuspendLayout();
             SuspendLayout();
             // 
             // flpProyList
             // 
             flpProyList.AutoScroll = true;
-            flpProyList.Controls.Add(vScrollBar1);
-            flpProyList.Controls.Add(pnlCargando);
-            flpProyList.Controls.Add(flowLayoutPanel1);
-            flpProyList.Location = new Point(0, 0);
+            flpProyList.FlowDirection = FlowDirection.TopDown;
+            flpProyList.Location = new Point(0, 74);
             flpProyList.Margin = new Padding(3, 4, 3, 4);
             flpProyList.Name = "flpProyList";
-            flpProyList.Size = new Size(1511, 977);
+            flpProyList.Size = new Size(1245, 672);
             flpProyList.TabIndex = 8;
+            flpProyList.WrapContents = false;
             flpProyList.Paint += flpProyList_Paint;
-            // 
-            // vScrollBar1
-            // 
-            vScrollBar1.Location = new Point(0, 0);
-            vScrollBar1.Name = "vScrollBar1";
-            vScrollBar1.Size = new Size(22, 1156);
-            vScrollBar1.TabIndex = 4;
-            vScrollBar1.Scroll += vScrollBar1_Scroll;
             // 
             // pnlCargando
             // 
-            pnlCargando.Location = new Point(25, 3);
+            pnlCargando.Location = new Point(340, 3);
             pnlCargando.Name = "pnlCargando";
-            pnlCargando.Size = new Size(269, 81);
+            pnlCargando.Size = new Size(290, 51);
             pnlCargando.TabIndex = 9;
             // 
-            // flowLayoutPanel1
+            // pnlBotones
             // 
-            flowLayoutPanel1.Controls.Add(vScrollBar2);
-            flowLayoutPanel1.Controls.Add(flowLayoutPanel2);
-            flowLayoutPanel1.Location = new Point(3, 1160);
-            flowLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(1561, 955);
-            flowLayoutPanel1.TabIndex = 8;
+            pnlBotones.Controls.Add(btnVerArchivados);
+            pnlBotones.Controls.Add(btnVerActivos);
+            pnlBotones.Location = new Point(0, 0);
+            pnlBotones.Name = "pnlBotones";
+            pnlBotones.Size = new Size(334, 67);
+            pnlBotones.TabIndex = 10;
             // 
-            // vScrollBar2
+            // btnVerArchivados
             // 
-            vScrollBar2.Location = new Point(0, 0);
-            vScrollBar2.Name = "vScrollBar2";
-            vScrollBar2.Size = new Size(22, 1156);
-            vScrollBar2.TabIndex = 4;
+            btnVerArchivados.Location = new Point(173, 3);
+            btnVerArchivados.Name = "btnVerArchivados";
+            btnVerArchivados.Size = new Size(155, 51);
+            btnVerArchivados.TabIndex = 1;
+            btnVerArchivados.Text = "Archivados";
+            btnVerArchivados.UseVisualStyleBackColor = true;
+            btnVerArchivados.Click += btnVerArchivados_Click;
             // 
-            // flowLayoutPanel2
+            // btnVerActivos
             // 
-            flowLayoutPanel2.Controls.Add(vScrollBar3);
-            flowLayoutPanel2.Location = new Point(3, 1160);
-            flowLayoutPanel2.Margin = new Padding(3, 4, 3, 4);
-            flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(1561, 955);
-            flowLayoutPanel2.TabIndex = 9;
-            // 
-            // vScrollBar3
-            // 
-            vScrollBar3.Location = new Point(0, 0);
-            vScrollBar3.Name = "vScrollBar3";
-            vScrollBar3.Size = new Size(22, 1156);
-            vScrollBar3.TabIndex = 4;
+            btnVerActivos.Location = new Point(12, 3);
+            btnVerActivos.Name = "btnVerActivos";
+            btnVerActivos.Size = new Size(155, 51);
+            btnVerActivos.TabIndex = 0;
+            btnVerActivos.Text = "Activos";
+            btnVerActivos.UseVisualStyleBackColor = true;
+            btnVerActivos.Click += btnVerActivos_Click;
             // 
             // wVerProyecto
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1543, 977);
+            ClientSize = new Size(1275, 747);
+            Controls.Add(pnlBotones);
             Controls.Add(flpProyList);
+            Controls.Add(pnlCargando);
             FormBorderStyle = FormBorderStyle.None;
             Name = "wVerProyecto";
             Text = "Ver Proyectos";
-            flpProyList.ResumeLayout(false);
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel2.ResumeLayout(false);
+            Load += wVerProyecto_Load;
+            pnlBotones.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
         private FlowLayoutPanel flpProyList;
-        private VScrollBar vScrollBar1;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private VScrollBar vScrollBar2;
-        private FlowLayoutPanel flowLayoutPanel2;
-        private VScrollBar vScrollBar3;
         private Panel pnlCargando;
+        private Panel pnlBotones;
+        private Button btnVerArchivados;
+        private Button btnVerActivos;
     }
 }

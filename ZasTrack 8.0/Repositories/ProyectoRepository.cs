@@ -96,10 +96,7 @@ namespace ZasTrack.Repositories
         public bool ArchivarProyecto(int idProyecto, DateTime fechaFin)
         {
             // Actualiza la fecha de fin y marca como archivado
-            string query = @"UPDATE proyecto 
-                     SET fecha_fin = @fechaFin, 
-                         is_archived = TRUE 
-                     WHERE id_proyecto = @idProyecto;";
+            string query = "UPDATE proyecto SET is_archived = TRUE, fecha_fin = @fechaFin WHERE id_proyecto = @id";
             try
             {
                 using (var conn = DatabaseConnection.GetConnection())
@@ -107,19 +104,111 @@ namespace ZasTrack.Repositories
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                        cmd.Parameters.AddWithValue("@fechaFin", fechaFin.Date); // Guarda solo la fecha
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        return rowsAffected > 0; // Devuelve true si se actualizó al menos una fila
+                        cmd.Parameters.AddWithValue("@id", idProyecto);
+                        cmd.Parameters.AddWithValue("@fechaFin", fechaFin);
+                        int affectedRows = cmd.ExecuteNonQuery();
+                        return affectedRows > 0;
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error en ArchivarProyecto: {ex.Message}");
-                // Considera loguear ex.ToString()
-                return false; // Indica que hubo un error
+                return false;
             }
         }
+        
+
+        public List<Proyecto> ObtenerProyectosSoloArchivados()
+        {
+            var proyectos = new List<Proyecto>();
+            // Asegúrate que los nombres de columna (is_archived, etc.) sean correctos
+            // Consulta para obtener solo los archivados (is_archived = TRUE)
+            string query = "SELECT id_proyecto, nombre, fecha_inicio, fecha_fin, is_archived, codigo FROM proyecto WHERE is_archived = TRUE ORDER BY nombre;";
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection()) // Usa tu método de conexión
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                proyectos.Add(new Proyecto
+                                {
+                                    id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                    nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                                    fecha_inicio = reader.GetDateTime(reader.GetOrdinal("fecha_inicio")),
+                                    fecha_fin = reader.IsDBNull(reader.GetOrdinal("fecha_fin")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fecha_fin")),
+                                    // Aquí is_archived debería ser siempre true, pero lo leemos igual
+                                    IsArchived = reader.IsDBNull(reader.GetOrdinal("is_archived")) ? false : reader.GetBoolean(reader.GetOrdinal("is_archived")),
+                                    codigo = reader.IsDBNull(reader.GetOrdinal("codigo")) ? null : reader.GetString(reader.GetOrdinal("codigo"))
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error de PostgreSQL en ObtenerProyectosSoloArchivados: {ex.Message} (SQLState: {ex.SqlState})");
+                // Considera lanzar la excepción o devolver lista vacía/null según tu manejo de errores
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general en ObtenerProyectosSoloArchivados: {ex.ToString()}");
+                throw;
+            }
+            return proyectos;
+        }
+
+
+        // --- NUEVO MÉTODO: Reactivar Proyecto ---
+        public bool ReactivarProyecto(int idProyecto, bool limpiarFechaFin)
+        {
+            // Prepara la consulta SQL condicionalmente
+            string query;
+            if (limpiarFechaFin)
+            {
+                // Pone IsArchived = false Y fecha_fin = NULL
+                query = "UPDATE proyecto SET is_archived = FALSE, fecha_fin = NULL WHERE id_proyecto = @id";
+            }
+            else
+            {
+                // Solo pone IsArchived = false, deja fecha_fin como estaba
+                query = "UPDATE proyecto SET is_archived = FALSE WHERE id_proyecto = @id";
+            }
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection()) // Usa tu método de conexión
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        // Añade el parámetro ID de forma segura
+                        cmd.Parameters.AddWithValue("@id", idProyecto);
+                        // Ejecuta el comando y verifica si alguna fila fue afectada
+                        int affectedRows = cmd.ExecuteNonQuery();
+                        return affectedRows > 0; // Devuelve true si se actualizó al menos una fila
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error de PostgreSQL en ReactivarProyecto: {ex.Message} (SQLState: {ex.SqlState})");
+                return false; // Devuelve false en caso de error de BD
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general en ReactivarProyecto: {ex.ToString()}");
+                return false; // Devuelve false en caso de error general
+            }
+        }
+
     }
 }
