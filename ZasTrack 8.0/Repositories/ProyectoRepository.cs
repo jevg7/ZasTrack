@@ -40,10 +40,21 @@ namespace ZasTrack.Repositories
             }
         }
 
-        public List<Proyecto> ObtenerProyectos()
+        public List<Proyecto> ObtenerProyectos(bool incluirArchivados = false) // Parámetro opcional
         {
             var proyectos = new List<Proyecto>();
-            string query = "SELECT id_proyecto, nombre, fecha_inicio, fecha_fin FROM proyecto";
+            // Modifica la consulta para filtrar por is_archived
+            // ¡Asegúrate de que los nombres de columna 'is_archived' y 'codigo' sean correctos!
+            string query = "SELECT id_proyecto, nombre, fecha_inicio, fecha_fin, is_archived, codigo FROM proyecto";
+
+            if (!incluirArchivados)
+            {
+                // Añade el filtro WHERE si NO se incluyen archivados
+                // Usamos IS DISTINCT FROM TRUE para incluir los NULL (que no están archivados)
+                query += " WHERE is_archived IS DISTINCT FROM TRUE";
+            }
+            // Opcional: Añadir ordenamiento
+            query += " ORDER BY nombre;";
 
             try
             {
@@ -58,26 +69,57 @@ namespace ZasTrack.Repositories
                             {
                                 proyectos.Add(new Proyecto
                                 {
-                                    id_proyecto = reader.GetInt32(0),
-                                    nombre = reader.GetString(1),
-                                    fecha_inicio = reader.GetDateTime(2),
-                                    fecha_fin = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3)
+                                    // Uso de GetOrdinal: ¡Muy bien! Hace el código más robusto.
+                                    id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                    nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                                    fecha_inicio = reader.GetDateTime(reader.GetOrdinal("fecha_inicio")),
+                                    fecha_fin = reader.IsDBNull(reader.GetOrdinal("fecha_fin")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fecha_fin")),
+                                    // Lee el estado archivado, manejando NULLs (asume NULL = false)
+                                    IsArchived = reader.IsDBNull(reader.GetOrdinal("is_archived")) ? false : reader.GetBoolean(reader.GetOrdinal("is_archived")),
+                                    // Lee el código, manejando NULLs
+                                    codigo = reader.IsDBNull(reader.GetOrdinal("codigo")) ? null : reader.GetString(reader.GetOrdinal("codigo"))
                                 });
                             }
                         }
                     }
                 }
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex) // Captura genérica Exception, considera NpgsqlException si quieres ser más específico
             {
-                Console.WriteLine("Error de PostgreSQL: " + ex.Message);
+                // Es buena idea registrar el error completo, no solo el mensaje
+                Console.WriteLine($"Error en ObtenerProyectos: {ex.ToString()}");
+                // Re-lanzar la excepción para que capas superiores puedan manejarla si es necesario
+                throw;
+            }
+            return proyectos;
+        }
+        public bool ArchivarProyecto(int idProyecto, DateTime fechaFin)
+        {
+            // Actualiza la fecha de fin y marca como archivado
+            string query = @"UPDATE proyecto 
+                     SET fecha_fin = @fechaFin, 
+                         is_archived = TRUE 
+                     WHERE id_proyecto = @idProyecto;";
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                        cmd.Parameters.AddWithValue("@fechaFin", fechaFin.Date); // Guarda solo la fecha
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        return rowsAffected > 0; // Devuelve true si se actualizó al menos una fila
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error inesperado: " + ex.Message);
+                Console.WriteLine($"Error en ArchivarProyecto: {ex.Message}");
+                // Considera loguear ex.ToString()
+                return false; // Indica que hubo un error
             }
-
-            return proyectos;
         }
     }
 }

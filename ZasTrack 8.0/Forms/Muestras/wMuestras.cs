@@ -148,12 +148,19 @@ namespace ZasTrack.Forms.Muestras
                 return;
             }
             // Validación selección proyecto
-            if (cmbProyecto.SelectedItem == null || !(cmbProyecto.SelectedItem is Proyecto) || ((Proyecto)cmbProyecto.SelectedItem).id_proyecto <= 0)
+            if (cmbProyecto.SelectedItem == null || !(cmbProyecto.SelectedItem is Proyecto proyectoSeleccionado) || proyectoSeleccionado.id_proyecto <= 0)
             {
-                // CORREGIDO: MessageBoxIcon.Warning
                 MessageBox.Show("Debe seleccionar un proyecto válido.", "Proyecto no Seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbProyecto.Focus();
                 return;
+            }
+
+            // --- INICIO: Comprobación Proyecto Archivado ---
+            // Asumiendo que el objeto Proyecto cargado en el ComboBox tiene la propiedad IsArchived
+            if (proyectoSeleccionado.IsArchived)
+            {
+                MessageBox.Show($"El proyecto '{proyectoSeleccionado.nombre}' está archivado y no se pueden registrar nuevas muestras.", "Proyecto Archivado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return; // Detiene el guardado
             }
             // Validación tipo examen
             if (!chkOrina.Checked && !chkHeces.Checked && !chkSangre.Checked)
@@ -165,7 +172,7 @@ namespace ZasTrack.Forms.Muestras
             }
 
 
-            int idProyecto = (cmbProyecto.SelectedItem as Proyecto).id_proyecto;
+            int idProyecto = proyectoSeleccionado.id_proyecto;
             DateTime fechaActual = DateTime.Now.Date;
             int numeroMuestra = muestraRepository.ObtenerUltimaMuestra(idProyecto, fechaActual) + 1;
 

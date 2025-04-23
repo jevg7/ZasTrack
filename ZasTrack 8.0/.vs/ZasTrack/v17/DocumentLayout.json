@@ -3,48 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\dashboard\\wdashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\dashboard\\wdashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\forms\\dashboard\\wdashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\dashboard\\wdashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\repositories\\examenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositories\\examenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\repositories\\muestrarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositories\\muestrarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\models\\muestra.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\muestra.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\models\\examenprocesadoinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\examenprocesadoinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\repositories\\examensangrerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositories\\examensangrerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wmain.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wmain.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\repositories\\pacienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositories\\pacienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 412,
-          "SelectedChildIndex": 19,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -98,140 +66,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Muestra.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Models\\Muestra.cs",
-              "RelativeDocumentMoniker": "Models\\Muestra.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Models\\Muestra.cs",
-              "RelativeToolTip": "Models\\Muestra.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T17:43:25.118Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ExamenProcesadoInfo.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Models\\ExamenProcesadoInfo.cs",
-              "RelativeDocumentMoniker": "Models\\ExamenProcesadoInfo.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Models\\ExamenProcesadoInfo.cs",
-              "RelativeToolTip": "Models\\ExamenProcesadoInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T17:42:49.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ExamenSangreRepository.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\ExamenSangreRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\ExamenSangreRepository.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\ExamenSangreRepository.cs",
-              "RelativeToolTip": "Repositories\\ExamenSangreRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T17:42:04.939Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "wMain.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
-              "RelativeDocumentMoniker": "Forms\\wMain.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
-              "RelativeToolTip": "Forms\\wMain.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABcAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T17:11:05.605Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "wMain.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.Designer.cs",
-              "RelativeDocumentMoniker": "Forms\\wMain.Designer.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.Designer.cs",
-              "RelativeToolTip": "Forms\\wMain.Designer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAANwAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T17:11:11.666Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "wMain.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
-              "RelativeDocumentMoniker": "Forms\\wMain.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs [Design]",
-              "RelativeToolTip": "Forms\\wMain.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T17:11:03.79Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ExamenRepository.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\ExamenRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\ExamenRepository.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\ExamenRepository.cs",
-              "RelativeToolTip": "Repositories\\ExamenRepository.cs",
-              "ViewState": "AgIAABgDAAAAAAAAAAAowBkEAAAFAAAAAAAAAA==",
+              "Title": "wMuestras.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs",
+              "RelativeDocumentMoniker": "Forms\\Muestras\\wMuestras.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs [Design]",
+              "RelativeToolTip": "Forms\\Muestras\\wMuestras.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:54:07.059Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-23T02:48:49.367Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "PacienteRepository.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\PacienteRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\PacienteRepository.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\PacienteRepository.cs",
-              "RelativeToolTip": "Repositories\\PacienteRepository.cs",
-              "ViewState": "AgIAANoAAAAAAAAAAAAnwOcAAAATAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "wVerProyecto.cs",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs",
+              "RelativeDocumentMoniker": "Forms\\wProyectos\\wVerProyecto.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs",
+              "RelativeToolTip": "Forms\\wProyectos\\wVerProyecto.cs",
+              "ViewState": "AgIAAKsAAAAAAAAAAADwvxUBAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:54:04.99Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MuestraRepository.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\MuestraRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\MuestraRepository.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Repositories\\MuestraRepository.cs",
-              "RelativeToolTip": "Repositories\\MuestraRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKwAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:53:34.319Z",
+              "WhenOpened": "2025-04-22T18:39:36.02Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "wDashboard.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Dashboard\\wDashboard.cs",
-              "RelativeDocumentMoniker": "Forms\\Dashboard\\wDashboard.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Dashboard\\wDashboard.cs",
-              "RelativeToolTip": "Forms\\Dashboard\\wDashboard.cs",
-              "ViewState": "AgIAAIIAAAAAAAAAAAAUwHkAAAAAAAAAAAAAAA==",
+              "Title": "wVerProyecto.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs",
+              "RelativeDocumentMoniker": "Forms\\wProyectos\\wVerProyecto.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs [Design]",
+              "RelativeToolTip": "Forms\\wProyectos\\wVerProyecto.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:52:40.513Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "wDashboard.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Dashboard\\wDashboard.cs",
-              "RelativeDocumentMoniker": "Forms\\Dashboard\\wDashboard.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Dashboard\\wDashboard.cs [Design]",
-              "RelativeToolTip": "Forms\\Dashboard\\wDashboard.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:52:37.75Z",
+              "WhenOpened": "2025-04-22T18:39:34.612Z",
               "EditorCaption": " [Design]"
             }
           ]
