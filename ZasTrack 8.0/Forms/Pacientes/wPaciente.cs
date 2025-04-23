@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZasTrack.Forms.Estudiantes;
+using ZasTrack.Forms.Pacientes;
 
 namespace ZasTrack
 {
@@ -38,7 +39,7 @@ namespace ZasTrack
             fh.Show(); // Muestra el formulario.
         }
 
-       
+
         private void editarEliminarEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Abrir_Form(new wEditarEliminarPaciente());
@@ -59,5 +60,10 @@ namespace ZasTrack
         }
 
         #endregion
+
+        private void importarPacientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new wImportarPacientes());
+        }
     }
 }

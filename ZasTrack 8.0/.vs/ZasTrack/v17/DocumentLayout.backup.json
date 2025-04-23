@@ -3,32 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wproyectos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wproyectos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\pacientes\\wimportarpacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\pacientes\\wimportarpacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wproyectos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wproyectos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wa\u00F1adirproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wa\u00F1adirproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wproyectos\\wverproyecto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\github\\zastrack\\zastrack 8.0\\forms\\pacientes\\wimportarpacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\pacientes\\wimportarpacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 412,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -82,89 +62,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "wProyectos.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wProyectos.cs",
-              "RelativeDocumentMoniker": "Forms\\wProyectos\\wProyectos.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wProyectos.cs*",
-              "RelativeToolTip": "Forms\\wProyectos\\wProyectos.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEwAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T16:15:05.759Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "wProyectos.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wProyectos.cs",
-              "RelativeDocumentMoniker": "Forms\\wProyectos\\wProyectos.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wProyectos.cs [Design]*",
-              "RelativeToolTip": "Forms\\wProyectos\\wProyectos.cs [Design]*",
+              "Title": "wImportarPacientes.cs",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wImportarPacientes.cs",
+              "RelativeDocumentMoniker": "Forms\\Pacientes\\wImportarPacientes.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wImportarPacientes.cs",
+              "RelativeToolTip": "Forms\\Pacientes\\wImportarPacientes.cs",
+              "ViewState": "AgIAAI8BAAAAAAAAAAAgwJ8BAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T16:15:03.715Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "wA\u00F1adirProyecto.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wA\u00F1adirProyecto.cs",
-              "RelativeDocumentMoniker": "Forms\\wProyectos\\wA\u00F1adirProyecto.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wA\u00F1adirProyecto.cs [Design]",
-              "RelativeToolTip": "Forms\\wProyectos\\wA\u00F1adirProyecto.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T16:15:01.768Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "wMain.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
-              "RelativeDocumentMoniker": "Forms\\wMain.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs [Design]",
-              "RelativeToolTip": "Forms\\wMain.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T16:05:30.331Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T16:04:05.279Z",
+              "WhenOpened": "2025-04-23T22:57:50.513Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "wVerProyecto.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs",
-              "RelativeDocumentMoniker": "Forms\\wProyectos\\wVerProyecto.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs",
-              "RelativeToolTip": "Forms\\wProyectos\\wVerProyecto.cs",
-              "ViewState": "AgIAAM8AAAAAAAAAAAAYwAYBAAAJAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "wImportarPacientes.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wImportarPacientes.cs",
+              "RelativeDocumentMoniker": "Forms\\Pacientes\\wImportarPacientes.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\Pacientes\\wImportarPacientes.cs [Design]",
+              "RelativeToolTip": "Forms\\Pacientes\\wImportarPacientes.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T15:58:09.024Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "wVerProyecto.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs",
-              "RelativeDocumentMoniker": "Forms\\wProyectos\\wVerProyecto.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\Github\\ZasTrack\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs [Design]",
-              "RelativeToolTip": "Forms\\wProyectos\\wVerProyecto.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T15:58:06.649Z",
+              "WhenOpened": "2025-04-23T22:57:45.649Z",
               "EditorCaption": " [Design]"
             }
           ]

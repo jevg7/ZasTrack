@@ -37,6 +37,9 @@
     <Compile Update="Forms\Pacientes\wEditarEliminarPaciente.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Pacientes\wImportarPacientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Pacientes\wPaciente.cs">
       <SubType>Form</SubType>
     </Compile>

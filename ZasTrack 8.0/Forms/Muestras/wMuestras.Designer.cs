@@ -167,7 +167,7 @@
             // cmbProyecto
             // 
             cmbProyecto.FormattingEnabled = true;
-            cmbProyecto.Location = new Point(67, 187);
+            cmbProyecto.Location = new Point(67, 186);
             cmbProyecto.Margin = new Padding(3, 4, 3, 4);
             cmbProyecto.Name = "cmbProyecto";
             cmbProyecto.Size = new Size(215, 28);

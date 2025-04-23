@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             menuStrip1 = new MenuStrip();
+            importarPacientesToolStripMenuItem = new ToolStripMenuItem();
             agregarEstudiantesToolStripMenuItem = new ToolStripMenuItem();
             editarEliminarEstudiantesToolStripMenuItem = new ToolStripMenuItem();
             verEstudiantesToolStripMenuItem = new ToolStripMenuItem();
@@ -38,54 +39,62 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { agregarEstudiantesToolStripMenuItem, editarEliminarEstudiantesToolStripMenuItem, verEstudiantesToolStripMenuItem });
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { importarPacientesToolStripMenuItem, agregarEstudiantesToolStripMenuItem, editarEliminarEstudiantesToolStripMenuItem, verEstudiantesToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Padding = new Padding(7, 2, 0, 2);
-            menuStrip1.Size = new Size(933, 24);
+            menuStrip1.Padding = new Padding(8, 3, 0, 3);
+            menuStrip1.Size = new Size(1066, 30);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
+            // 
+            // importarPacientesToolStripMenuItem
+            // 
+            importarPacientesToolStripMenuItem.Name = "importarPacientesToolStripMenuItem";
+            importarPacientesToolStripMenuItem.Size = new Size(146, 24);
+            importarPacientesToolStripMenuItem.Text = "Importar Pacientes";
+            importarPacientesToolStripMenuItem.Click += importarPacientesToolStripMenuItem_Click;
             // 
             // agregarEstudiantesToolStripMenuItem
             // 
             agregarEstudiantesToolStripMenuItem.Name = "agregarEstudiantesToolStripMenuItem";
-            agregarEstudiantesToolStripMenuItem.Size = new Size(114, 20);
+            agregarEstudiantesToolStripMenuItem.Size = new Size(142, 24);
             agregarEstudiantesToolStripMenuItem.Text = "Agregar Pacientes";
             agregarEstudiantesToolStripMenuItem.Click += agregarEstudiantesToolStripMenuItem_Click;
             // 
             // editarEliminarEstudiantesToolStripMenuItem
             // 
             editarEliminarEstudiantesToolStripMenuItem.Name = "editarEliminarEstudiantesToolStripMenuItem";
-            editarEliminarEstudiantesToolStripMenuItem.Size = new Size(150, 20);
+            editarEliminarEstudiantesToolStripMenuItem.Size = new Size(187, 24);
             editarEliminarEstudiantesToolStripMenuItem.Text = "Editar/Eliminar Pacientes";
             editarEliminarEstudiantesToolStripMenuItem.Click += editarEliminarEstudiantesToolStripMenuItem_Click;
             // 
             // verEstudiantesToolStripMenuItem
             // 
             verEstudiantesToolStripMenuItem.Name = "verEstudiantesToolStripMenuItem";
-            verEstudiantesToolStripMenuItem.Size = new Size(88, 20);
+            verEstudiantesToolStripMenuItem.Size = new Size(109, 24);
             verEstudiantesToolStripMenuItem.Text = "Ver Pacientes";
             verEstudiantesToolStripMenuItem.Click += verEstudiantesToolStripMenuItem_Click;
             // 
             // pnlCntEstudiantes
             // 
-            pnlCntEstudiantes.Location = new Point(0, 31);
-            pnlCntEstudiantes.Margin = new Padding(4, 3, 4, 3);
+            pnlCntEstudiantes.Location = new Point(0, 41);
+            pnlCntEstudiantes.Margin = new Padding(5, 4, 5, 4);
             pnlCntEstudiantes.Name = "pnlCntEstudiantes";
-            pnlCntEstudiantes.Size = new Size(1184, 792);
+            pnlCntEstudiantes.Size = new Size(1353, 1056);
             pnlCntEstudiantes.TabIndex = 1;
             pnlCntEstudiantes.Paint += pnlCntEstudiantes_Paint;
             // 
             // wPaciente
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(933, 519);
+            ClientSize = new Size(1066, 692);
             Controls.Add(pnlCntEstudiantes);
             Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.None;
             MainMenuStrip = menuStrip1;
-            Margin = new Padding(4, 3, 4, 3);
+            Margin = new Padding(5, 4, 5, 4);
             Name = "wPaciente";
             Text = "wEstudiantes";
             Load += wPaciente_Load;
@@ -102,5 +111,6 @@
         private System.Windows.Forms.ToolStripMenuItem editarEliminarEstudiantesToolStripMenuItem;
         private System.Windows.Forms.Panel pnlCntEstudiantes;
         private ToolStripMenuItem verEstudiantesToolStripMenuItem;
+        private ToolStripMenuItem importarPacientesToolStripMenuItem;
     }
 }

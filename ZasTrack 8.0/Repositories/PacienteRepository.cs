@@ -290,5 +290,90 @@ namespace ZasTrack.Repositories
             return pacientes;
         }
 
+        // --- Añadir a PacienteRepository.cs ---
+
+        public bool ExisteCodigoBeneficiario(string codigoBeneficiario)
+        {
+            // Consulta para contar cuántos pacientes tienen ese código
+            string query = "SELECT COUNT(*) FROM pacientes WHERE codigo_beneficiario = @codigo";
+            bool existe = false;
+
+            if (string.IsNullOrWhiteSpace(codigoBeneficiario))
+            {
+                return false; // Un código vacío no "existe" para evitar errores
+            }
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection()) // Usa tu método de conexión
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@codigo", codigoBeneficiario.Trim()); // Usa Trim por si acaso
+                                                                                           // ExecuteScalar devuelve la primera columna de la primera fila (en este caso, el COUNT)
+                        long count = (long)cmd.ExecuteScalar();
+                        existe = (count > 0);
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error de PostgreSQL al verificar código beneficiario: {ex.Message}");
+                // Decide cómo manejar el error. Lanzar excepción o devolver 'false' (asumiendo que no existe si hay error)
+                // Lanzar la excepción es más seguro para saber que hubo un problema.
+                throw new Exception($"Error al verificar existencia del código '{codigoBeneficiario}'.", ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general al verificar código beneficiario: {ex.ToString()}");
+                throw new Exception($"Error al verificar existencia del código '{codigoBeneficiario}'.", ex);
+            }
+            return existe;
+        }
+
+        // --- OPCIONAL PERO RECOMENDADO: Guardar en Lote ---
+        // public bool GuardarPacientesBatch(List<pacientes> listaPacientes)
+        // {
+        //     if (listaPacientes == null || !listaPacientes.Any()) return true; // Nada que guardar
+        //
+        //     using (var conn = DatabaseConnection.GetConnection())
+        //     {
+        //         conn.Open();
+        //         // Usar una transacción para asegurar que todo se guarde o nada
+        //         using (var transaction = conn.BeginTransaction())
+        //         {
+        //             try
+        //             {
+        //                 // Construir un comando INSERT grande o usar COPY de PostgreSQL (más avanzado)
+        //                 // Ejemplo con múltiples INSERTs en una transacción (menos eficiente que COPY):
+        //                  string query = "INSERT INTO pacientes (nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, id_proyecto, observacion) VALUES (@nombres, @apellidos, @edad, @genero, @codigo, @fechaNac, @idProy, @obs);";
+        //                  foreach (var p in listaPacientes) {
+        //                      using (var cmd = new NpgsqlCommand(query, conn, transaction)) { // Asociar comando a transacción
+        //                           cmd.Parameters.AddWithValue("@nombres", p.nombres);
+        //                           cmd.Parameters.AddWithValue("@apellidos", p.apellidos);
+        //                           cmd.Parameters.AddWithValue("@edad", p.edad);
+        //                           cmd.Parameters.AddWithValue("@genero", p.genero);
+        //                           cmd.Parameters.AddWithValue("@codigo", p.codigo_beneficiario);
+        //                           cmd.Parameters.AddWithValue("@fechaNac", p.fecha_nacimiento);
+        //                           cmd.Parameters.AddWithValue("@idProy", p.id_proyecto);
+        //                           cmd.Parameters.AddWithValue("@obs", (object)p.observacion ?? DBNull.Value); // Manejar posible null
+        //                           cmd.ExecuteNonQuery();
+        //                      }
+        //                  }
+        //
+        //                 transaction.Commit(); // Si todo fue bien, confirma los cambios
+        //                 return true;
+        //             }
+        //             catch (Exception ex)
+        //             {
+        //                 Console.WriteLine($"ERROR en GuardarPacientesBatch: {ex.ToString()}");
+        //                 transaction.Rollback(); // Deshacer cambios si algo falló
+        //                 return false;
+        //             }
+        //         } // Fin using transaction
+        //     } // Fin using connection
+        // }
     }
+
 }
