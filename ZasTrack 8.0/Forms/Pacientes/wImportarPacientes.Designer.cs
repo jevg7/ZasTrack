@@ -39,6 +39,8 @@
             lblProyecto = new Label();
             txtRutaArchivo = new TextBox();
             cmbProyecto = new ComboBox();
+            lblUbicacionArc = new Label();
+            lblErrores = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvResultados).BeginInit();
             SuspendLayout();
             // 
@@ -50,12 +52,11 @@
             btnSeleccionarArchivo.TabIndex = 0;
             btnSeleccionarArchivo.Text = "Seleccionar Archivo";
             btnSeleccionarArchivo.UseVisualStyleBackColor = true;
-            btnSeleccionarArchivo.Click += btnSeleccionarArchivo_Click;
             // 
             // cmbHojas
             // 
             cmbHojas.FormattingEnabled = true;
-            cmbHojas.Location = new Point(149, 144);
+            cmbHojas.Location = new Point(147, 191);
             cmbHojas.Name = "cmbHojas";
             cmbHojas.Size = new Size(151, 28);
             cmbHojas.TabIndex = 1;
@@ -63,7 +64,7 @@
             // chkTieneEncabezado
             // 
             chkTieneEncabezado.AutoSize = true;
-            chkTieneEncabezado.Location = new Point(153, 227);
+            chkTieneEncabezado.Location = new Point(151, 274);
             chkTieneEncabezado.Name = "chkTieneEncabezado";
             chkTieneEncabezado.Size = new Size(155, 24);
             chkTieneEncabezado.TabIndex = 3;
@@ -72,25 +73,24 @@
             // 
             // btnImportar
             // 
-            btnImportar.Location = new Point(149, 272);
+            btnImportar.Location = new Point(147, 319);
             btnImportar.Name = "btnImportar";
             btnImportar.Size = new Size(155, 41);
             btnImportar.TabIndex = 4;
             btnImportar.Text = "Importar";
             btnImportar.UseVisualStyleBackColor = true;
-            btnImportar.Click += btnImportar_Click;
             // 
             // progressBarImportacion
             // 
             progressBarImportacion.Location = new Point(457, 482);
             progressBarImportacion.Name = "progressBarImportacion";
-            progressBarImportacion.Size = new Size(556, 11);
+            progressBarImportacion.Size = new Size(652, 11);
             progressBarImportacion.TabIndex = 5;
             // 
             // lblHojas
             // 
             lblHojas.AutoSize = true;
-            lblHojas.Location = new Point(79, 147);
+            lblHojas.Location = new Point(77, 194);
             lblHojas.Name = "lblHojas";
             lblHojas.Size = new Size(47, 20);
             lblHojas.TabIndex = 6;
@@ -99,10 +99,10 @@
             // dgvResultados
             // 
             dgvResultados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvResultados.Location = new Point(386, 39);
+            dgvResultados.Location = new Point(386, 65);
             dgvResultados.Name = "dgvResultados";
             dgvResultados.RowHeadersWidth = 51;
-            dgvResultados.Size = new Size(627, 420);
+            dgvResultados.Size = new Size(723, 394);
             dgvResultados.TabIndex = 7;
             // 
             // lblProgreso
@@ -117,7 +117,7 @@
             // lblProyecto
             // 
             lblProyecto.AutoSize = true;
-            lblProyecto.Location = new Point(80, 201);
+            lblProyecto.Location = new Point(78, 248);
             lblProyecto.Name = "lblProyecto";
             lblProyecto.Size = new Size(67, 20);
             lblProyecto.TabIndex = 9;
@@ -125,7 +125,8 @@
             // 
             // txtRutaArchivo
             // 
-            txtRutaArchivo.Location = new Point(50, 102);
+            txtRutaArchivo.Enabled = false;
+            txtRutaArchivo.Location = new Point(48, 143);
             txtRutaArchivo.Name = "txtRutaArchivo";
             txtRutaArchivo.ReadOnly = true;
             txtRutaArchivo.Size = new Size(314, 27);
@@ -134,19 +135,40 @@
             // cmbProyecto
             // 
             cmbProyecto.FormattingEnabled = true;
-            cmbProyecto.Location = new Point(149, 193);
+            cmbProyecto.Location = new Point(147, 240);
             cmbProyecto.Margin = new Padding(3, 4, 3, 4);
             cmbProyecto.Name = "cmbProyecto";
             cmbProyecto.Size = new Size(215, 28);
             cmbProyecto.TabIndex = 14;
             cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
+            // lblUbicacionArc
+            // 
+            lblUbicacionArc.AutoSize = true;
+            lblUbicacionArc.Location = new Point(127, 99);
+            lblUbicacionArc.Name = "lblUbicacionArc";
+            lblUbicacionArc.Size = new Size(154, 20);
+            lblUbicacionArc.TabIndex = 15;
+            lblUbicacionArc.Text = "Ubicacion del Archivo";
+            // 
+            // lblErrores
+            // 
+            lblErrores.AutoSize = true;
+            lblErrores.Font = new Font("Segoe UI", 14F);
+            lblErrores.Location = new Point(560, 12);
+            lblErrores.Name = "lblErrores";
+            lblErrores.Size = new Size(281, 32);
+            lblErrores.TabIndex = 16;
+            lblErrores.Text = "Errores de la Importacion";
+            // 
             // wImportarPacientes
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1025, 623);
+            ClientSize = new Size(1121, 623);
             ControlBox = false;
+            Controls.Add(lblErrores);
+            Controls.Add(lblUbicacionArc);
             Controls.Add(cmbProyecto);
             Controls.Add(txtRutaArchivo);
             Controls.Add(lblProyecto);
@@ -182,5 +204,7 @@
         private Label lblProyecto;
         private TextBox txtRutaArchivo;
         private ComboBox cmbProyecto;
+        private Label lblUbicacionArc;
+        private Label lblErrores;
     }
 }

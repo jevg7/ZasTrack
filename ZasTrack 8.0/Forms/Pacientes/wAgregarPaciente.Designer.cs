@@ -41,7 +41,6 @@
             txtEdad = new TextBox();
             cmbGenero = new ComboBox();
             btnGuardarPaciente = new Button();
-            btnExcel = new Button();
             txtApellidos = new TextBox();
             lblApellido = new Label();
             panel1 = new Panel();
@@ -170,25 +169,14 @@
             // btnGuardarPaciente
             // 
             btnGuardarPaciente.Cursor = Cursors.Hand;
-            btnGuardarPaciente.Location = new Point(689, 753);
+            btnGuardarPaciente.Location = new Point(298, 740);
             btnGuardarPaciente.Margin = new Padding(5, 4, 5, 4);
             btnGuardarPaciente.Name = "btnGuardarPaciente";
-            btnGuardarPaciente.Size = new Size(168, 43);
+            btnGuardarPaciente.Size = new Size(340, 43);
             btnGuardarPaciente.TabIndex = 13;
             btnGuardarPaciente.Text = "Guardar";
             btnGuardarPaciente.UseVisualStyleBackColor = true;
             btnGuardarPaciente.Click += btnGuardarPaciente_Click;
-            // 
-            // btnExcel
-            // 
-            btnExcel.Cursor = Cursors.Hand;
-            btnExcel.Location = new Point(67, 753);
-            btnExcel.Margin = new Padding(5, 4, 5, 4);
-            btnExcel.Name = "btnExcel";
-            btnExcel.Size = new Size(168, 43);
-            btnExcel.TabIndex = 14;
-            btnExcel.Text = "Excel";
-            btnExcel.UseVisualStyleBackColor = true;
             // 
             // txtApellidos
             // 
@@ -249,7 +237,6 @@
             Controls.Add(panel1);
             Controls.Add(lblApellido);
             Controls.Add(txtApellidos);
-            Controls.Add(btnExcel);
             Controls.Add(btnGuardarPaciente);
             Controls.Add(cmbGenero);
             Controls.Add(txtEdad);
@@ -287,7 +274,6 @@
         private System.Windows.Forms.TextBox txtEdad;
         private System.Windows.Forms.ComboBox cmbGenero;
         private System.Windows.Forms.Button btnGuardarPaciente;
-        private System.Windows.Forms.Button btnExcel;
         private TextBox txtApellidos;
         private Label lblApellido;
         private Panel panel1;

@@ -43,6 +43,9 @@
     <Compile Update="Forms\Pacientes\wPaciente.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Pacientes\wResultadosImportacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Pacientes\wVerPaciente.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,6 +14,9 @@ using ExcelDataReader; // NuGet: ExcelDataReader, ExcelDataReader.DataSet
 using Npgsql; // Para NpgsqlException si la usas en el repo
 using ZasTrack.Models;
 using ZasTrack.Repositories;
+using static System.Net.WebRequestMethods;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // Necesario para ExcelDataReader en .NET Core / .NET 5+
 // Añadir paquete NuGet: System.Text.Encoding.CodePages
@@ -32,16 +36,16 @@ namespace ZasTrack.Forms.Pacientes
         public wImportarPacientes()
         {
             InitializeComponent();
-            // Inicializar repositorios
             pacienteRepository = new PacienteRepository();
             proyectoRepository = new ProyectoRepository();
 
-            // Conectar Handlers (si no se hizo en diseñador)
+            // --- ASEGÚRATE QUE ESTÉN AQUÍ (Y NO EN EL DISEÑADOR) ---
             this.Load += wImportarPacientes_Load;
             btnSeleccionarArchivo.Click += btnSeleccionarArchivo_Click;
-            btnImportar.Click += btnImportar_Click;
+            this.btnImportar.Click += btnImportar_Click;
             cmbHojas.SelectedIndexChanged += cmbHojas_SelectedIndexChanged;
             cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
+            // -------------------------------------------------------
         }
 
         // --- Evento Load ---
@@ -142,7 +146,7 @@ namespace ZasTrack.Forms.Pacientes
             try
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Necesario
-                using (var stream = File.Open(rutaArchivo, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = System.IO.File.Open(rutaArchivo, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) // Añade System.IO.
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     do { nombresHojas.Add(reader.Name); } while (reader.NextResult());
@@ -190,7 +194,7 @@ namespace ZasTrack.Forms.Pacientes
         // --- Habilitar/Deshabilitar Botón Importar ---
         private void ActualizarEstadoBotonImportar()
         {
-            bool archivoOk = !string.IsNullOrEmpty(txtRutaArchivo.Text) && File.Exists(txtRutaArchivo.Text);
+            bool archivoOk = !string.IsNullOrEmpty(txtRutaArchivo.Text) && System.IO.File.Exists(txtRutaArchivo.Text);
             bool hojaOk = cmbHojas.SelectedItem != null;
             bool proyectoOk = cmbProyecto.SelectedValue != null && (cmbProyecto.SelectedValue is int);
 
@@ -200,75 +204,120 @@ namespace ZasTrack.Forms.Pacientes
         // --- BOTÓN IMPORTAR: Inicia el proceso ---
         private async void btnImportar_Click(object sender, EventArgs e)
         {
-            // Validaciones Iniciales (ya hechas por ActualizarEstadoBotonImportar, pero doble chequeo)
+            // --- 1. Validaciones Iniciales ---
             string rutaArchivo = txtRutaArchivo.Text;
-            if (string.IsNullOrEmpty(rutaArchivo) || !File.Exists(rutaArchivo)) { MessageBox.Show("Seleccione archivo."); return; }
-            if (cmbHojas.SelectedItem == null) { MessageBox.Show("Seleccione hoja."); return; }
-            if (cmbProyecto.SelectedValue == null || !(cmbProyecto.SelectedValue is int)) { MessageBox.Show("Seleccione proyecto."); return; }
+            if (string.IsNullOrEmpty(rutaArchivo) || !System.IO.File.Exists(rutaArchivo))
+            {
+                MessageBox.Show("Seleccione archivo Excel válido.", "Archivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (cmbHojas.SelectedItem == null)
+            {
+                MessageBox.Show("Seleccione la hoja de cálculo.", "Hoja", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (cmbProyecto.SelectedValue == null || !(cmbProyecto.SelectedValue is int))
+            {
+                MessageBox.Show("Seleccione un proyecto destino.", "Proyecto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             string nombreHoja = cmbHojas.SelectedItem.ToString();
             int idProyectoSeleccionado = (int)cmbProyecto.SelectedValue;
             bool tieneEncabezado = chkTieneEncabezado.Checked;
 
-            // Preparar UI
-            btnImportar.Enabled = false; btnSeleccionarArchivo.Enabled = false;
-            cmbProyecto.Enabled = false; cmbHojas.Enabled = false; chkTieneEncabezado.Enabled = false;
-            progressBarImportacion.Value = 0; progressBarImportacion.Visible = true;
-            lblProgreso.Text = "Iniciando importación..."; lblProgreso.Visible = true;
+            // --- 2. Preparar UI para Importación ---
+            btnImportar.Enabled = false;
+            btnSeleccionarArchivo.Enabled = false;
+            cmbProyecto.Enabled = false;
+            cmbHojas.Enabled = false;
+            chkTieneEncabezado.Enabled = false;
+            progressBarImportacion.Value = 0;
+            progressBarImportacion.Visible = true;
+            lblProgreso.Text = "Iniciando importación...";
+            lblProgreso.Visible = true;
             dgvResultados.DataSource = null;
 
-            // Iniciar Tarea Asíncrona
+            // --- 3. Iniciar Tarea Asíncrona ---
             ResultadoImportacion resultados = null;
             try
             {
                 resultados = await Task.Run(() => ProcesarArchivoExcel(rutaArchivo, nombreHoja, tieneEncabezado, idProyectoSeleccionado));
 
-                // Mostrar Resumen Final
-                lblProgreso.Text = $"Proceso finalizado. {resultados.Exitosos} pacientes guardados, {resultados.Errores.Count} filas con errores.";
-                MessageBox.Show($"Importación Finalizada.\n\nPacientes guardados: {resultados.Exitosos}\nFilas con errores: {resultados.Errores.Count}",
-                                "Proceso Terminado", MessageBoxButtons.OK,
-                                resultados.Errores.Any() ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
-
-                // Mostrar errores detallados
-                if (resultados.Errores.Any())
+                // --- 4. Mostrar Resultados en Nueva Ventana (UI Thread) ---
+                if (resultados != null) // Verificar que el proceso devolvió algo
                 {
-                    dgvResultados.DataSource = resultados.Errores;
-                    // Configurar columnas (hacerlo idealmente en el diseñador)
-                    try
-                    { // Puede fallar si las columnas no existen o AutoGenerate está off
-                        if (dgvResultados.Columns["Fila"] != null) dgvResultados.Columns["Fila"].HeaderText = "Fila Excel";
-                        if (dgvResultados.Columns["Mensaje"] != null) { dgvResultados.Columns["Mensaje"].HeaderText = "Motivo del Error"; dgvResultados.Columns["Mensaje"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill; }
-                        if (dgvResultados.Columns["CodigoIntentado"] != null) dgvResultados.Columns["CodigoIntentado"].HeaderText = "Código Leído";
-                        if (dgvResultados.Columns["NombreIntentado"] != null) dgvResultados.Columns["NombreIntentado"].HeaderText = "Nombre Leído";
+                    // Actualizar label local con resumen simple
+                    // Usamos resultados.PacientesGuardados.Count en lugar de resultados.Exitosos para estar seguros
+                    lblProgreso.Text = $"Proceso finalizado. {resultados.PacientesGuardados.Count} guardados, {resultados.Errores.Count} filas con errores.";
+
+
+                    // ** OPCIONAL: Mostrar errores en el grid local **
+                    // Si quieres mantener los errores aquí además de en la ventana nueva:
+                    if (resultados.Errores.Any())
+                    {
+                        dgvResultados.DataSource = null;
+                        dgvResultados.DataSource = resultados.Errores;
+                        try { /* ... configurar columnas dgvResultados ... */ } catch { /*...*/ }
+                        Console.WriteLine("Mostrando errores en dgvResultados local.");
                     }
-                    catch (Exception exGrid) { Console.WriteLine($"Error configurando DGV: {exGrid.Message}"); }
+                    else
+                    {
+                        dgvResultados.DataSource = null; // Limpiar si no hay errores
+                    }
+
+                    // *** Mostrar la nueva ventana de resultados ***
+                    // Solo si hubo algún paciente guardado O algún error que mostrar
+                    if (resultados.PacientesGuardados.Any() || resultados.Errores.Any())
+                    {
+                        try
+                        {
+                            // Crear instancia del formulario de resultados pasándole el objeto ResultadoImportacion
+                            wResultadosImportacion formResultados = new wResultadosImportacion(resultados);
+                            // Mostrarla como diálogo modal (el usuario debe cerrarla para continuar)
+                            formResultados.ShowDialog(this);
+                        }
+                        catch (Exception exDialog)
+                        {
+                            MessageBox.Show($"Error al mostrar ventana de resultados: {exDialog.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        // Mensaje si el archivo estaba vacío o todas las filas fueron inválidas/omitidas
+                        MessageBox.Show("No se encontraron pacientes válidos para importar en el archivo.", "Importación Vacía", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    lblProgreso.Text = "El proceso de importación no devolvió resultados.";
+                    MessageBox.Show("El proceso de importación finalizó inesperadamente sin resultados.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
                 lblProgreso.Text = "Error durante la importación.";
                 MessageBox.Show($"Ocurrió un error grave durante la importación:\n{ex.Message}", "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Console.WriteLine($"ERROR IMPORTACIÓN (btnImportar_Click): {ex.ToString()}");
+                Console.WriteLine($"ERROR IMPORTACIÓN (btnImportar_Click): {ex}");
             }
             finally
             {
-                // Reactivar UI
+                // --- 5. Reactivar UI ---
                 progressBarImportacion.Visible = false;
-                btnImportar.Enabled = true; // Habilitar de nuevo por si quiere reintentar
+                btnImportar.Enabled = true;
                 btnSeleccionarArchivo.Enabled = true;
-                cmbProyecto.Enabled = true; // Habilitar de nuevo si hay proyectos
-                cmbHojas.Enabled = !string.IsNullOrEmpty(txtRutaArchivo.Text); // Habilitar si hay ruta
+                cmbProyecto.Enabled = cmbProyecto.Items.Count > 0;
+                cmbHojas.Enabled = !string.IsNullOrEmpty(txtRutaArchivo.Text);
                 chkTieneEncabezado.Enabled = true;
-                ActualizarEstadoBotonImportar(); // Re-evaluar estado final del botón importar
+                ActualizarEstadoBotonImportar();
             }
         }
-
 
         // --- MÉTODO ACTUALIZADO: ProcesarArchivoExcel con Validaciones y Guardado 1x1 ---
         private ResultadoImportacion ProcesarArchivoExcel(string rutaArchivo, string nombreHoja, bool tieneEncabezado, int idProyecto)
         {
             ResultadoImportacion resultado = new ResultadoImportacion();
-            int filaActualExcel = tieneEncabezado ? 1 : 0;
+            int filaExcelActual = tieneEncabezado ? 1 : 0; // Inicia antes de la primera fila a leer
             int filasProcesadas = 0;
 
             if (pacienteRepository == null) pacienteRepository = new PacienteRepository();
@@ -277,145 +326,195 @@ namespace ZasTrack.Forms.Pacientes
 
             try
             {
-                using (var stream = File.Open(rutaArchivo, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = System.IO.File.Open(rutaArchivo, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     var dataset = reader.AsDataSet(new ExcelDataSetConfiguration()
                     {
-                        ConfigureDataTable = (_) => new ExcelDataTableConfiguration() { UseHeaderRow = tieneEncabezado }
+                        ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                        {
+                            UseHeaderRow = tieneEncabezado
+                        }
                     });
 
                     DataTable tabla = dataset.Tables[nombreHoja] ?? dataset.Tables[0];
-                    if (tabla == null) throw new Exception("No se encontró la hoja especificada o el archivo está vacío.");
+                    if (tabla == null) throw new Exception("No se encontró la hoja especificada o el archivo Excel está vacío.");
 
-                    int totalFilas = tabla.Rows.Count;
-
-                    // Actualizar UI inicial (Progreso)
-                    this.Invoke((MethodInvoker)delegate { progressBarImportacion.Maximum = totalFilas; progressBarImportacion.Value = 0; lblProgreso.Text = $"Procesando {totalFilas} filas..."; });
-
-                    // --- Iterar Filas ---
                     foreach (DataRow fila in tabla.Rows)
                     {
-                        filaActualExcel++; filasProcesadas++;
+                        filaExcelActual++;
+                        filasProcesadas++;
 
-                        // Actualizar Progreso
-                        if (filasProcesadas % 5 == 0 || filasProcesadas == totalFilas)
-                        {
-                            this.Invoke((MethodInvoker)delegate { progressBarImportacion.Value = filasProcesadas; lblProgreso.Text = $"Procesando fila {filasProcesadas} de {totalFilas}..."; });
-                        }
+                        if (tieneEncabezado && filasProcesadas == 1) continue;
 
-                        // Extraer datos
                         string codigo = fila.Field<string>(1)?.Trim();
                         string nombreCompleto = fila.Field<string>(2)?.Trim();
                         object fechaObj = fila[3];
                         string generoChar = fila.Field<string>(4)?.Trim().ToUpper();
 
-                        // Filtrar filas vacías
                         if (string.IsNullOrWhiteSpace(codigo) && string.IsNullOrWhiteSpace(nombreCompleto)) continue;
 
-                        // Validar Datos
-                        bool esFilaValida = true; List<string> erroresFila = new List<string>(); DateTime fechaNac = DateTime.MinValue;
+                        bool esFilaValida = true;
+                        List<string> erroresFila = new List<string>();
+                        DateTime fechaNac = DateTime.MinValue;
 
-                        // 1. Código
-                        if (string.IsNullOrWhiteSpace(codigo)) { esFilaValida = false; erroresFila.Add("Código vacío."); }
-                        else { try { if (pacienteRepository.ExisteCodigoBeneficiario(codigo)) { esFilaValida = false; erroresFila.Add($"Código '{codigo}' ya existe."); } } catch (Exception exRepo) { esFilaValida = false; erroresFila.Add($"Error DB validando código."); Console.WriteLine(exRepo.Message); } }
-                        // 2. Nombre
-                        if (string.IsNullOrWhiteSpace(nombreCompleto)) { esFilaValida = false; erroresFila.Add("Nombre vacío."); }
-                        // 3. Fecha Nacimiento
-                        if (fechaObj == null || string.IsNullOrWhiteSpace(fechaObj.ToString())) { esFilaValida = false; erroresFila.Add("Fecha Nac. vacía."); }
+                        if (string.IsNullOrWhiteSpace(codigo))
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Código vacío.");
+                        }
                         else
                         {
-                            bool fechaParseada = false;
-                            if (fechaObj is DateTime dt) { fechaNac = dt; fechaParseada = true; }
-                            else if (fechaObj is double oaDate) { try { fechaNac = DateTime.FromOADate(oaDate); fechaParseada = true; } catch { /* Ignorar error de OADate */ } }
-                            if (!fechaParseada && DateTime.TryParseExact(fechaObj.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaNac)) { fechaParseada = true; }
-                            if (!fechaParseada && DateTime.TryParse(fechaObj.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaNac)) { fechaParseada = true; }
-
-                            if (!fechaParseada) { esFilaValida = false; erroresFila.Add($"Formato Fecha Nac. inválido ('{fechaObj}')."); }
-                            else if (fechaNac > DateTime.Today || fechaNac < new DateTime(1900, 1, 1)) { esFilaValida = false; erroresFila.Add("Fecha Nac. fuera de rango."); }
+                            try
+                            {
+                                if (pacienteRepository.ExisteCodigoBeneficiario(codigo))
+                                {
+                                    esFilaValida = false;
+                                    erroresFila.Add($"Código '{codigo}' ya existe.");
+                                }
+                            }
+                            catch
+                            {
+                                esFilaValida = false;
+                                erroresFila.Add("Error validando código.");
+                            }
                         }
-                        // 4. Género
-                        if (generoChar != "F" && generoChar != "M") { esFilaValida = false; erroresFila.Add("Género inválido (F/M)."); }
 
-                        // --- Procesar / Guardar si es Válido ---
+                        if (string.IsNullOrWhiteSpace(nombreCompleto))
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Nombre vacío.");
+                        }
+
+                        if (fechaObj == null || string.IsNullOrWhiteSpace(fechaObj.ToString()))
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Fecha Nac. vacía.");
+                        }
+                        else
+                        {
+                            if (!DateTime.TryParse(fechaObj.ToString(), out fechaNac) || fechaNac > DateTime.Today || fechaNac < new DateTime(1900, 1, 1))
+                            {
+                                esFilaValida = false;
+                                erroresFila.Add("Fecha Nac. inválida.");
+                            }
+                        }
+
+                        if (generoChar != "F" && generoChar != "M")
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Género inválido (F/M).");
+                        }
+
                         if (esFilaValida)
                         {
-                            string nombres = ""; string apellidos = "";
+                            string nombres = "", apellidos = "";
                             int firstSpace = nombreCompleto.IndexOf(' ');
-                            if (firstSpace > 0) { nombres = nombreCompleto.Substring(0, firstSpace); apellidos = nombreCompleto.Substring(firstSpace + 1); } else { nombres = nombreCompleto; }
-                            string generoDb = (generoChar == "F") ? "Femenino" : "Masculino";
-                            int edadDb = DateTime.Today.Year - fechaNac.Year; if (DateTime.Today < fechaNac.AddYears(edadDb)) edadDb--; if (edadDb < 0) edadDb = 0;
+                            if (firstSpace > 0)
+                            {
+                                nombres = nombreCompleto.Substring(0, firstSpace).Trim();
+                                apellidos = nombreCompleto.Substring(firstSpace + 1).Trim();
+                            }
+                            else
+                            {
+                                nombres = nombreCompleto.Trim();
+                            }
 
                             pacientes nuevoPaciente = new pacientes
                             {
                                 nombres = CapitalizarTexto(nombres),
                                 apellidos = CapitalizarTexto(apellidos),
-                                edad = edadDb,
-                                genero = generoDb,
+                                edad = DateTime.Today.Year - fechaNac.Year,
+                                genero = generoChar == "F" ? "Femenino" : "Masculino",
                                 codigo_beneficiario = codigo,
                                 fecha_nacimiento = fechaNac,
                                 id_proyecto = idProyecto,
                                 observacion = ""
                             };
 
-                            // --- Guardar Paciente Individualmente ---
                             try
                             {
                                 pacienteRepository.GuardarPaciente(nuevoPaciente);
-                                resultado.Exitosos++; // Incrementar éxito
+                                resultado.PacientesGuardados.Add(nuevoPaciente);
                             }
                             catch (Exception exSave)
                             {
-                                Console.WriteLine($"ERROR al guardar paciente Cod={codigo}: {exSave.Message}");
-                                // Registrar error si falla guardado
-                                resultado.Errores.Add(new ErrorImportacion { Fila = filaActualExcel, Mensaje = $"Error al guardar en BD: {exSave.Message}", CodigoIntentado = codigo, NombreIntentado = nombreCompleto });
+                                Console.WriteLine($"ERROR al guardar Cod={codigo}, FilaExcel={filaExcelActual}: {exSave.Message}");
+
+                                resultado.Errores.Add(new ErrorImportacion
+                                {
+                                    Fila = filaExcelActual,
+                                    Mensaje = $"Error al guardar BD: {exSave.Message}",
+                                    CodigoIntentado = codigo,
+                                    NombreIntentado = nombreCompleto
+                                });
+
                             }
                         }
                         else
                         {
-                            // Registrar error de validación
-                            resultado.Errores.Add(new ErrorImportacion { Fila = filaActualExcel, Mensaje = string.Join("; ", erroresFila), CodigoIntentado = codigo ?? "", NombreIntentado = nombreCompleto ?? "" });
+                            resultado.Errores.Add(new ErrorImportacion
+                            {
+                                Fila = filaExcelActual,
+                                Mensaje = string.Join("; ", erroresFila),
+                                CodigoIntentado = codigo ?? "",
+                                NombreIntentado = nombreCompleto ?? ""
+                            });
                         }
-                    } // Fin foreach fila
-                } // Fin using reader
-            } // Fin using stream
-        
-        catch (IOException ioEx) { Console.WriteLine($"Error de IO: {ioEx.Message}"); resultado.Errores.Add(new ErrorImportacion { Fila = 0, Mensaje = $"Error IO: {ioEx.Message}" }); }
-        catch (Exception ex) { Console.WriteLine($"Error procesando Excel: {ex.ToString()}"); resultado.Errores.Add(new ErrorImportacion { Fila = filaActualExcel, Mensaje = $"Error General Fila ~{filaActualExcel}: {ex.Message}" }); }
-
-        // Actualizar progreso final
-        this.Invoke((MethodInvoker)delegate { if (progressBarImportacion.Maximum > 0) progressBarImportacion.Value = progressBarImportacion.Maximum; });
-            return resultado;
+                    }
                 }
-
-                // --- Método auxiliar para capitalizar ---
-                private string CapitalizarTexto(string texto)
+            }
+            catch (IOException ioEx)
             {
-                if (string.IsNullOrWhiteSpace(texto)) return texto;
-                TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-                return textInfo.ToTitleCase(texto.ToLower());
+                resultado.Errores.Add(new ErrorImportacion { Fila = 0, Mensaje = $"Error IO: {ioEx.Message}" });
+            }
+            catch (Exception ex)
+            {
+                resultado.Errores.Add(new ErrorImportacion { Fila = filaExcelActual, Mensaje = $"Error General: {ex.Message}" });
             }
 
-            // --- Clases auxiliares para resultado y error ---
-            public class ResultadoImportacion
-            {
-                public int Exitosos { get; set; } = 0;
-                public List<ErrorImportacion> Errores { get; set; } = new List<ErrorImportacion>();
-            }
-            public class ErrorImportacion
-            {
-                public int Fila { get; set; }
-                public string Mensaje { get; set; }
-                public string CodigoIntentado { get; set; }
-                public string NombreIntentado { get; set; }
-            }
+            return resultado;
+        }
 
-            // --- Handlers vacíos (puedes quitarlos si no los usas) ---
-            private void cmbProyectoImportar_SelectedIndexChanged(object sender, EventArgs e) 
-            { /* No necesita lógica si ActualizarEstado lo maneja todo */ }
-            
-            private void wImportarPacientes_Load_1
-                (object sender, EventArgs e) { /* Probablemente redundante, usa el otro Load */ }
 
+        // --- Método auxiliar para capitalizar ---
+        private string CapitalizarTexto(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return texto;
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(texto.ToLower());
+        }
+
+        // --- Clases auxiliares para resultado y error ---
+        // FUERA de la clase wImportarPacientes, DENTRO del namespace
+
+       
+        // --- Handlers vacíos (puedes quitarlos si no los usas) ---
+        private void cmbProyectoImportar_SelectedIndexChanged(object sender, EventArgs e)
+        { /* No necesita lógica si ActualizarEstado lo maneja todo */ }
+
+        private void wImportarPacientes_Load_1
+            (object sender, EventArgs e)
+        { /* Probablemente redundante, usa el otro Load */ }
     } // Fin clase wImportarPacientes
+    public class ResultadoImportacion
+    {
+        public List<pacientes> PacientesGuardados { get; set; }
+        public List<ErrorImportacion> Errores { get; set; }
+        public int Exitosos => PacientesGuardados?.Count ?? 0;
+
+        public ResultadoImportacion()
+        {
+            PacientesGuardados = new List<pacientes>();
+            Errores = new List<ErrorImportacion>();
+        }
+    }
+
+    public class ErrorImportacion
+    {
+        public int Fila { get; set; }
+        public string Mensaje { get; set; }
+        public string CodigoIntentado { get; set; }
+        public string NombreIntentado { get; set; }
+    }
 } // Fin namespace

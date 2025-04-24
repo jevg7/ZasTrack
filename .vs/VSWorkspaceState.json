@@ -3,14 +3,14 @@
     "",
     "\\ZasTrack 8.0",
     "\\ZasTrack 8.0\\Forms",
-    "\\ZasTrack 8.0\\Forms\\Dashboard",
     "\\ZasTrack 8.0\\Forms\\Examenes",
     "\\ZasTrack 8.0\\Forms\\Examenes\\Debug",
     "\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl",
+    "\\ZasTrack 8.0\\Forms\\Pacientes",
     "\\ZasTrack 8.0\\Forms\\wProyectos",
     "\\ZasTrack 8.0\\Models",
     "\\ZasTrack 8.0\\Repositories"
   ],
-  "SelectedNode": "\\ZasTrack 8.0\\Forms\\wProyectos\\wVerProyecto.cs",
+  "SelectedNode": "\\ZasTrack 8.0\\Forms\\Pacientes\\wImportarPacientes.cs",
   "PreviewInSolutionExplorer": false
 }
