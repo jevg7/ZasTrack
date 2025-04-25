@@ -23,6 +23,7 @@ namespace ZasTrack
         {
             Abrir_Form(new wAgregarPaciente());
         }
+        
 
 
         private void Abrir_Form(object formhijo)
@@ -51,6 +52,7 @@ namespace ZasTrack
         #region Windows Forms Designer generated code
         private void wPaciente_Load(object sender, EventArgs e)
         {
+            Abrir_Form(new ZasTrack.Forms.Pacientes.wImportarPacientes());
 
         }
         private void pnlCntEstudiantes_Paint(object sender, PaintEventArgs e)

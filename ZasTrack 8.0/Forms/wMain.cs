@@ -20,6 +20,7 @@ namespace ZasTrack
         public wMain()
         {
             InitializeComponent();
+            LoadChildForm(new Forms.Dashboard.wDashboard(this), this.pnlContenedor); // Pass 'this' as the required 'mainForm' parameter
         }
         public void Abrir_Form(object formhijo)
         {
@@ -39,13 +40,13 @@ namespace ZasTrack
 
         private void btnEstudiantes_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new wPaciente());
+            Abrir_Form(new ZasTrack.wPaciente());
         }
 
 
         private void btnProyecto_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new Forms.wProyectos.wProyectos());
+            Abrir_Form(new ZasTrack.Forms.wProyectos.wProyectos());
         }
         private void btnAgregarProyecto_Click(object sender, EventArgs e)
         {
@@ -67,7 +68,27 @@ namespace ZasTrack
             Abrir_Form(new wExamenes());
         }
         #endregion
+        private void LoadChildForm(Form childForm, Panel targetPanel)
+        {
+            
+            if (targetPanel.Controls.Count > 0)
+            {
+                if (targetPanel.Controls[0] is Form currentForm && currentForm.GetType() == childForm.GetType())
+                {
+                    childForm.Dispose(); // Evita abrir el mismo tipo de nuevo
+                    return;
+                }
+                targetPanel.Controls.RemoveAt(0);
+            }
 
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            targetPanel.Controls.Add(childForm);
+            targetPanel.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
+        }
         /// ni idea si se usan
         #region ConfigBotones
 
