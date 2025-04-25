@@ -1,7 +1,9 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using ZasTrack.Models;
+using static ZasTrack.Forms.Estudiantes.wVerPaciente;
 
 namespace ZasTrack.Repositories
 {
@@ -290,7 +292,6 @@ namespace ZasTrack.Repositories
             return pacientes;
         }
 
-        // --- Añadir a PacienteRepository.cs ---
 
         public bool ExisteCodigoBeneficiario(string codigoBeneficiario)
         {
@@ -374,6 +375,216 @@ namespace ZasTrack.Repositories
         //         } // Fin using transaction
         //     } // Fin using connection
         // }
+        public bool ActualizarPaciente(pacientes paciente)
+        {
+            // Recalcular edad por si cambió la fecha de nacimiento
+            int edadDb = DateTime.Today.Year - paciente.fecha_nacimiento.Year;
+            if (DateTime.Today < paciente.fecha_nacimiento.AddYears(edadDb)) edadDb--;
+            if (edadDb < 0) edadDb = 0;
+
+            // Query para actualizar usando el ID del paciente
+            string query = @"UPDATE pacientes SET
+                                nombres = @nombres,
+                                apellidos = @apellidos,
+                                edad = @edad,           -- Actualizar edad calculada
+                                genero = @genero,
+                                codigo_beneficiario = @codigo, -- Permitir cambiar código? Cuidado con duplicados!
+                                fecha_nacimiento = @fechaNac,
+                                id_proyecto = @idProy,
+                                observacion = @obs
+                            WHERE id_paciente = @idPaciente"; // <-- WHERE por ID (PK) es más seguro
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        // Pasar todos los parámetros
+                        cmd.Parameters.AddWithValue("@nombres", paciente.nombres);
+                        cmd.Parameters.AddWithValue("@apellidos", paciente.apellidos);
+                        cmd.Parameters.AddWithValue("@edad", edadDb); // Edad recalculada
+                        cmd.Parameters.AddWithValue("@genero", paciente.genero);
+                        cmd.Parameters.AddWithValue("@codigo", paciente.codigo_beneficiario);
+                        cmd.Parameters.AddWithValue("@fechaNac", paciente.fecha_nacimiento);
+                        cmd.Parameters.AddWithValue("@idProy", paciente.id_proyecto);
+                        cmd.Parameters.AddWithValue("@obs", (object?)paciente.observacion ?? DBNull.Value); // Manejar posible null
+                        cmd.Parameters.AddWithValue("@idPaciente", paciente.id_paciente); // El ID para el WHERE
+
+                        int affectedRows = cmd.ExecuteNonQuery();
+                        return affectedRows > 0; // Devuelve true si se actualizó 1 fila
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en ActualizarPaciente (ID: {paciente.id_paciente}): {ex.ToString()}");
+                // throw; // Opcional: relanzar
+                return false; // Indicar que falló
+            }
+        }
+
+        // --- Método para Eliminar un Paciente por su ID ---
+        public bool EliminarPaciente(int idPaciente)
+        {
+            string query = "DELETE FROM pacientes WHERE id_paciente = @id";
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", idPaciente);
+                        int affectedRows = cmd.ExecuteNonQuery();
+                        return affectedRows > 0; // True si se borró 1 fila
+                    }
+                }
+            }
+            catch (NpgsqlException ex) // Captura específica de PG para FK
+            {
+                Console.WriteLine($"Error PostgreSQL en EliminarPaciente (ID: {idPaciente}): {ex.Message} (SQLState: {ex.SqlState})");
+                if (ex.SqlState == "23503")
+                { // Foreign Key Violation
+                    throw new InvalidOperationException("No se puede eliminar este paciente porque tiene datos asociados (muestras, exámenes, etc.).", ex);
+                }
+                throw; // Relanzar otros errores de BD
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general en EliminarPaciente (ID: {idPaciente}): {ex.ToString()}");
+                throw; // Relanzar otros errores
+            }
+        }
+        public pacientes? ObtenerPacientePorId(int idPaciente) // Usa 'pacientes?' para indicar que puede devolver null
+        {
+            pacientes? paciente = null; // Inicializar a null
+            string query = "SELECT id_paciente, nombres, apellidos, edad, genero, codigo_beneficiario, fecha_nacimiento, id_proyecto, observacion FROM pacientes WHERE id_paciente = @id";
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", idPaciente);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read()) // Si encuentra una fila
+                            {
+                                paciente = new pacientes
+                                {
+                                    id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                    nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                    apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                    edad = reader.GetInt32(reader.GetOrdinal("edad")), // Lee la edad guardada
+                                    genero = reader.GetString(reader.GetOrdinal("genero")),
+                                    codigo_beneficiario = reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
+                                    fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")),
+                                    id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                    observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? null : reader.GetString(reader.GetOrdinal("observacion"))
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en ObtenerPacientePorId (ID: {idPaciente}): {ex.ToString()}");
+                // Puedes relanzar o devolver null según tu manejo de errores
+                throw;
+            }
+            return paciente; // Devuelve el paciente encontrado o null
+        }
+        public List<PacienteViewModel> BuscarPacientesCompleto(string? criterio, int? idProyecto, string? filtroGenero, bool? filtroConMuestras, bool? filtroConExamenes)
+        {
+            var pacientesVM = new List<PacienteViewModel>();
+            var sqlBuilder = new StringBuilder();
+
+            // --- ¡¡REVISA Y ADAPTA ESTA SQL A TU BASE DE DATOS!! ---
+            sqlBuilder.Append(@"
+                SELECT
+                    p.id_paciente, p.codigo_beneficiario, p.nombres, p.apellidos,
+                    p.fecha_nacimiento, p.genero, p.edad,
+                    COALESCE(pr.nombre, '') AS NombreProyecto,
+
+                    -- Resumen de Muestras (EJEMPLO: Concatena ID o Tipo de muestra)
+                    -- CAMBIA 'm.id_muestra' o añade JOIN a 'tipo_muestra' si es necesario
+                    COALESCE(
+                        (SELECT STRING_AGG(CAST(m.id_muestra AS TEXT), ', ' ORDER BY m.id_muestra)
+                         FROM muestra m WHERE m.id_paciente = p.id_paciente),
+                        'Ninguna'
+                    ) AS ResumenMuestras,
+
+                    -- Resumen de Exámenes (EJEMPLO: Concatena ID o Nombre de examen)
+                    -- CAMBIA 'ex.id_examen' o añade JOIN a 'tipo_examen' si es necesario
+                     COALESCE(
+                         (SELECT STRING_AGG(CAST(ex.id_examen AS TEXT), ', ' ORDER BY ex.id_examen)
+                          FROM examen ex
+                          JOIN muestra m ON ex.id_muestra = m.id_muestra
+                          WHERE m.id_paciente = p.id_paciente),
+                         'Ninguno'
+                     ) AS ResumenExamenes
+
+                FROM
+                    pacientes p
+                LEFT JOIN
+                    proyecto pr ON p.id_proyecto = pr.id_proyecto
+                WHERE 1=1 "); // Cláusula base
+
+            // --- Añadir Filtros Condicionales ---
+            if (idProyecto.HasValue) sqlBuilder.Append(" AND p.id_proyecto = @idProyecto ");
+            if (!string.IsNullOrWhiteSpace(criterio)) sqlBuilder.Append(@" AND (LOWER(p.nombres) LIKE LOWER(@criterioLike) OR LOWER(p.apellidos) LIKE LOWER(@criterioLike) OR LOWER(p.codigo_beneficiario) LIKE LOWER(@criterioLike)) ");
+            if (!string.IsNullOrWhiteSpace(filtroGenero)) sqlBuilder.Append(" AND p.genero = @filtroGenero ");
+            if (filtroConMuestras.HasValue) sqlBuilder.Append(filtroConMuestras.Value ? " AND EXISTS (SELECT 1 FROM muestra m WHERE m.id_paciente = p.id_paciente) " : " AND NOT EXISTS (SELECT 1 FROM muestra m WHERE m.id_paciente = p.id_paciente) ");
+            if (filtroConExamenes.HasValue) sqlBuilder.Append(filtroConExamenes.Value ? " AND EXISTS (SELECT 1 FROM examen e JOIN muestra m ON e.id_muestra = m.id_muestra WHERE m.id_paciente = p.id_paciente) " : " AND NOT EXISTS (SELECT 1 FROM examen e JOIN muestra m ON e.id_muestra = m.id_muestra WHERE m.id_paciente = p.id_paciente) ");
+
+            sqlBuilder.Append(" ORDER BY p.apellidos, p.nombres;");
+            // --- Fin SQL ---
+
+            string query = sqlBuilder.ToString();
+            Console.WriteLine($"DEBUG SQL BuscarPacientesCompleto:\n{query}");
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    // Añadir parámetros (importante manejar nulls para los opcionales)
+                    if (idProyecto.HasValue) cmd.Parameters.AddWithValue("@idProyecto", idProyecto.Value);
+                    if (!string.IsNullOrWhiteSpace(criterio)) cmd.Parameters.AddWithValue("@criterioLike", $"%{criterio}%");
+                    if (!string.IsNullOrWhiteSpace(filtroGenero)) cmd.Parameters.AddWithValue("@filtroGenero", filtroGenero);
+                    // Los parámetros booleanos para EXISTS/NOT EXISTS no son necesarios si se construyen en la SQL
+
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            pacientesVM.Add(new PacienteViewModel
+                            { // Crear ViewModel
+                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                codigo_beneficiario = reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
+                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")),
+                                genero = reader.GetString(reader.GetOrdinal("genero")),
+                                edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                                NombreProyecto = reader.GetString(reader.GetOrdinal("NombreProyecto")),
+                                ResumenMuestras = reader.GetString(reader.GetOrdinal("ResumenMuestras")),
+                                ResumenExamenes = reader.GetString(reader.GetOrdinal("ResumenExamenes"))
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine($"ERROR en BuscarPacientesCompleto: {ex.ToString()}"); throw; }
+            return pacientesVM;
+        }
+
     }
 
 }

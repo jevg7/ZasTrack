@@ -42,7 +42,6 @@ namespace ZasTrack
 
         private void editarEliminarEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new wEditarEliminarPaciente());
         }
 
         private void verEstudiantesToolStripMenuItem_Click(object sender, EventArgs e)
