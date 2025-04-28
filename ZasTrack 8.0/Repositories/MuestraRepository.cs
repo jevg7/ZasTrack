@@ -3,11 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using ZasTrack.Models;
+using ZasTrack.Models.ExamenModel;
+using ZasTrack.Models.Informes;
 
 namespace ZasTrack.Repositories
 {
     public class MuestraRepository
     {
+        private ExamenRepository _examenRepository;
+        // --- Constructor de la clase ---
+        public MuestraRepository() // O InformeRepository()
+        {
+            _examenRepository = new ExamenRepository();
+            
+        }
         public int GuardarMuestras(Muestra muestra)
         {
             string query = @"
@@ -46,8 +55,6 @@ namespace ZasTrack.Repositories
             }
 
         }
-
-
         public int ObtenerUltimaMuestra(int idProyecto, DateTime fecha)
         {
             int ultimaMuestra = 0;
@@ -148,7 +155,7 @@ namespace ZasTrack.Repositories
                                 // Asegúrate que MuestraInfoViewModel tenga las propiedades necesarias
                                 ultimasMuestras.Add(new MuestraInfoViewModel
                                 {
-                                    IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                                    id_Muestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
                                     NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
                                     Paciente = reader.GetString(reader.GetOrdinal("paciente")),
                                     FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
@@ -170,7 +177,9 @@ namespace ZasTrack.Repositories
             }
             return ultimasMuestras;
         }
+       
         
+
     }
 }
 

@@ -8,7 +8,7 @@ namespace ZasTrack.Models
 {
     public class Muestra
     {
-        public int IdMuestra { get; set; }
+        public int id_Muestra { get; set; }
         public int IdProyecto { get; set; }
         public int IdPaciente { get; set; }
         public int IdTipoExamen { get; set; }

@@ -12,7 +12,7 @@ namespace ZasTrack.Repositories
         {
             string query = @"
                 INSERT INTO muestra_examen (id_muestra, id_tipo_examen)
-                VALUES (@IdMuestra, @IdTipoExamen)
+                VALUES (@id_Muestra, @IdTipoExamen)
                 ON CONFLICT (id_muestra, id_tipo_examen) DO NOTHING";
 
             try
@@ -22,7 +22,7 @@ namespace ZasTrack.Repositories
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@IdMuestra", muestraExamen.IdMuestra);
+                        cmd.Parameters.AddWithValue("@id_Muestra", muestraExamen.id_Muestra);
                         cmd.Parameters.AddWithValue("@IdTipoExamen", muestraExamen.IdTipoExamen);
                         cmd.ExecuteNonQuery();
                     }
@@ -42,12 +42,12 @@ namespace ZasTrack.Repositories
             }
         }
 
-        public List<int> GetExamenesPorMuestra(int idMuestra)
+        public List<int> GetExamenesPorMuestra(int id_Muestra)
         {
 
            
             var examenes = new List<int>();
-            string query = "SELECT id_tipo_examen FROM muestra_examen WHERE id_muestra = @IdMuestra";
+            string query = "SELECT id_tipo_examen FROM muestra_examen WHERE id_muestra = @id_Muestra";
             try
             {
                 using (var conn = DatabaseConnection.GetConnection())
@@ -55,7 +55,7 @@ namespace ZasTrack.Repositories
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@IdMuestra", idMuestra);
+                    cmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

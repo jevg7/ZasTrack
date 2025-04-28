@@ -185,10 +185,10 @@ namespace ZasTrack.Forms.Muestras
                 FechaRecepcion = fechaActual
             };
 
-            int idMuestra = 0;
+            int id_Muestra = 0;
             try
             {
-                idMuestra = muestraRepository.GuardarMuestras(muestra);
+                id_Muestra = muestraRepository.GuardarMuestras(muestra);
             }
             catch (Exception exGuardadoMuestra)
             {
@@ -199,18 +199,18 @@ namespace ZasTrack.Forms.Muestras
             }
 
             // 2. Vincular exámenes
-            if (idMuestra > 0)
+            if (id_Muestra > 0)
             {
                 try
                 {
                     if (chkOrina.Checked)
-                        muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 1 });
+                        muestraExamenRepository.VincularExamen(new MuestraExamen { id_Muestra = id_Muestra, IdTipoExamen = 1 });
 
                     if (chkHeces.Checked)
-                        muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 2 });
+                        muestraExamenRepository.VincularExamen(new MuestraExamen { id_Muestra = id_Muestra, IdTipoExamen = 2 });
 
                     if (chkSangre.Checked)
-                        muestraExamenRepository.VincularExamen(new MuestraExamen { IdMuestra = idMuestra, IdTipoExamen = 3 });
+                        muestraExamenRepository.VincularExamen(new MuestraExamen { id_Muestra = id_Muestra, IdTipoExamen = 3 });
 
                     // CORREGIDO: MessageBoxIcon.Information
                     MessageBox.Show($"Muestra #{numeroMuestra} guardada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -226,7 +226,7 @@ namespace ZasTrack.Forms.Muestras
                 {
                     // CORREGIDO: MessageBoxIcon.Error
                     MessageBox.Show($"Se guardó la muestra #{numeroMuestra}, pero ocurrió un error al vincular los tipos de examen:\n{exVinculacion.Message}\n\nRevise la configuración o intente editar la muestra.", "Error al Vincular Exámenes", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Console.WriteLine($"ERROR Vinculando Exámenes para Muestra ID {idMuestra}: {exVinculacion.ToString()}");
+                    Console.WriteLine($"ERROR Vinculando Exámenes para Muestra ID {id_Muestra}: {exVinculacion.ToString()}");
                     LimpiarCampos(false); // Limpia igual para la siguiente
                     txtBuscar.Clear();
                     txtBuscar.Focus();

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ZasTrack.Models;
+using ZasTrack.Models.ExamenModel;
 using static ZasTrack.Forms.Estudiantes.wVerPaciente;
 
 namespace ZasTrack.Repositories

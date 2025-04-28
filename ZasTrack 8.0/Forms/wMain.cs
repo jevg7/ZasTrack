@@ -67,6 +67,10 @@ namespace ZasTrack
         {
             Abrir_Form(new wExamenes());
         }
+        private void btnReportes_Click(object sender, EventArgs e)
+        {
+            Abrir_Form(new Forms.Informes.wInformes());
+        }
         #endregion
         private void LoadChildForm(Form childForm, Panel targetPanel)
         {
@@ -130,9 +134,7 @@ namespace ZasTrack
         {
         }
 
-        private void btnReportes_Click(object sender, EventArgs e)
-        {
-        }
+       
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
         }

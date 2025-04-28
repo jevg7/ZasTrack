@@ -10,17 +10,15 @@
 
   <ItemGroup>
     <Compile Remove="Class\**" />
-    <Compile Remove="Forms\Informes\**" />
     <EmbeddedResource Remove="Class\**" />
-    <EmbeddedResource Remove="Forms\Informes\**" />
     <None Remove="Class\**" />
-    <None Remove="Forms\Informes\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ExcelDataReader" Version="3.7.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
+    <PackageReference Include="QuestPDF" Version="2025.4.0" />
   </ItemGroup>
 
   <ItemGroup>

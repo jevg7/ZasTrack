@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZasTrack.Models;       // Asegurar acceso a Proyecto y pacientes
+using ZasTrack.Models.ExamenModel;
 using ZasTrack.Repositories;    // Asegurar acceso a repositorios
 // using ZasTrack.ViewModels; // Si pones PacienteViewModel en otro namespace
 

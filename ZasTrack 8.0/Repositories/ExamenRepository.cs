@@ -6,7 +6,8 @@ using System.Linq;
 using ZasTrack;
 using ZasTrack.Forms.Examenes.Debug;
 using ZasTrack.Forms.Muestras;
-using ZasTrack.Models; 
+using ZasTrack.Models;
+using ZasTrack.Models.ExamenModel;
 public class ExamenRepository
 {
     // MeTODO COMPLETO CON TODOS LOS FILTROS
@@ -109,7 +110,7 @@ public class ExamenRepository
                             // porque filtramos las muestras completadas con el EXISTS.
                             resultados.Add(new MuestraInfoViewModel
                             {
-                                IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                                id_Muestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
                                 NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
                                 Paciente = reader.GetString(reader.GetOrdinal("paciente")),
                                 Genero = reader.GetString(reader.GetOrdinal("genero")),
@@ -227,7 +228,7 @@ public class ExamenRepository
                             // Llenado del ViewModel
                             resultados.Add(new MuestraInfoViewModel
                             {
-                                IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                                id_Muestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
                                 NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
                                 Paciente = reader.GetString(reader.GetOrdinal("paciente")),
                                 Genero = reader.GetString(reader.GetOrdinal("genero")),
@@ -246,7 +247,7 @@ public class ExamenRepository
         catch (Exception ex) { Console.WriteLine($"Error en ObtenerPacientesProcesados MODIFICADO: {ex.Message}\nQuery: {queryFinal}"); throw; }
         return resultados;
     }
-    public List<tipo_examen> ObtenerTiposExamenPendientesPorMuestra(int idMuestra)
+    public List<tipo_examen> ObtenerTiposExamenPendientesPorMuestra(int id_Muestra)
     {
         var tiposPendientes = new List<tipo_examen>();
         // Esta consulta busca los tipos de examen asociados a la muestra
@@ -259,7 +260,7 @@ public class ExamenRepository
             LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
             LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
             LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-            WHERE me.id_muestra = @idMuestra
+            WHERE me.id_muestra = @id_Muestra
               AND te.activo = TRUE -- Solo consideramos tipos de examen activos
               AND ( -- Condición para estar PENDIENTE
                     e.id_examen IS NULL OR
@@ -277,7 +278,7 @@ public class ExamenRepository
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                    cmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -295,13 +296,13 @@ public class ExamenRepository
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al obtener tipos pendientes para muestra {idMuestra}: {ex.Message}");
+            Console.WriteLine($"Error al obtener tipos pendientes para muestra {id_Muestra}: {ex.Message}");
             // Podrías relanzar o manejar el error como prefieras
             throw;
         }
         return tiposPendientes;
     }
-    public bool GuardarResultadoHeces(examen_heces datosHeces, int idMuestra, int idPaciente)
+    public bool GuardarResultadoHeces(examen_heces datosHeces, int id_Muestra, int idPaciente)
     {
         int idExamen;
         const int ID_TIPO_EXAMEN_HECES = 2; // Asumiendo ID 2 = Heces
@@ -314,11 +315,11 @@ public class ExamenRepository
                 try
                 {
                     // PASO 1: Buscar o Crear cabecera 'examen' (Idéntico a Orina, solo cambia ID_TIPO_EXAMEN)
-                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @idMuestra AND id_tipo_examen = @idTipoExamen";
+                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @id_Muestra AND id_tipo_examen = @idTipoExamen";
                     int? examenExistenteId = null;
                     using (var checkCmd = new NpgsqlCommand(checkQuery, conn, transaction))
                     {
-                        checkCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        checkCmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                         checkCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_HECES); // <- Usa ID Heces
                         var result = checkCmd.ExecuteScalar();
                         if (result != null && result != DBNull.Value) examenExistenteId = Convert.ToInt32(result);
@@ -339,13 +340,13 @@ public class ExamenRepository
                     else
                     {
                         string insertExamenQuery = @"INSERT INTO examen (id_paciente, id_tipo_examen, id_muestra, fecha_procesamiento, fecha_recepcion)
-                                                     VALUES (@idPaciente, @idTipoExamen, @idMuestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @idMuestra LIMIT 1))
+                                                     VALUES (@idPaciente, @idTipoExamen, @id_Muestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @id_Muestra LIMIT 1))
                                                      RETURNING id_examen;";
                         using (var insertCmd = new NpgsqlCommand(insertExamenQuery, conn, transaction))
                         {
                             insertCmd.Parameters.AddWithValue("@idPaciente", idPaciente);
                             insertCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_HECES); // <- Usa ID Heces
-                            insertCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                            insertCmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                             insertCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
                             idExamen = Convert.ToInt32(insertCmd.ExecuteScalar());
                         }
@@ -390,7 +391,7 @@ public class ExamenRepository
             }
         }
     }
-    public bool GuardarResultadoSangre(examen_sangre datosSangre, int idMuestra, int idPaciente)
+    public bool GuardarResultadoSangre(examen_sangre datosSangre, int id_Muestra, int idPaciente)
     {
         int idExamen;
         const int ID_TIPO_EXAMEN_SANGRE = 3; // Asumiendo ID 3 = Sangre
@@ -403,11 +404,11 @@ public class ExamenRepository
                 try
                 {
                     // PASO 1: Buscar o Crear cabecera 'examen' (Idéntico a Orina, solo cambia ID_TIPO_EXAMEN)
-                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @idMuestra AND id_tipo_examen = @idTipoExamen";
+                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @id_Muestra AND id_tipo_examen = @idTipoExamen";
                     int? examenExistenteId = null;
                     using (var checkCmd = new NpgsqlCommand(checkQuery, conn, transaction))
                     {
-                        checkCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        checkCmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                         checkCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_SANGRE); // <- Usa ID Sangre
                         var result = checkCmd.ExecuteScalar();
                         if (result != null && result != DBNull.Value) examenExistenteId = Convert.ToInt32(result);
@@ -428,13 +429,13 @@ public class ExamenRepository
                     else
                     {
                         string insertExamenQuery = @"INSERT INTO examen (id_paciente, id_tipo_examen, id_muestra, fecha_procesamiento, fecha_recepcion)
-                                                     VALUES (@idPaciente, @idTipoExamen, @idMuestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @idMuestra LIMIT 1))
+                                                     VALUES (@idPaciente, @idTipoExamen, @id_Muestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @id_Muestra LIMIT 1))
                                                      RETURNING id_examen;";
                         using (var insertCmd = new NpgsqlCommand(insertExamenQuery, conn, transaction))
                         {
                             insertCmd.Parameters.AddWithValue("@idPaciente", idPaciente);
                             insertCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_SANGRE); // <- Usa ID Sangre
-                            insertCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                            insertCmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                             insertCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
                             idExamen = Convert.ToInt32(insertCmd.ExecuteScalar());
                         }
@@ -497,7 +498,7 @@ public class ExamenRepository
         }
     }
 
-    public bool GuardarResultadoOrina(examen_orina datosOrina, int idMuestra, int idPaciente)
+    public bool GuardarResultadoOrina(examen_orina datosOrina, int id_Muestra, int idPaciente)
     {
         int idExamen; // Guardará el ID del registro 'examen' (nuevo o existente)
         const int ID_TIPO_EXAMEN_ORINA = 1; // Asumiendo que 1 es Orina
@@ -512,11 +513,11 @@ public class ExamenRepository
                 {
                     // PASO 1: Buscar o Crear el registro cabecera en la tabla 'examen'
                     //         Asociado a esta muestra Y este tipo de examen.
-                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @idMuestra AND id_tipo_examen = @idTipoExamen";
+                    string checkQuery = "SELECT id_examen FROM examen WHERE id_muestra = @id_Muestra AND id_tipo_examen = @idTipoExamen";
                     int? examenExistenteId = null;
                     using (var checkCmd = new NpgsqlCommand(checkQuery, conn, transaction)) // Ejecuta dentro de la transacción
                     {
-                        checkCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        checkCmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                         checkCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_ORINA);
                         var result = checkCmd.ExecuteScalar(); // Devuelve la primera columna de la primera fila, o null si no hay filas
                         if (result != null && result != DBNull.Value)
@@ -543,13 +544,13 @@ public class ExamenRepository
                         // Si no existe, lo insertamos y obtenemos el nuevo ID
                         string insertExamenQuery = @"
                             INSERT INTO examen (id_paciente, id_tipo_examen, id_muestra, fecha_procesamiento, fecha_recepcion)
-                            VALUES (@idPaciente, @idTipoExamen, @idMuestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @idMuestra LIMIT 1))
+                            VALUES (@idPaciente, @idTipoExamen, @id_Muestra, @fechaProc, (SELECT fecha_recepcion FROM muestra WHERE id_muestra = @id_Muestra LIMIT 1))
                             RETURNING id_examen;"; // RETURNING nos devuelve el ID recién creado
                         using (var insertCmd = new NpgsqlCommand(insertExamenQuery, conn, transaction))
                         {
                             insertCmd.Parameters.AddWithValue("@idPaciente", idPaciente);
                             insertCmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_ORINA);
-                            insertCmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                            insertCmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                             insertCmd.Parameters.AddWithValue("@fechaProc", DateTime.Now);
                             // La fecha de recepción se toma de la tabla muestra en la misma query
                             idExamen = Convert.ToInt32(insertCmd.ExecuteScalar()); // Obtiene el ID nuevo
@@ -635,9 +636,9 @@ public class ExamenRepository
         }
     }
     // En ExamenRepository.cs
-    public int? ObtenerIdPacientePorMuestra(int idMuestra)
+    public int? ObtenerIdPacientePorMuestra(int id_Muestra)
     {
-        string query = "SELECT id_paciente FROM muestra WHERE id_muestra = @idMuestra LIMIT 1;";
+        string query = "SELECT id_paciente FROM muestra WHERE id_muestra = @id_Muestra LIMIT 1;";
         try
         {
             using (var conn = DatabaseConnection.GetConnection())
@@ -645,7 +646,7 @@ public class ExamenRepository
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                    cmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                     var result = cmd.ExecuteScalar();
                     if (result != null && result != DBNull.Value)
                     {
@@ -656,7 +657,7 @@ public class ExamenRepository
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al obtener idPaciente para muestra {idMuestra}: {ex.Message}");
+            Console.WriteLine($"Error al obtener idPaciente para muestra {id_Muestra}: {ex.Message}");
             // Podrías lanzar una excepción o devolver null
         }
         return null; // Devuelve null si no se encuentra o hay error
@@ -665,9 +666,9 @@ public class ExamenRepository
     /// Obtiene la lista de tipos de examen que ya han sido marcados como procesados
     /// para una muestra específica. Útil para el modo Ver/Editar.
     /// </summary>
-    /// <param name="idMuestra">El ID de la muestra a consultar.</param>
+    /// <param name="id_Muestra">El ID de la muestra a consultar.</param>
     /// <returns>Una lista de objetos tipo_examen procesados.</returns>
-    public List<tipo_examen> ObtenerTiposExamenProcesadosPorMuestra(int idMuestra)
+    public List<tipo_examen> ObtenerTiposExamenProcesadosPorMuestra(int id_Muestra)
     {
         var tiposProcesados = new List<tipo_examen>();
         // Seleccionamos los tipos de examen que tienen una entrada correspondiente
@@ -679,7 +680,7 @@ public class ExamenRepository
             LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
             LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
             LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-            WHERE e.id_muestra = @idMuestra
+            WHERE e.id_muestra = @id_Muestra
               AND te.activo = TRUE
               AND ( -- Condición para estar PROCESADO
                     (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
@@ -696,7 +697,7 @@ public class ExamenRepository
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                    cmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -714,7 +715,7 @@ public class ExamenRepository
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al obtener tipos procesados para muestra {idMuestra}: {ex.Message}");
+            Console.WriteLine($"Error al obtener tipos procesados para muestra {id_Muestra}: {ex.Message}");
             throw; // Relanza para que la capa superior se entere
         }
         return tiposProcesados;
@@ -722,9 +723,9 @@ public class ExamenRepository
         /// <summary>
         /// Obtiene los datos guardados de un examen de orina para una muestra específica.
         /// </summary>
-        /// <param name="idMuestra">ID de la muestra.</param>
+        /// <param name="id_Muestra">ID de la muestra.</param>
         /// <returns>Objeto examen_orina con los datos, o null si no se encuentra.</returns>
-        public examen_orina ObtenerResultadoOrina(int idMuestra)
+        public examen_orina ObtenerResultadoOrina(int id_Muestra)
         {
             examen_orina resultado = null;
             const int ID_TIPO_EXAMEN_ORINA = 1;
@@ -733,7 +734,7 @@ public class ExamenRepository
             SELECT eo.*
             FROM examen_orina eo
             JOIN examen e ON eo.id_examen = e.id_examen
-            WHERE e.id_muestra = @idMuestra AND e.id_tipo_examen = @idTipoExamen
+            WHERE e.id_muestra = @id_Muestra AND e.id_tipo_examen = @idTipoExamen
             LIMIT 1;
         "; // LIMIT 1 por si acaso, aunque solo debería haber uno
 
@@ -744,7 +745,7 @@ public class ExamenRepository
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        cmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                         cmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_ORINA);
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -782,7 +783,7 @@ public class ExamenRepository
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al obtener resultado de Orina para muestra {idMuestra}: {ex.Message}");
+                Console.WriteLine($"Error al obtener resultado de Orina para muestra {id_Muestra}: {ex.Message}");
                 throw; // Relanza para manejo superior
             }
             return resultado;
@@ -791,7 +792,7 @@ public class ExamenRepository
         /// <summary>
         /// Obtiene los datos guardados de un examen de heces para una muestra específica.
         /// </summary>
-        public examen_heces ObtenerResultadoHeces(int idMuestra)
+        public examen_heces ObtenerResultadoHeces(int id_Muestra)
         {
             examen_heces resultado = null;
             const int ID_TIPO_EXAMEN_HECES = 2;
@@ -799,7 +800,7 @@ public class ExamenRepository
             SELECT eh.*
             FROM examen_heces eh
             JOIN examen e ON eh.id_examen = e.id_examen
-            WHERE e.id_muestra = @idMuestra AND e.id_tipo_examen = @idTipoExamen
+            WHERE e.id_muestra = @id_Muestra AND e.id_tipo_examen = @idTipoExamen
             LIMIT 1;
         ";
 
@@ -810,7 +811,7 @@ public class ExamenRepository
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        cmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                         cmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_HECES);
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -837,7 +838,7 @@ public class ExamenRepository
         /// <summary>
         /// Obtiene los datos guardados de un examen de sangre (BHC) para una muestra específica.
         /// </summary>
-        public examen_sangre ObtenerResultadoSangre(int idMuestra)
+        public examen_sangre ObtenerResultadoSangre(int id_Muestra)
         {
             examen_sangre resultado = null;
             const int ID_TIPO_EXAMEN_SANGRE = 3;
@@ -845,7 +846,7 @@ public class ExamenRepository
             SELECT es.*
             FROM examen_sangre es
             JOIN examen e ON es.id_examen = e.id_examen
-            WHERE e.id_muestra = @idMuestra AND e.id_tipo_examen = @idTipoExamen
+            WHERE e.id_muestra = @id_Muestra AND e.id_tipo_examen = @idTipoExamen
             LIMIT 1;
         ";
 
@@ -856,7 +857,7 @@ public class ExamenRepository
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@idMuestra", idMuestra);
+                        cmd.Parameters.AddWithValue("@id_Muestra", id_Muestra);
                         cmd.Parameters.AddWithValue("@idTipoExamen", ID_TIPO_EXAMEN_SANGRE);
                         using (var reader = cmd.ExecuteReader())
                         {

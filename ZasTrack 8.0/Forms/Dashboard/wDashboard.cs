@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using ZasTrack.Forms.Examenes;
 using ZasTrack.Forms.Muestras;
 using ZasTrack.Models;
+using ZasTrack.Models.ExamenModel;
 using ZasTrack.Repositories;
 
 namespace ZasTrack.Forms.Dashboard

@@ -13,19 +13,22 @@
     <Compile Update="Forms\Examenes\ExamControl\EGOControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\ExamWrite\BHC.cs">
+    <Compile Update="Forms\Examenes\ExamWrite (No se usa)\BHC.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\ExamControl\BHCControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\ExamWrite\EGH.cs">
+    <Compile Update="Forms\Examenes\ExamWrite (No se usa)\EGH.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Examenes\ExamControl\EGHControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Forms\Examenes\ExamWrite\EGO.cs">
+    <Compile Update="Forms\Examenes\ExamWrite (No se usa)\EGO.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Informes\wInformes.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Muestras\wMuestras.cs">

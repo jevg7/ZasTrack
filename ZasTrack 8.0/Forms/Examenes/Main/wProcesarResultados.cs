@@ -16,21 +16,22 @@ using ZasTrack.Forms.Examenes.ExamWrite;
 using ZasTrack.Forms.Examenes; 
 using ZasTrack.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using ZasTrack.Models.ExamenModel;
 
 namespace ZasTrack.Forms.Examenes.Debug
 {
     public partial class wProcesarResultados : Form
     {
-        private int _idMuestra;
+        private int _id_Muestra;
         private int _numeroMuestra;
         private DateTime _fechaRecepcion;
         private string _nombrePaciente;
         private bool _esModoVistaOEditar; // Para saber si es nuevo o ver/editar
         private ExamenRepository _examenRepository;
-        public wProcesarResultados(int idMuestra, int numeroMuestra, DateTime fechaRecepcion, string nombrePaciente, bool modoVista = false)
+        public wProcesarResultados(int id_Muestra, int numeroMuestra, DateTime fechaRecepcion, string nombrePaciente, bool modoVista = false)
         {
             InitializeComponent();
-            _idMuestra = idMuestra;
+            _id_Muestra = id_Muestra;
             // Guarda los datos extras
             _numeroMuestra = numeroMuestra;
             _fechaRecepcion = fechaRecepcion;
@@ -79,7 +80,7 @@ namespace ZasTrack.Forms.Examenes.Debug
                 if (_esModoVistaOEditar)
                 {
                     // Lógica para MODO VER/EDITAR (Obtiene procesados)
-                    examenesParaMostrar = _examenRepository.ObtenerTiposExamenProcesadosPorMuestra(_idMuestra);
+                    examenesParaMostrar = _examenRepository.ObtenerTiposExamenProcesadosPorMuestra(_id_Muestra);
                     if (!examenesParaMostrar.Any())
                     {
                         MessageBox.Show("No se encontraron exámenes procesados para esta muestra.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -90,7 +91,7 @@ namespace ZasTrack.Forms.Examenes.Debug
                 else
                 {
                     // Lógica para MODO PROCESAR (Obtiene pendientes)
-                    examenesParaMostrar = _examenRepository.ObtenerTiposExamenPendientesPorMuestra(_idMuestra);
+                    examenesParaMostrar = _examenRepository.ObtenerTiposExamenPendientesPorMuestra(_id_Muestra);
                     if (!examenesParaMostrar.Any())
                     {
                         MessageBox.Show("Esta muestra no tiene exámenes pendientes de procesar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -113,15 +114,15 @@ namespace ZasTrack.Forms.Examenes.Debug
                     {
                         case 1: // Orina
                             controlExamen = new EGOControl();
-                            if (_esModoVistaOEditar) { datosGuardados = _examenRepository.ObtenerResultadoOrina(_idMuestra); }
+                            if (_esModoVistaOEditar) { datosGuardados = _examenRepository.ObtenerResultadoOrina(_id_Muestra); }
                             break;
                         case 2: // Heces
                             controlExamen = new EGHControl();
-                            if (_esModoVistaOEditar) { datosGuardados = _examenRepository.ObtenerResultadoHeces(_idMuestra); }
+                            if (_esModoVistaOEditar) { datosGuardados = _examenRepository.ObtenerResultadoHeces(_id_Muestra); }
                             break;
                         case 3: // Sangre
                             controlExamen = new BHCControl();
-                            if (_esModoVistaOEditar) { datosGuardados = _examenRepository.ObtenerResultadoSangre(_idMuestra); }
+                            if (_esModoVistaOEditar) { datosGuardados = _examenRepository.ObtenerResultadoSangre(_id_Muestra); }
                             break;
                         default:
                             controlExamen = new UserControl();
@@ -372,7 +373,7 @@ namespace ZasTrack.Forms.Examenes.Debug
             int? idPacienteNullable = null;
             try
             {
-                idPacienteNullable = _examenRepository.ObtenerIdPacientePorMuestra(_idMuestra);
+                idPacienteNullable = _examenRepository.ObtenerIdPacientePorMuestra(_id_Muestra);
             }
             catch (Exception exRepo)
             {
@@ -401,15 +402,15 @@ namespace ZasTrack.Forms.Examenes.Debug
             {
                 if (datosObtenidos is examen_orina dataOrina)
                 {
-                    guardadoExitoso = _examenRepository.GuardarResultadoOrina(dataOrina, _idMuestra, idPaciente);
+                    guardadoExitoso = _examenRepository.GuardarResultadoOrina(dataOrina, _id_Muestra, idPaciente);
                 }
                 else if (datosObtenidos is examen_heces dataHeces)
                 {
-                    guardadoExitoso = _examenRepository.GuardarResultadoHeces(dataHeces, _idMuestra, idPaciente);
+                    guardadoExitoso = _examenRepository.GuardarResultadoHeces(dataHeces, _id_Muestra, idPaciente);
                 }
                 else if (datosObtenidos is examen_sangre dataSangre)
                 {
-                    guardadoExitoso = _examenRepository.GuardarResultadoSangre(dataSangre, _idMuestra, idPaciente);
+                    guardadoExitoso = _examenRepository.GuardarResultadoSangre(dataSangre, _id_Muestra, idPaciente);
                 }
                 // Añade 'else if' para otros tipos si los tienes
             }
@@ -456,7 +457,7 @@ namespace ZasTrack.Forms.Examenes.Debug
         private async void btnGuardarResultados_Click(object sender, EventArgs e)
         {
             // --- 1. Obtener idPaciente ---
-            int? idPacienteNullable = _examenRepository.ObtenerIdPacientePorMuestra(_idMuestra);
+            int? idPacienteNullable = _examenRepository.ObtenerIdPacientePorMuestra(_id_Muestra);
             if (!idPacienteNullable.HasValue)
             {
                 MessageBox.Show("Error Crítico: No se pudo obtener la información del paciente.", "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -572,9 +573,9 @@ namespace ZasTrack.Forms.Examenes.Debug
 
                     try // Intenta guardar este examen individualmente
                     {
-                        if (itemGuardar.Data is examen_orina dataOrina) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoOrina(dataOrina, _idMuestra, idPaciente); }
-                        else if (itemGuardar.Data is examen_heces dataHeces) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoHeces(dataHeces, _idMuestra, idPaciente); }
-                        else if (itemGuardar.Data is examen_sangre dataSangre) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoSangre(dataSangre, _idMuestra, idPaciente); }
+                        if (itemGuardar.Data is examen_orina dataOrina) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoOrina(dataOrina, _id_Muestra, idPaciente); }
+                        else if (itemGuardar.Data is examen_heces dataHeces) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoHeces(dataHeces, _id_Muestra, idPaciente); }
+                        else if (itemGuardar.Data is examen_sangre dataSangre) { guardadoOkEsteExamen = /*await*/ _examenRepository.GuardarResultadoSangre(dataSangre, _id_Muestra, idPaciente); }
                         // ... otros tipos ...
 
                         if (!guardadoOkEsteExamen) // Si el repositorio devolvió false

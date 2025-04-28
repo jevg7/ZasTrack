@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ZasTrack.Forms.Examenes.Debug;
 using ZasTrack.Models;
+using ZasTrack.Models.ExamenModel;
 using ZasTrack.Repositories;
 
 namespace ZasTrack.Forms.Examenes
@@ -269,7 +270,7 @@ namespace ZasTrack.Forms.Examenes
 
                 if (mostrandoRecepcionados) // Botón "Procesar"
                 {
-                    using (var modalForm = new wProcesarResultados(pac.IdMuestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente))
+                    using (var modalForm = new wProcesarResultados(pac.id_Muestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente))
                     {
                         // Muestra el formulario modal
                         result = modalForm.ShowDialog(this);
@@ -277,7 +278,7 @@ namespace ZasTrack.Forms.Examenes
                 }
                 else // Botón "Ver Detalles"
                 {
-                    using (var modalForm = new wProcesarResultados(pac.IdMuestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente, modoVista: true))
+                    using (var modalForm = new wProcesarResultados(pac.id_Muestra, pac.NumeroMuestra, pac.FechaRecepcion, pac.Paciente, modoVista: true))
                     {
                         // Muestra el formulario modal en modo vista
                         result = modalForm.ShowDialog(this);

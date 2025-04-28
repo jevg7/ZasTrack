@@ -369,7 +369,6 @@
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(3, 4, 3, 4);
             Name = "wDashboard";
-            Text = "z|";
             Load += wDashboard_Load;
             tlpIndices.ResumeLayout(false);
             pnlAccionRapida.ResumeLayout(false);

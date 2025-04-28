@@ -59,14 +59,14 @@
             pnlContenedor.Controls.Add(pnlSearchFiltro);
             pnlContenedor.Dock = DockStyle.Fill;
             pnlContenedor.Location = new Point(0, 0);
-            pnlContenedor.Margin = new Padding(3, 2, 3, 2);
             pnlContenedor.Name = "pnlContenedor";
-            pnlContenedor.Size = new Size(1184, 661);
+            pnlContenedor.Size = new Size(1353, 881);
             pnlContenedor.TabIndex = 1;
             pnlContenedor.Paint += panel1_Paint;
             // 
             // pnlContProc
             // 
+            pnlContProc.BackColor = SystemColors.AppWorkspace;
             pnlContProc.Controls.Add(btnLimpiarFiltros);
             pnlContProc.Controls.Add(btnActualizar);
             pnlContProc.Controls.Add(panel1);
@@ -74,15 +74,17 @@
             pnlContProc.Controls.Add(btnVerProcesados);
             pnlContProc.Dock = DockStyle.Top;
             pnlContProc.Location = new Point(0, 0);
+            pnlContProc.Margin = new Padding(3, 4, 3, 4);
             pnlContProc.Name = "pnlContProc";
-            pnlContProc.Size = new Size(1184, 42);
+            pnlContProc.Size = new Size(1353, 56);
             pnlContProc.TabIndex = 2;
             // 
             // btnLimpiarFiltros
             // 
-            btnLimpiarFiltros.Location = new Point(874, 6);
+            btnLimpiarFiltros.Location = new Point(999, 8);
+            btnLimpiarFiltros.Margin = new Padding(3, 4, 3, 4);
             btnLimpiarFiltros.Name = "btnLimpiarFiltros";
-            btnLimpiarFiltros.Size = new Size(75, 31);
+            btnLimpiarFiltros.Size = new Size(86, 41);
             btnLimpiarFiltros.TabIndex = 5;
             btnLimpiarFiltros.Text = "Limpiar";
             btnLimpiarFiltros.UseVisualStyleBackColor = true;
@@ -90,9 +92,10 @@
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(787, 6);
+            btnActualizar.Location = new Point(899, 8);
+            btnActualizar.Margin = new Padding(3, 4, 3, 4);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(77, 31);
+            btnActualizar.Size = new Size(88, 41);
             btnActualizar.TabIndex = 5;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
@@ -103,45 +106,47 @@
             panel1.BackColor = SystemColors.ActiveCaptionText;
             panel1.Controls.Add(label2);
             panel1.Controls.Add(cmbProyecto);
-            panel1.Location = new Point(535, 6);
-            panel1.Margin = new Padding(3, 2, 3, 2);
+            panel1.Location = new Point(611, 8);
             panel1.Name = "panel1";
-            panel1.Size = new Size(246, 31);
+            panel1.Size = new Size(281, 41);
             panel1.TabIndex = 0;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.BackColor = SystemColors.ButtonHighlight;
-            label2.Location = new Point(10, 7);
+            label2.Location = new Point(11, 9);
             label2.Name = "label2";
-            label2.Size = new Size(54, 15);
+            label2.Size = new Size(67, 20);
             label2.TabIndex = 39;
             label2.Text = "Proyecto";
             // 
             // cmbProyecto
             // 
             cmbProyecto.FormattingEnabled = true;
-            cmbProyecto.Location = new Point(87, 3);
+            cmbProyecto.Location = new Point(99, 4);
+            cmbProyecto.Margin = new Padding(3, 4, 3, 4);
             cmbProyecto.Name = "cmbProyecto";
-            cmbProyecto.Size = new Size(156, 23);
+            cmbProyecto.Size = new Size(178, 28);
             cmbProyecto.TabIndex = 38;
             cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
             // btnVerRecepcionados
             // 
-            btnVerRecepcionados.Location = new Point(12, 7);
+            btnVerRecepcionados.Location = new Point(14, 9);
+            btnVerRecepcionados.Margin = new Padding(3, 4, 3, 4);
             btnVerRecepcionados.Name = "btnVerRecepcionados";
-            btnVerRecepcionados.Size = new Size(249, 30);
+            btnVerRecepcionados.Size = new Size(285, 40);
             btnVerRecepcionados.TabIndex = 2;
             btnVerRecepcionados.Text = "Recepcionados";
             btnVerRecepcionados.UseVisualStyleBackColor = true;
             // 
             // btnVerProcesados
             // 
-            btnVerProcesados.Location = new Point(282, 7);
+            btnVerProcesados.Location = new Point(322, 9);
+            btnVerProcesados.Margin = new Padding(3, 4, 3, 4);
             btnVerProcesados.Name = "btnVerProcesados";
-            btnVerProcesados.Size = new Size(241, 30);
+            btnVerProcesados.Size = new Size(275, 40);
             btnVerProcesados.TabIndex = 1;
             btnVerProcesados.Text = "Procesados";
             btnVerProcesados.UseVisualStyleBackColor = true;
@@ -150,9 +155,10 @@
             // pnlPacientes
             // 
             pnlPacientes.AutoScroll = true;
-            pnlPacientes.Location = new Point(0, 92);
+            pnlPacientes.Location = new Point(0, 123);
+            pnlPacientes.Margin = new Padding(3, 4, 3, 4);
             pnlPacientes.Name = "pnlPacientes";
-            pnlPacientes.Size = new Size(1152, 569);
+            pnlPacientes.Size = new Size(1317, 759);
             pnlPacientes.TabIndex = 1;
             pnlPacientes.Paint += pnlPacientes_Paint;
             // 
@@ -161,16 +167,18 @@
             pnlSearchFiltro.Controls.Add(dtpFechaRecepcion);
             pnlSearchFiltro.Controls.Add(gbFiltroTipo);
             pnlSearchFiltro.Controls.Add(txtSearch);
-            pnlSearchFiltro.Location = new Point(0, 43);
+            pnlSearchFiltro.Location = new Point(0, 57);
+            pnlSearchFiltro.Margin = new Padding(3, 4, 3, 4);
             pnlSearchFiltro.Name = "pnlSearchFiltro";
-            pnlSearchFiltro.Size = new Size(1184, 43);
+            pnlSearchFiltro.Size = new Size(1353, 57);
             pnlSearchFiltro.TabIndex = 0;
             // 
             // dtpFechaRecepcion
             // 
-            dtpFechaRecepcion.Location = new Point(12, 11);
+            dtpFechaRecepcion.Location = new Point(14, 15);
+            dtpFechaRecepcion.Margin = new Padding(3, 4, 3, 4);
             dtpFechaRecepcion.Name = "dtpFechaRecepcion";
-            dtpFechaRecepcion.Size = new Size(255, 23);
+            dtpFechaRecepcion.Size = new Size(291, 27);
             dtpFechaRecepcion.TabIndex = 4;
             dtpFechaRecepcion.ValueChanged += dtpFechaRecepcion_ValueChanged_1;
             // 
@@ -179,9 +187,11 @@
             gbFiltroTipo.Controls.Add(chkFiltroSangre);
             gbFiltroTipo.Controls.Add(chkFiltroHeces);
             gbFiltroTipo.Controls.Add(chkFiltroOrina);
-            gbFiltroTipo.Location = new Point(852, 5);
+            gbFiltroTipo.Location = new Point(974, 7);
+            gbFiltroTipo.Margin = new Padding(3, 4, 3, 4);
             gbFiltroTipo.Name = "gbFiltroTipo";
-            gbFiltroTipo.Size = new Size(233, 35);
+            gbFiltroTipo.Padding = new Padding(3, 4, 3, 4);
+            gbFiltroTipo.Size = new Size(266, 47);
             gbFiltroTipo.TabIndex = 2;
             gbFiltroTipo.TabStop = false;
             gbFiltroTipo.Text = "Filtrar por Tipo Requerido:";
@@ -189,9 +199,10 @@
             // chkFiltroSangre
             // 
             chkFiltroSangre.AutoSize = true;
-            chkFiltroSangre.Location = new Point(134, 16);
+            chkFiltroSangre.Location = new Point(153, 21);
+            chkFiltroSangre.Margin = new Padding(3, 4, 3, 4);
             chkFiltroSangre.Name = "chkFiltroSangre";
-            chkFiltroSangre.Size = new Size(62, 19);
+            chkFiltroSangre.Size = new Size(77, 24);
             chkFiltroSangre.TabIndex = 2;
             chkFiltroSangre.Text = "Sangre";
             chkFiltroSangre.UseVisualStyleBackColor = true;
@@ -199,9 +210,10 @@
             // chkFiltroHeces
             // 
             chkFiltroHeces.AutoSize = true;
-            chkFiltroHeces.Location = new Point(70, 16);
+            chkFiltroHeces.Location = new Point(80, 21);
+            chkFiltroHeces.Margin = new Padding(3, 4, 3, 4);
             chkFiltroHeces.Name = "chkFiltroHeces";
-            chkFiltroHeces.Size = new Size(58, 19);
+            chkFiltroHeces.Size = new Size(71, 24);
             chkFiltroHeces.TabIndex = 1;
             chkFiltroHeces.Text = "Heces";
             chkFiltroHeces.UseVisualStyleBackColor = true;
@@ -209,29 +221,30 @@
             // chkFiltroOrina
             // 
             chkFiltroOrina.AutoSize = true;
-            chkFiltroOrina.Location = new Point(9, 16);
+            chkFiltroOrina.Location = new Point(10, 21);
+            chkFiltroOrina.Margin = new Padding(3, 4, 3, 4);
             chkFiltroOrina.Name = "chkFiltroOrina";
-            chkFiltroOrina.Size = new Size(55, 19);
+            chkFiltroOrina.Size = new Size(67, 24);
             chkFiltroOrina.TabIndex = 0;
             chkFiltroOrina.Text = "Orina";
             chkFiltroOrina.UseVisualStyleBackColor = true;
             // 
             // txtSearch
             // 
-            txtSearch.Location = new Point(282, 11);
+            txtSearch.Location = new Point(322, 15);
+            txtSearch.Margin = new Padding(3, 4, 3, 4);
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "Buscar por Codigo o por Nombre";
-            txtSearch.Size = new Size(564, 23);
+            txtSearch.Size = new Size(644, 27);
             txtSearch.TabIndex = 1;
             // 
             // wExamenes
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1184, 661);
+            ClientSize = new Size(1353, 881);
             Controls.Add(pnlContenedor);
             FormBorderStyle = FormBorderStyle.None;
-            Margin = new Padding(3, 2, 3, 2);
             Name = "wExamenes";
             Text = "wExamenesTest";
             pnlContenedor.ResumeLayout(false);
