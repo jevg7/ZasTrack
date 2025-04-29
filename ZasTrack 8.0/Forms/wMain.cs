@@ -17,85 +17,103 @@ namespace ZasTrack
     public partial class wMain : Form
     {
         private Button currentBtn;
+        private Form? activeForm = null;
         public wMain()
         {
             InitializeComponent();
-            LoadChildForm(new Forms.Dashboard.wDashboard(this), this.pnlContenedor); // Pass 'this' as the required 'mainForm' parameter
+            // Establecer el color de fondo del panel contenedor
+            actButton(null, Color.Turquoise); // Cambia el color del botón activo a Turquoise
+            ShowChildForm(new Forms.Dashboard.wDashboard(this));
         }
-        public void Abrir_Form(object formhijo)
+        // Metodo para mostrar formularios hijos
+        public void ShowChildForm(Form childForm)
         {
-
-            if (this.pnlContenedor.Controls.Count > 0)
-                this.pnlContenedor.Controls.RemoveAt(0); // Elimina cualquier control existente del panel contenedor.
-
-            Form fh = formhijo as Form; // Convierte el objeto de entrada en un formulario.
-            fh.TopLevel = false; // Establece la propiedad TopLevel del formulario como false.
-            fh.Dock = DockStyle.Fill; // Establece la propiedad Dock del formulario para que ocupe todo el espacio del panel contenedor.
-            this.pnlContenedor.Controls.Add(fh); // Agrega el formulario al panel contenedor.
-            this.pnlContenedor.Tag = fh; // Establece la propiedad Tag del panel contenedor como el formulario.
-            fh.Show(); // Muestra el formulario.
-        }
-
-        #region Eventos de los botones
-
-        private void btnEstudiantes_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new ZasTrack.wPaciente());
-        }
-
-
-        private void btnProyecto_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new ZasTrack.Forms.wProyectos.wProyectos());
-        }
-        private void btnAgregarProyecto_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.wAñadirProyecto());
-        }
-
-        private void btnMuestras_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.Muestras.wMuestras());
-
-        }
-
-        private void btnDashBoard_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.Dashboard.wDashboard(this));
-        }
-        private void btnExamenes_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new wExamenes());
-        }
-        private void btnReportes_Click(object sender, EventArgs e)
-        {
-            Abrir_Form(new Forms.Informes.wInformes());
-        }
-        #endregion
-        private void LoadChildForm(Form childForm, Panel targetPanel)
-        {
-            
-            if (targetPanel.Controls.Count > 0)
+            // 1. No hacer nada si se intenta abrir el mismo tipo de form que ya está activo
+            if (activeForm?.GetType() == childForm.GetType())
             {
-                if (targetPanel.Controls[0] is Form currentForm && currentForm.GetType() == childForm.GetType())
-                {
-                    childForm.Dispose(); // Evita abrir el mismo tipo de nuevo
-                    return;
-                }
-                targetPanel.Controls.RemoveAt(0);
+                childForm.Dispose(); // Liberar la instancia recién creada que no se usará
+                return;
             }
 
-            childForm.TopLevel = false;
-            childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill;
-            targetPanel.Controls.Add(childForm);
-            targetPanel.Tag = childForm;
-            childForm.BringToFront();
-            childForm.Show();
-        }
-        /// ni idea si se usan
-        #region ConfigBotones
+            // 2. Cerrar y liberar el formulario activo anterior (si existe)
+            if (activeForm != null)
+            {
+                activeForm.Close(); // Llama a Close() que a su vez debería llamar a Dispose()
+                                    // Alternativamente, puedes llamar a Dispose() directamente si Close() no es suficiente:
+                                    // activeForm.Dispose();
+            }
 
+            // 3. Configurar y mostrar el nuevo formulario
+            try
+            {
+                activeForm = childForm; // Guardar referencia al nuevo formulario activo
+                childForm.TopLevel = false;
+                childForm.FormBorderStyle = FormBorderStyle.None;
+                childForm.Dock = DockStyle.Fill;
+                this.pnlContenedor.Controls.Add(childForm);
+                this.pnlContenedor.Tag = childForm; // Opcional, podrías usar activeForm en su lugar
+                childForm.BringToFront();
+                childForm.Show();
+            }
+            catch (Exception ex)
+            {
+                // Manejo básico de errores al mostrar el form
+                MessageBox.Show($"Error al intentar abrir la sección:\n{ex.Message}",
+                                "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"ERROR ShowChildForm: {ex}"); // Mantener log para depuración
+                if (childForm != null)
+                {
+                    childForm.Dispose(); // Asegurarse de liberar recursos si falla
+                }
+                activeForm = null; // Resetear el formulario activo si falló
+            }
+        }
+        #region Eventos de los botones
+
+        // Formulario Dashboard
+        private void btnDashBoard_Click(object sender, EventArgs e)
+        {
+            actButton(sender, Color.Turquoise);
+            ShowChildForm(new Forms.Dashboard.wDashboard(this));
+        }     
+
+        // Formulario Proyectos
+        private void btnProyecto_Click(object sender, EventArgs e)
+        {
+            actButton(sender, Color.Turquoise);
+            ShowChildForm(new ZasTrack.Forms.wProyectos.wProyectos());
+        }
+
+        // Formulario Pacientes
+        private void btnEstudiantes_Click(object sender, EventArgs e)
+        {
+            actButton(sender, Color.Turquoise);
+            ShowChildForm(new ZasTrack.wPaciente());
+        }
+
+        // Formulario Muestras
+        private void btnMuestras_Click(object sender, EventArgs e)
+        {
+            actButton(sender, Color.Turquoise);
+            ShowChildForm(new Forms.Muestras.wMuestras());
+
+        }
+       
+        // Formulario Examenes
+        private void btnExamenes_Click(object sender, EventArgs e)
+        {
+            actButton(sender, Color.Turquoise);
+            ShowChildForm(new wExamenes());
+        }
+
+        // Formulario Reportes
+        private void btnReportes_Click(object sender, EventArgs e)
+        {
+            actButton(sender, Color.Turquoise);
+            ShowChildForm(new Forms.Informes.wInformes());
+        }
+        #endregion
+        #region ConfigBotones
         private struct Colores
         {
             public static Color color1 = Color.FromArgb(255, 255, 255);
@@ -105,10 +123,11 @@ namespace ZasTrack
             if (senderBtn != null)
             {
                 dsbButton(); // Desactiva el botón actualmente activo.
-                             //Btn
-                currentBtn = (Button)senderBtn; // Establece el botón actualmente clicado como el botón activo.
-                currentBtn.BackColor = Color.FromArgb(40, 40, 40); // Establece el color de fondo del botón activo.
-                currentBtn.ForeColor = color; // Establece el color del texto del botón activo.
+                currentBtn = (Button)senderBtn;
+                currentBtn.ForeColor = Color.Gray; // Color activo
+                currentBtn.BackColor = Color.LightGray;
+
+                currentBtn.ForeColor = Color.Black;     //  Establece el color del texto del botón activo.
                 currentBtn.TextAlign = ContentAlignment.MiddleCenter; // Establece la alineación del texto en el botón activo.
                 currentBtn.TextImageRelation = TextImageRelation.TextBeforeImage; // Establece la relación entre el texto y la imagen en el botón activo.
                 currentBtn.ImageAlign = ContentAlignment.MiddleRight; // Establece la alineación de la imagen en el botón activo.
@@ -118,18 +137,16 @@ namespace ZasTrack
         {
             if (currentBtn != null)
             {
-                currentBtn.BackColor = Color.FromArgb(27, 27, 27); // Establece el color de fondo del botón inactivo.
-                currentBtn.ForeColor = Color.White; // Establece el color del texto del botón inactivo.
+                 currentBtn.BackColor = Color.White; // Establece el color de fondo del botón inactivo.
+                currentBtn.ForeColor = Color.Black; // Establece el color del texto del botón inactivo.
                 currentBtn.TextAlign = ContentAlignment.MiddleLeft; // Establece la alineación del texto en el botón inactivo.
                 currentBtn.TextImageRelation = TextImageRelation.ImageBeforeText; // Establece la relación entre el texto y la imagen en el botón inactivo.
                 currentBtn.ImageAlign = ContentAlignment.MiddleLeft; // Establece la alineación de la imagen en el botón inactivo.
             }
 
         }
-
-
         #endregion
-        #region metodos sin uso
+        #region Windows Form Designer generated code
         private void pnlContenedor_Paint(object sender, PaintEventArgs e)
         {
         }

@@ -22,12 +22,12 @@ namespace ZasTrack.Forms.Dashboard
         private ProyectoRepository proyectoRepository;
         private MuestraRepository muestraRepository;
         private ExamenRepository examenRepository;
-        private wMain _mainForm; 
+        private wMain _mainForm;
 
         // Modifica el constructor para aceptar wMain
-        public wDashboard(wMain mainForm) 
+        public wDashboard(wMain mainForm)
         {
-            _mainForm = mainForm; 
+            _mainForm = mainForm;
 
             // Inicialización de repositorios (como lo tenías)
             pacienteRepository = new PacienteRepository();
@@ -63,48 +63,48 @@ namespace ZasTrack.Forms.Dashboard
             CargarDatosDashboard(null);
         }
 
-            private void CargarDatosDashboard(int? idProyectoSeleccionado)
+        private void CargarDatosDashboard(int? idProyectoSeleccionado)
+        {
+            // --- Limpieza inicial o estado "Sin Proyecto" ---
+            if (!idProyectoSeleccionado.HasValue || idProyectoSeleccionado <= 0)
             {
-                // --- Limpieza inicial o estado "Sin Proyecto" ---
-                if (!idProyectoSeleccionado.HasValue || idProyectoSeleccionado <= 0)
-                {
-                    lblPacientesTotal.Text = "Total Pacientes:\n-";
-                    lblMuestrasDia.Text = "Muestras Hoy:\n-";
-                    lblExamenesRev.Text = "Exámenes Pendientes:\n-";
-                    lblInfomes.Text = "Procesados Hoy:\n-";
+                lblPacientesTotal.Text = "Total Pacientes:\n-";
+                lblMuestrasDia.Text = "Muestras Hoy:\n-";
+                lblExamenesRev.Text = "Exámenes Pendientes:\n-";
+                lblInfomes.Text = "Procesados Hoy:\n-";
 
-                    // Limpia paneles de listas
-                    pnlMuestrasUltimas.Controls.Clear();
-                    pnlMuestrasUltimas.Controls.Add(lblMuestrasUltimas); // Readiciona el título
-                    pnlExamenesUltimos.Controls.Clear();
-                    pnlExamenesUltimos.Controls.Add(lblExamenesUltimos); // Readiciona el título
-                    return;
-                }
+                // Limpia paneles de listas
+                pnlMuestrasUltimas.Controls.Clear();
+                pnlMuestrasUltimas.Controls.Add(lblMuestrasUltimas); // Readiciona el título
+                pnlExamenesUltimos.Controls.Clear();
+                pnlExamenesUltimos.Controls.Add(lblExamenesUltimos); // Readiciona el título
+                return;
+            }
 
-                int idProyecto = idProyectoSeleccionado.Value;
-                DateTime hoy = DateTime.Today;
+            int idProyecto = idProyectoSeleccionado.Value;
+            DateTime hoy = DateTime.Today;
 
-                // --- Estado de Carga ---
-                lblPacientesTotal.Text = "Total Pacientes:\nCargando...";
-                lblMuestrasDia.Text = "Muestras Hoy:\nCargando...";
-                lblExamenesRev.Text = "Exámenes Pendientes:\nCargando...";
-                lblInfomes.Text = "Procesados Hoy:\nCargando...";
-                // Limpia paneles de listas (quitando contenido anterior, no el título)
-                LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
-                LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
-                Application.DoEvents();
+            // --- Estado de Carga ---
+            lblPacientesTotal.Text = "Total Pacientes:\nCargando...";
+            lblMuestrasDia.Text = "Muestras Hoy:\nCargando...";
+            lblExamenesRev.Text = "Exámenes Pendientes:\nCargando...";
+            lblInfomes.Text = "Procesados Hoy:\nCargando...";
+            // Limpia paneles de listas (quitando contenido anterior, no el título)
+            LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
+            LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
+            Application.DoEvents();
 
-                try
-                {
-                    // --- Carga de KPIs (código existente) ---
-                    int totalPacientes = pacienteRepository.obtTotalPacientes(idProyecto);
-                    lblPacientesTotal.Text = $"Total Pacientes:\n{totalPacientes}";
+            try
+            {
+                // --- Carga de KPIs (código existente) ---
+                int totalPacientes = pacienteRepository.obtTotalPacientes(idProyecto);
+                lblPacientesTotal.Text = $"Total Pacientes:\n{totalPacientes}";
 
-                    int muestrasHoy = muestraRepository.CountByProjectAndDate(idProyecto, hoy);
-                    lblMuestrasDia.Text = $"Muestras Hoy:\n{muestrasHoy}";
+                int muestrasHoy = muestraRepository.CountByProjectAndDate(idProyecto, hoy);
+                lblMuestrasDia.Text = $"Muestras Hoy:\n{muestrasHoy}";
 
-                    Dictionary<string, int> pendientesPorTipo = examenRepository.CountPendientesByTypeByProject(idProyecto);
-                    StringBuilder sbPendientes = new StringBuilder("Pendientes:\n");
+                Dictionary<string, int> pendientesPorTipo = examenRepository.CountPendientesByTypeByProject(idProyecto);
+                StringBuilder sbPendientes = new StringBuilder("Pendientes:\n");
                 if (pendientesPorTipo.Any()) // Verifica si el diccionario tiene resultados
                 {
                     // Itera sobre cada par (NombreExamen, Conteo) en el diccionario
@@ -123,36 +123,36 @@ namespace ZasTrack.Forms.Dashboard
                 lblExamenesRev.Text = sbPendientes.ToString().TrimEnd();                    // ... (ajustes de tamaño/alineación para lblExamenesRev) ...
 
                 int procesadosHoy = examenRepository.CountProcesadosByProjectAndDate(idProyecto, hoy);
-                    lblInfomes.Text = $"Procesados Hoy:\n{procesadosHoy}";
+                lblInfomes.Text = $"Procesados Hoy:\n{procesadosHoy}";
 
 
-                    // --- INICIO: Cargar Última Actividad ---
+                // --- INICIO: Cargar Última Actividad ---
 
-                    // Cargar Últimas Muestras
-                    var ultimasMuestras = muestraRepository.GetUltimasMuestrasPorProyecto(idProyecto, 5); // Obtiene las últimas 5
-                    MostrarListaEnPanel(pnlMuestrasUltimas, lblMuestrasUltimas, ultimasMuestras.Cast<object>().ToList(), item =>
-                        $"#{((MuestraInfoViewModel)item).NumeroMuestra} - {((MuestraInfoViewModel)item).Paciente} ({((MuestraInfoViewModel)item).FechaRecepcion:dd/MM/yy})"
-                    );
+                // Cargar Últimas Muestras
+                var ultimasMuestras = muestraRepository.GetUltimasMuestrasPorProyecto(idProyecto, 5); // Obtiene las últimas 5
+                MostrarListaEnPanel(pnlMuestrasUltimas, lblMuestrasUltimas, ultimasMuestras.Cast<object>().ToList(), item =>
+                    $"#{((MuestraInfoViewModel)item).NumeroMuestra} - {((MuestraInfoViewModel)item).Paciente} ({((MuestraInfoViewModel)item).FechaRecepcion:dd/MM/yy})"
+                );
 
-                    // Cargar Últimos Exámenes Procesados
-                    var ultimosExamenes = examenRepository.GetUltimosExamenesProcesadosPorProyecto(idProyecto, 5); // Obtiene los últimos 5
-                    MostrarListaEnPanel(pnlExamenesUltimos, lblExamenesUltimos, ultimosExamenes.Cast<object>().ToList(), item =>
-                         $"#{((ExamenProcesadoInfo)item).NumeroMuestra} - {((ExamenProcesadoInfo)item).Paciente} ({((ExamenProcesadoInfo)item).TipoExamen} - {((ExamenProcesadoInfo)item).FechaProcesamiento:dd/MM/yy HH:mm})"
-                    );
+                // Cargar Últimos Exámenes Procesados
+                var ultimosExamenes = examenRepository.GetUltimosExamenesProcesadosPorProyecto(idProyecto, 5); // Obtiene los últimos 5
+                MostrarListaEnPanel(pnlExamenesUltimos, lblExamenesUltimos, ultimosExamenes.Cast<object>().ToList(), item =>
+                     $"#{((ExamenProcesadoInfo)item).NumeroMuestra} - {((ExamenProcesadoInfo)item).Paciente} ({((ExamenProcesadoInfo)item).TipoExamen} - {((ExamenProcesadoInfo)item).FechaProcesamiento:dd/MM/yy HH:mm})"
+                );
 
-                    // --- FIN: Cargar Última Actividad ---
+                // --- FIN: Cargar Última Actividad ---
 
-                }
-                catch (Exception ex)
-                {
-                    // ... (Manejo de error existente) ...
-                    // Asegurarse de limpiar paneles de listas también en caso de error
-                    LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
-                    LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
-                    lblMuestrasUltimas.Text += "\nError al cargar"; // Añadir mensaje de error al título
-                    lblExamenesUltimos.Text += "\nError al cargar";
-                }
             }
+            catch (Exception ex)
+            {
+                // ... (Manejo de error existente) ...
+                // Asegurarse de limpiar paneles de listas también en caso de error
+                LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
+                LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
+                lblMuestrasUltimas.Text += "\nError al cargar"; // Añadir mensaje de error al título
+                lblExamenesUltimos.Text += "\nError al cargar";
+            }
+        }
         private void LimpiarPanelDinamico(Panel panel, Label tituloLabel)
         {
             // Guarda los controles que NO son el título
@@ -250,7 +250,7 @@ namespace ZasTrack.Forms.Dashboard
             // Llama al método Abrir_Form del formulario principal (wMain)
             if (_mainForm != null)
             {
-                _mainForm.Abrir_Form(new Forms.Muestras.wMuestras());
+                _mainForm.ShowChildForm(new Forms.Muestras.wMuestras());
             }
         }
 
@@ -258,9 +258,14 @@ namespace ZasTrack.Forms.Dashboard
         {
             if (_mainForm != null)
             {
-                _mainForm.Abrir_Form(new Forms.Examenes.wExamenes());
-               ;
+                _mainForm.ShowChildForm(new Forms.Examenes.wExamenes());
+                ;
             }
+        }
+
+        private void pnlAccionRapida_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
