@@ -89,7 +89,6 @@ public class ExamenRepository
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(queryFinal, conn))
                 {
-                    // Parámetros (sin cambios)
                     cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
                     cmd.Parameters.AddWithValue("@fechaRecepcion", fecha.Date);
                     if (tiposRequeridos != null && tiposRequeridos.Any())
@@ -130,7 +129,6 @@ public class ExamenRepository
         }
         return resultados;
     }
-    // ***** FIN MÉTODO MODIFICADO *****
   
     public List<MuestraInfoViewModel> ObtenerPacientesProcesados(int idProyecto, DateTime fecha, List<int> tiposRequeridos, string textoBusqueda)
     {
@@ -890,13 +888,12 @@ public class ExamenRepository
             catch (Exception ex) { /* ... (Manejo de error similar a Orina) ... */ throw; }
             return resultado;
         }
-    public Dictionary<string, int> CountPendientesByTypeByProject(int idProyecto)
+    public async Task<Dictionary<string, int>> CountPendientesByTypeByProjectAsync(int idProyecto)
     {
         var counts = new Dictionary<string, int>();
+        // La query es compleja, asumimos que es la misma que tenías
         string query = @"
-        SELECT
-            te.nombre,
-            COUNT(DISTINCT me.id_muestra) -- O COUNT(*) si quieres contar exámenes individuales pendientes
+        SELECT te.nombre, COUNT(DISTINCT me.id_muestra)
         FROM tipo_examen te
         INNER JOIN muestra_examen me ON te.id_tipo_examen = me.id_tipo_examen
         INNER JOIN muestra m ON me.id_muestra = m.id_muestra
@@ -904,149 +901,108 @@ public class ExamenRepository
         LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
         LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
         LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-        WHERE m.id_proyecto = @idProyecto
-          AND te.activo = TRUE
-          AND (
+        WHERE m.id_proyecto = @idProyecto AND te.activo = TRUE AND (
               e.id_examen IS NULL OR
               (te.id_tipo_examen = 1 AND eo.procesado IS DISTINCT FROM TRUE) OR
               (te.id_tipo_examen = 2 AND eh.procesado IS DISTINCT FROM TRUE) OR
-              (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE)
-          )
-        GROUP BY te.nombre
-        ORDER BY te.nombre;
-    ";
+              (te.id_tipo_examen = 3 AND es.procesado IS DISTINCT FROM TRUE) )
+        GROUP BY te.nombre ORDER BY te.nombre;";
         try
         {
             using (var conn = DatabaseConnection.GetConnection())
+            using (var cmd = new NpgsqlCommand(query, conn))
             {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(query, conn))
+                cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                await conn.OpenAsync();
+                using (var reader = await cmd.ExecuteReaderAsync())
                 {
-                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                    using (var reader = cmd.ExecuteReader())
+                    while (await reader.ReadAsync())
                     {
-                        while (reader.Read())
-                        {
-                            // Usa GetInt64 por si acaso el COUNT es muy grande
-                            counts.Add(reader.GetString(0), Convert.ToInt32(reader.GetInt64(1)));
-                        }
+                        counts.Add(reader.GetString(0), Convert.ToInt32(reader.GetInt64(1)));
                     }
                 }
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error en CountPendientesByTypeByProject: {ex.Message}");
-            throw;
-        }
+        catch (Exception ex) { Console.WriteLine($"Error en CountPendientesByTypeByProjectAsync: {ex}"); throw; }
         return counts;
     }
 
-    // NUEVO MÉTODO para procesados hoy
-    public int CountProcesadosByProjectAndDate(int idProyecto, DateTime fecha)
+    // Metodo para procesados hoy
+    public async Task<int> CountProcesadosByProjectAndDateAsync(int idProyecto, DateTime fecha)
     {
+        // Query igual a la versión síncrona
         string query = @"
-        SELECT COUNT(e.id_examen)
-        FROM examen e
+        SELECT COUNT(e.id_examen) FROM examen e
         INNER JOIN muestra m ON e.id_muestra = m.id_muestra
         INNER JOIN tipo_examen te ON e.id_tipo_examen = te.id_tipo_examen
         LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
         LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
         LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-        WHERE m.id_proyecto = @idProyecto
-          AND e.fecha_procesamiento::date = @fecha -- Filtra por fecha de procesamiento
-          AND te.activo = TRUE -- Opcional
-          AND ( -- Condición de PROCESADO
-              (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
-              (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
-              (te.id_tipo_examen = 3 AND es.procesado = TRUE)
-          );
-    ";
+        WHERE m.id_proyecto = @idProyecto AND e.fecha_procesamiento::date = @fecha
+          AND te.activo = TRUE AND (
+             (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+             (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+             (te.id_tipo_examen = 3 AND es.procesado = TRUE) );";
         int count = 0;
         try
         {
             using (var conn = DatabaseConnection.GetConnection())
+            using (var cmd = new NpgsqlCommand(query, conn))
             {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                    cmd.Parameters.AddWithValue("@fecha", fecha.Date);
-                    var result = cmd.ExecuteScalar();
-                    count = (result == null || result == DBNull.Value) ? 0 : Convert.ToInt32(result);
-                }
+                cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                cmd.Parameters.AddWithValue("@fecha", fecha.Date);
+                await conn.OpenAsync();
+                var result = await cmd.ExecuteScalarAsync();
+                count = (result == null || result == DBNull.Value) ? 0 : Convert.ToInt32(result);
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error en CountProcesadosByProjectAndDate: {ex.Message}");
-            throw;
-        }
+        catch (Exception ex) { Console.WriteLine($"Error en CountProcesadosByProjectAndDateAsync: {ex}"); throw; }
         return count;
     }
-
     // Devuelve info de los últimos N exámenes procesados de un proyecto
-    public List<ExamenProcesadoInfo> GetUltimosExamenesProcesadosPorProyecto(int idProyecto, int limite = 5)
+    public async Task<List<ExamenProcesadoInfo>> GetUltimosExamenesProcesadosPorProyectoAsync(int idProyecto, int limite = 5)
     {
-        // Usa el namespace correcto para la clase auxiliar si la pusiste en otro lugar
-        // ej: var ultimosExamenes = new List<ZasTrack.Models.ExamenProcesadoInfo>();
         var ultimosExamenes = new List<ExamenProcesadoInfo>();
-
-        // IMPORTANTE: Revisa que los nombres de tablas y columnas en esta consulta
-        // coincidan EXACTAMENTE con tu base de datos.
+        // Query igual a la versión síncrona
         string query = @"
-                SELECT 
-                    m.numero_muestra, 
-                    p.nombres || ' ' || p.apellidos AS paciente, 
-                    te.nombre AS tipo_examen, 
-                    e.fecha_procesamiento
-                FROM examen e
-                INNER JOIN muestra m ON e.id_muestra = m.id_muestra
-                INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
-                INNER JOIN tipo_examen te ON e.id_tipo_examen = te.id_tipo_examen
-                LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
-                LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
-                LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
-                WHERE m.id_proyecto = @idProyecto
-                  AND ( -- Condición de PROCESADO
-                      (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
-                      (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
-                      (te.id_tipo_examen = 3 AND es.procesado = TRUE)
-                  )
-                ORDER BY e.fecha_procesamiento DESC, e.id_examen DESC
-                LIMIT @limite;
-            ";
+        SELECT m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
+               te.nombre AS tipo_examen, e.fecha_procesamiento
+        FROM examen e
+        INNER JOIN muestra m ON e.id_muestra = m.id_muestra
+        INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+        INNER JOIN tipo_examen te ON e.id_tipo_examen = te.id_tipo_examen
+        LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+        LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+        LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+        WHERE m.id_proyecto = @idProyecto AND (
+             (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+             (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+             (te.id_tipo_examen = 3 AND es.procesado = TRUE) )
+        ORDER BY e.fecha_procesamiento DESC, e.id_examen DESC LIMIT @limite;";
         try
         {
             using (var conn = DatabaseConnection.GetConnection())
+            using (var cmd = new NpgsqlCommand(query, conn))
             {
-                conn.Open(); // Considera OpenAsync si el método es async
-                using (var cmd = new NpgsqlCommand(query, conn))
+                cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                cmd.Parameters.AddWithValue("@limite", limite);
+                await conn.OpenAsync();
+                using (var reader = await cmd.ExecuteReaderAsync())
                 {
-                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                    cmd.Parameters.AddWithValue("@limite", limite);
-                    using (var reader = cmd.ExecuteReader()) // Considera ExecuteReaderAsync
+                    while (await reader.ReadAsync())
                     {
-                        while (reader.Read()) // Considera await reader.ReadAsync()
+                        ultimosExamenes.Add(new ExamenProcesadoInfo
                         {
-                            ultimosExamenes.Add(new ExamenProcesadoInfo // Usa el namespace correcto si es necesario
-                            {
-                                NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
-                                Paciente = reader.GetString(reader.GetOrdinal("paciente")),
-                                TipoExamen = reader.GetString(reader.GetOrdinal("tipo_examen")),
-                                FechaProcesamiento = reader.GetDateTime(reader.GetOrdinal("fecha_procesamiento"))
-                            });
-                        }
+                            NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                            Paciente = reader.GetString(reader.GetOrdinal("paciente")),
+                            TipoExamen = reader.GetString(reader.GetOrdinal("tipo_examen")),
+                            FechaProcesamiento = reader.GetDateTime(reader.GetOrdinal("fecha_procesamiento"))
+                        });
                     }
                 }
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error en GetUltimosExamenesProcesadosPorProyecto: {ex.Message}");
-            // Considera loguear ex.ToString() para más detalle
-            throw; // O retorna lista vacía y maneja el error en el Dashboard
-        }
+        catch (Exception ex) { Console.WriteLine($"Error en GetUltimosExamenesProcesadosPorProyectoAsync: {ex}"); throw; }
         return ultimosExamenes;
     }
     // ***** FIN *****

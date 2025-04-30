@@ -98,87 +98,77 @@ namespace ZasTrack.Repositories
             }
             return ultimaMuestra;
         }
-        public int CountByProjectAndDate(int idProyecto, DateTime fecha)
+
+        public async Task<int> CountByProjectAndDateAsync(int idProyecto, DateTime fecha)
         {
-            // Compara solo la parte de la fecha
             string query = "SELECT COUNT(id_muestra) FROM muestra WHERE id_proyecto = @idProyecto AND fecha_recepcion::date = @fecha";
             int count = 0;
             try
             {
                 using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    conn.Open(); // Considerar OpenAsync si el repo es async
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                        cmd.Parameters.AddWithValue("@fecha", fecha.Date); // Asegura comparar solo fecha
-                        var result = cmd.ExecuteScalar(); // Puede ser null si no hay filas
-                        count = (result == null || result == DBNull.Value) ? 0 : Convert.ToInt32(result);
-                    }
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    cmd.Parameters.AddWithValue("@fecha", fecha.Date);
+                    await conn.OpenAsync();
+                    var result = await cmd.ExecuteScalarAsync();
+                    count = (result == null || result == DBNull.Value) ? 0 : Convert.ToInt32(result);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error en CountByProjectAndDate: {ex.Message}");
-                throw; // O manejar el error como prefieras
+                Console.WriteLine($"Error en CountByProjectAndDateAsync (Proyecto: {idProyecto}, Fecha: {fecha.Date}): {ex}");
+                // throw;
             }
             return count;
         }
-        public List<MuestraInfoViewModel> GetUltimasMuestrasPorProyecto(int idProyecto, int limite = 5) // limite=5 por defecto
+
+        public async Task<List<MuestraInfoViewModel>> GetUltimasMuestrasPorProyectoAsync(int idProyecto, int limite = 5)
         {
             var ultimasMuestras = new List<MuestraInfoViewModel>();
-            // Unimos muestra con pacientes, filtramos por proyecto, ordenamos descendente por fecha/ID y limitamos
             string query = @"
-        SELECT 
-            m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente, 
-            m.fecha_recepcion 
+        SELECT m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente, m.fecha_recepcion
         FROM muestra m
         INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
         WHERE m.id_proyecto = @idProyecto
-        ORDER BY m.fecha_recepcion DESC, m.id_muestra DESC 
-        LIMIT @limite;
-    ";
+        ORDER BY m.fecha_recepcion DESC, m.id_muestra DESC
+        LIMIT @limite;";
             try
             {
                 using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    conn.Open();
-                    using (var cmd = new NpgsqlCommand(query, conn))
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    cmd.Parameters.AddWithValue("@limite", limite);
+                    await conn.OpenAsync();
+                    using (var reader = await cmd.ExecuteReaderAsync()) // Usar ExecuteReaderAsync
                     {
-                        cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                        cmd.Parameters.AddWithValue("@limite", limite);
-                        using (var reader = cmd.ExecuteReader())
+                        while (await reader.ReadAsync()) // Usar ReadAsync
                         {
-                            while (reader.Read())
+                            ultimasMuestras.Add(new MuestraInfoViewModel
                             {
-                                // Creamos un ViewModel simplificado o reusamos MuestraInfoViewModel
-                                // Asegúrate que MuestraInfoViewModel tenga las propiedades necesarias
-                                ultimasMuestras.Add(new MuestraInfoViewModel
-                                {
-                                    id_Muestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
-                                    NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
-                                    Paciente = reader.GetString(reader.GetOrdinal("paciente")),
-                                    FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
-                                    // Otras propiedades del ViewModel pueden quedar null o vacías
-                                    Genero = "",
-                                    Edad = 0,
-                                    ExamenesPendientesStr = "",
-                                    ExamenesCompletadosStr = ""
-                                });
-                            }
+                                id_Muestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                                NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                                Paciente = reader.GetString(reader.GetOrdinal("paciente")),
+                                FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
+                                // Otros campos vacíos...
+                                Genero = "",
+                                Edad = 0,
+                                ExamenesPendientesStr = "",
+                                ExamenesCompletadosStr = ""
+                            });
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error en GetUltimasMuestrasPorProyecto: {ex.Message}");
-                throw; // O retorna lista vacía
+                Console.WriteLine($"Error en GetUltimasMuestrasPorProyectoAsync (Proyecto: {idProyecto}): {ex}");
+                // throw; // O retorna lista vacía
             }
             return ultimasMuestras;
         }
-       
-        
+
 
     }
 }

@@ -232,19 +232,28 @@ namespace ZasTrack.Repositories
             Console.WriteLine($"Pacientes encontrados: {pacientes.Count}");
             return pacientes;
         }
-        public int obtTotalPacientes(int idProyecto)
+        public async Task<int> obtTotalPacientesAsync(int idProyecto)
         {
             string query = "SELECT COUNT(*) FROM pacientes WHERE id_proyecto = @idProyecto";
-
-            using (var conn = DatabaseConnection.GetConnection())
+            int count = 0;
+            try
             {
-                conn.Open();
+                // Usar using para asegurar disposición de conexión y comando
+                using (var conn = DatabaseConnection.GetConnection())
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
-                    return Convert.ToInt32(cmd.ExecuteScalar()); // Devuelve el total de pacientes
+                    await conn.OpenAsync(); // Abrir conexión asíncrona
+                    var result = await cmd.ExecuteScalarAsync(); // Ejecutar escalar asíncrono
+                    count = (result == null || result == DBNull.Value) ? 0 : Convert.ToInt32(result);
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en obtTotalPacientesAsync (Proyecto: {idProyecto}): {ex}");
+              
+            }
+            return count;
         }
 
         public List<pacientes> BuscarPacientes(string criterio, int idProyecto)

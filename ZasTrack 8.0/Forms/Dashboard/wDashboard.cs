@@ -13,6 +13,7 @@ using ZasTrack.Forms.Muestras;
 using ZasTrack.Models;
 using ZasTrack.Models.ExamenModel;
 using ZasTrack.Repositories;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace ZasTrack.Forms.Dashboard
 {
@@ -23,13 +24,10 @@ namespace ZasTrack.Forms.Dashboard
         private MuestraRepository muestraRepository;
         private ExamenRepository examenRepository;
         private wMain _mainForm;
-
-        // Modifica el constructor para aceptar wMain
+        
         public wDashboard(wMain mainForm)
         {
             _mainForm = mainForm;
-
-            // Inicialización de repositorios (como lo tenías)
             pacienteRepository = new PacienteRepository();
             proyectoRepository = new ProyectoRepository();
             muestraRepository = new MuestraRepository();
@@ -37,15 +35,11 @@ namespace ZasTrack.Forms.Dashboard
 
             InitializeComponent();
         }
-
-
         private void wDashboard_Load(object sender, EventArgs e)
         {
-            CargarProyectos(); // Carga los proyectos en el ComboBox
+            CargarProyectos(); 
 
-            // --- Mostrar Versión de la Aplicación ---
-            // Asume que tienes un Label llamado lblVersionApp en el diseñador
-            // Puedes usar Find o acceder directamente si es un miembro de la clase.
+            
             Label versionLabel = this.Controls.Find("lblVersionApp", true).FirstOrDefault() as Label;
             if (versionLabel != null)
             {
@@ -59,11 +53,12 @@ namespace ZasTrack.Forms.Dashboard
                 }
             }
 
-            // Carga inicial de datos SIN proyecto seleccionado (mostrará guiones o N/A)
             CargarDatosDashboard(null);
-        }
 
-        private void CargarDatosDashboard(int? idProyectoSeleccionado)
+
+        }
+        #region Metodos
+        private async void CargarDatosDashboard(int? idProyectoSeleccionado)
         {
             // --- Limpieza inicial o estado "Sin Proyecto" ---
             if (!idProyectoSeleccionado.HasValue || idProyectoSeleccionado <= 0)
@@ -72,6 +67,12 @@ namespace ZasTrack.Forms.Dashboard
                 lblMuestrasDia.Text = "Muestras Hoy:\n-";
                 lblExamenesRev.Text = "Exámenes Pendientes:\n-";
                 lblInfomes.Text = "Procesados Hoy:\n-";
+                LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
+                LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
+                ActualizarGraficoEstadoExamenes(0, 0); // Llama al método con ceros
+                btnAccionNuevaMuestra.Enabled = false;
+                btnAccionVerPendientes.Enabled = false;
+
 
                 // Limpia paneles de listas
                 pnlMuestrasUltimas.Controls.Clear();
@@ -80,78 +81,167 @@ namespace ZasTrack.Forms.Dashboard
                 pnlExamenesUltimos.Controls.Add(lblExamenesUltimos); // Readiciona el título
                 return;
             }
+             btnAccionNuevaMuestra.Enabled = true;
+             btnAccionVerPendientes.Enabled = true;
 
             int idProyecto = idProyectoSeleccionado.Value;
-            DateTime hoy = DateTime.Today;
-
+                DateTime hoy = DateTime.Today;
+            this.Cursor = Cursors.WaitCursor;
             // --- Estado de Carga ---
             lblPacientesTotal.Text = "Total Pacientes:\nCargando...";
-            lblMuestrasDia.Text = "Muestras Hoy:\nCargando...";
-            lblExamenesRev.Text = "Exámenes Pendientes:\nCargando...";
-            lblInfomes.Text = "Procesados Hoy:\nCargando...";
-            // Limpia paneles de listas (quitando contenido anterior, no el título)
-            LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
-            LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
-            Application.DoEvents();
+                lblMuestrasDia.Text = "Muestras Hoy:\nCargando...";
+                lblExamenesRev.Text = "Exámenes Pendientes:\nCargando...";
+                lblInfomes.Text = "Procesados Hoy:\nCargando...";
+                ActualizarGraficoEstadoExamenes(0, 0); // Limpia gráfico mientras carga
+
+                LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
+                LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
+                Application.DoEvents();
+
+
 
             try
             {
-                // --- Carga de KPIs (código existente) ---
-                int totalPacientes = pacienteRepository.obtTotalPacientes(idProyecto);
-                lblPacientesTotal.Text = $"Total Pacientes:\n{totalPacientes}";
+                // --- Carga de KPIs ASÍNCRONA ---
+                // Usamos await para esperar cada tarea sin bloquear la UI
+                // Task.WhenAll puede usarse para lanzarlas en paralelo si no dependen entre sí
 
-                int muestrasHoy = muestraRepository.CountByProjectAndDate(idProyecto, hoy);
-                lblMuestrasDia.Text = $"Muestras Hoy:\n{muestrasHoy}";
+                // Lanzar todas las tareas que no dependen entre sí
+                Task<int> taskTotalPacientes = pacienteRepository.obtTotalPacientesAsync(idProyecto);
+                Task<int> taskMuestrasHoy = muestraRepository.CountByProjectAndDateAsync(idProyecto, hoy);
+                Task<Dictionary<string, int>> taskPendientes = examenRepository.CountPendientesByTypeByProjectAsync(idProyecto);
+                Task<int> taskProcesadosHoy = examenRepository.CountProcesadosByProjectAndDateAsync(idProyecto, hoy);
+                Task<List<MuestraInfoViewModel>> taskUltimasMuestras = muestraRepository.GetUltimasMuestrasPorProyectoAsync(idProyecto, 5);
+                Task<List<ExamenProcesadoInfo>> taskUltimosExamenes = examenRepository.GetUltimosExamenesProcesadosPorProyectoAsync(idProyecto, 5);
 
-                Dictionary<string, int> pendientesPorTipo = examenRepository.CountPendientesByTypeByProject(idProyecto);
-                StringBuilder sbPendientes = new StringBuilder("Pendientes:\n");
-                if (pendientesPorTipo.Any()) // Verifica si el diccionario tiene resultados
+                // Esperar a que todas terminen
+                await Task.WhenAll(taskTotalPacientes, taskMuestrasHoy, taskPendientes, taskProcesadosHoy, taskUltimasMuestras, taskUltimosExamenes);
+
+                // --- Actualizar UI con los resultados (AHORA que ya terminaron) ---
+                lblPacientesTotal.Text = $"Total Pacientes:\n{taskTotalPacientes.Result}"; // Acceder a .Result DESPUÉS de await Task.WhenAll
+                lblMuestrasDia.Text = $"Muestras Hoy:\n{taskMuestrasHoy.Result}";
+
+                Dictionary<string, int> pendientesPorTipo = taskPendientes.Result;
+                StringBuilder sbPendientes = new StringBuilder("Examenes Pendientes:\n");
+                if (pendientesPorTipo.Any())
                 {
-                    // Itera sobre cada par (NombreExamen, Conteo) en el diccionario
-                    foreach (var kvp in pendientesPorTipo.OrderBy(x => x.Key)) // Ordena alfabéticamente por nombre de examen
+                    foreach (var kvp in pendientesPorTipo.OrderBy(x => x.Key))
                     {
-                        // Añade una línea por cada tipo de examen pendiente y su conteo
                         sbPendientes.AppendLine($"{kvp.Key}: {kvp.Value}");
                     }
                 }
-                else
-                {
-                    // Si no hay pendientes, añade un mensaje indicándolo
-                    sbPendientes.Append("Ninguno");
-                }
+                else { sbPendientes.Append("Ninguno"); }
+                lblExamenesRev.Text = sbPendientes.ToString().TrimEnd();
 
-                lblExamenesRev.Text = sbPendientes.ToString().TrimEnd();                    // ... (ajustes de tamaño/alineación para lblExamenesRev) ...
-
-                int procesadosHoy = examenRepository.CountProcesadosByProjectAndDate(idProyecto, hoy);
+                int procesadosHoy = taskProcesadosHoy.Result;
                 lblInfomes.Text = $"Procesados Hoy:\n{procesadosHoy}";
 
+                // Calcular totales y actualizar gráfico
+                int totalPendientesHoy = pendientesPorTipo.Values.Sum();
+                Console.WriteLine($"DEBUG: Actualizando gráfico - Pendientes: {totalPendientesHoy}, Procesados: {procesadosHoy}");
+                ActualizarGraficoEstadoExamenes(totalPendientesHoy, procesadosHoy);
 
-                // --- INICIO: Cargar Última Actividad ---
-
-                // Cargar Últimas Muestras
-                var ultimasMuestras = muestraRepository.GetUltimasMuestrasPorProyecto(idProyecto, 5); // Obtiene las últimas 5
-                MostrarListaEnPanel(pnlMuestrasUltimas, lblMuestrasUltimas, ultimasMuestras.Cast<object>().ToList(), item =>
-                    $"#{((MuestraInfoViewModel)item).NumeroMuestra} - {((MuestraInfoViewModel)item).Paciente} ({((MuestraInfoViewModel)item).FechaRecepcion:dd/MM/yy})"
-                );
-
-                // Cargar Últimos Exámenes Procesados
-                var ultimosExamenes = examenRepository.GetUltimosExamenesProcesadosPorProyecto(idProyecto, 5); // Obtiene los últimos 5
-                MostrarListaEnPanel(pnlExamenesUltimos, lblExamenesUltimos, ultimosExamenes.Cast<object>().ToList(), item =>
-                     $"#{((ExamenProcesadoInfo)item).NumeroMuestra} - {((ExamenProcesadoInfo)item).Paciente} ({((ExamenProcesadoInfo)item).TipoExamen} - {((ExamenProcesadoInfo)item).FechaProcesamiento:dd/MM/yy HH:mm})"
-                );
-
-                // --- FIN: Cargar Última Actividad ---
+                // Actualizar listas de última actividad
+                MostrarListaEnPanel(pnlMuestrasUltimas, lblMuestrasUltimas, taskUltimasMuestras.Result.Cast<object>().ToList(), item =>
+                    $"#{((MuestraInfoViewModel)item).NumeroMuestra} - {((MuestraInfoViewModel)item).Paciente} ({((MuestraInfoViewModel)item).FechaRecepcion:dd/MM/yy})");
+                MostrarListaEnPanel(pnlExamenesUltimos, lblExamenesUltimos, taskUltimosExamenes.Result.Cast<object>().ToList(), item =>
+                    $"#{((ExamenProcesadoInfo)item).NumeroMuestra} - {((ExamenProcesadoInfo)item).Paciente} ({((ExamenProcesadoInfo)item).TipoExamen} - {((ExamenProcesadoInfo)item).FechaProcesamiento:dd/MM/yy HH:mm})");
 
             }
             catch (Exception ex)
             {
-                // ... (Manejo de error existente) ...
-                // Asegurarse de limpiar paneles de listas también en caso de error
+                // ... (Manejo de error mejorado, igual que antes) ...
+                lblPacientesTotal.Text = "Total Pacientes:\nError";
+                lblMuestrasDia.Text = "Muestras Hoy:\nError";
+                lblExamenesRev.Text = "Exámenes Pendientes:\nError";
+                lblInfomes.Text = "Procesados Hoy:\nError";
                 LimpiarPanelDinamico(pnlMuestrasUltimas, lblMuestrasUltimas);
                 LimpiarPanelDinamico(pnlExamenesUltimos, lblExamenesUltimos);
-                lblMuestrasUltimas.Text += "\nError al cargar"; // Añadir mensaje de error al título
-                lblExamenesUltimos.Text += "\nError al cargar";
+                ActualizarGraficoEstadoExamenes(0, 0);
+                MessageBox.Show($"Ocurrió un error al cargar los datos del Dashboard:\n{ex.Message}", "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Console.WriteLine($"ERROR CargarDatosDashboard: {ex.ToString()}");
             }
+            finally // Asegura que esto SIEMPRE se ejecute, incluso si hay error
+            {
+                // Ocultar indicador de carga
+                // progressBarCarga.Visible = false;
+                this.Cursor = Cursors.Default; // Restaurar cursor
+            }
+        }
+        private void ActualizarGraficoEstadoExamenes(int pendientes, int procesados)
+        {
+            // Asegúrate que 'chartEstadoDia' es el nombre que le diste al control Chart
+            var chart = chartEstadoDia; // Accede al control Chart
+
+            // Limpiar datos y configuración previa
+            chart.Series.Clear();
+            chart.Titles.Clear();
+            chart.Legends.Clear();
+            chart.Palette = ChartColorPalette.Pastel; // Elige una paleta de colores
+
+            // Añadir un título al gráfico
+            chart.Titles.Add("Estado Exámenes (Hoy)");
+            chart.Titles[0].Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+
+            // Crear la serie de datos para el gráfico Pie
+            Series series = new Series("EstadoDia")
+            {
+                ChartType = SeriesChartType.Pie // O Doughnut para tipo Dona
+            };
+
+            // Añadir los puntos de datos (solo si hay datos)
+            if (pendientes > 0 || procesados > 0)
+            {
+                series.Points.AddXY("Pendientes", pendientes);
+                series.Points.AddXY("Procesados", procesados);
+
+                // Opcional: Configurar etiquetas y ToolTips
+                series.IsValueShownAsLabel = true; // Mostrar el número en el gráfico
+                series.LabelFormat = "#"; // Mostrar el valor numérico
+                // series.LabelFormat = "P0"; // Descomenta para mostrar porcentaje
+                series.Font = new Font("Segoe UI", 9F);
+                series.ToolTip = "#VALX: #VALY"; // Texto al pasar el mouse
+
+                // Opcional: Colores específicos
+                if (series.Points.Count > 0) series.Points[0].Color = Color.OrangeRed;
+                if (series.Points.Count > 1) series.Points[1].Color = Color.MediumSeaGreen;
+
+                // Añadir Leyenda
+                Legend legend = new Legend("Default")
+                {
+                    Docking = Docking.Bottom, // Posición de la leyenda
+                    Alignment = StringAlignment.Center,
+                    Font = new Font("Segoe UI", 8F)
+                };
+                chart.Legends.Add(legend);
+                series.Legend = "Default";
+                series.LegendText = "#VALX"; // Muestra "Pendientes", "Procesados" en la leyenda
+            }
+            else
+            {
+                // Si no hay datos, mostrar un mensaje o dejarlo vacío
+                // Podríamos añadir un punto "Vacío" o un título indicándolo
+                series.Points.AddXY("Sin Actividad Hoy", 1);
+                series.Points[0].Color = Color.LightGray;
+                series.IsValueShownAsLabel = false; // No mostrar "1"
+                                                    // Opcional: Añadir una anotación de texto
+                TextAnnotation annotation = new TextAnnotation();
+                annotation.Text = "Sin datos";
+                annotation.X = 50;
+                annotation.Y = 50;
+                annotation.AnchorAlignment = ContentAlignment.MiddleCenter;
+                annotation.Font = new Font("Segoe UI", 10F);
+                annotation.ForeColor = Color.Gray;
+                // chart.Annotations.Add(annotation); // Descomentar si quieres la anotación
+            }
+
+
+            // Añadir la serie al gráfico
+            chart.Series.Add(series);
+
+            // Opcional: Mejorar apariencia del área del gráfico
+            if (chart.ChartAreas.Count == 0) chart.ChartAreas.Add("ChartArea1");
+            chart.ChartAreas[0].BackColor = Color.Transparent;
         }
         private void LimpiarPanelDinamico(Panel panel, Label tituloLabel)
         {
@@ -163,11 +253,8 @@ namespace ZasTrack.Forms.Dashboard
                 c.Dispose(); // Libera recursos
             }
             // Asegura que el título quede posicionado correctamente (si es necesario)
-            tituloLabel.Location = new Point(10, 10); // O la posición original
             tituloLabel.BringToFront();
         }
-
-        // Muestra una lista de objetos en un panel creando Labels dinámicos
         private void MostrarListaEnPanel(Panel panel, Label tituloLabel, List<object> items, Func<object, string> formatoItem)
         {
             LimpiarPanelDinamico(panel, tituloLabel); // Limpia contenido previo
@@ -195,56 +282,51 @@ namespace ZasTrack.Forms.Dashboard
                 topPosition += lblItem.Height + 2; // Siguiente posición vertical
             }
         }
-        private void cboProyecto_SelectedIndexChanged(object sender, EventArgs e)
+        private void CargarProyectos()
+        {
+            cmbProyecto.SelectedIndexChanged -= cboProyecto_SelectedIndexChanged;
+
+            List<Proyecto> proyectos = null; 
+            try
+            {
+                proyectos = proyectoRepository.ObtenerProyectos(incluirArchivados: false);
+
+                cmbProyecto.DataSource = proyectos;
+                cmbProyecto.DisplayMember = "nombre"; // Muestra el nombre del proyecto
+                cmbProyecto.ValueMember = "id_proyecto"; // Usa el ID como valor
+                cmbProyecto.SelectedIndex = -1; // No seleccionar ningún proyecto por defecto
+                cmbProyecto.Text = "Seleccione un proyecto activo..."; // Placeholder text
+            }
+            catch (Exception ex)
+            {
+                // Manejo básico de error si falla la carga de proyectos
+                MessageBox.Show($"Error al cargar la lista de proyectos:\n{ex.Message}", "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"ERROR CargarProyectos: {ex.ToString()}");
+                cmbProyecto.DataSource = null;
+                cmbProyecto.Items.Clear();
+                cmbProyecto.Items.Add("Error al cargar proyectos");
+                cmbProyecto.SelectedIndex = 0;
+                cmbProyecto.Enabled = false; // Deshabilitar si hay error
+            }
+            finally
+            {
+                // Rehabilitar el evento SelectedIndexChanged SIEMPRE
+                cmbProyecto.SelectedIndexChanged += cboProyecto_SelectedIndexChanged;
+            }
+        }
+        #endregion
+        #region Eventos de los botones
+        private async void cboProyecto_SelectedIndexChanged(object sender, EventArgs e) // Cambiado a async void
         {
             int? idProyectoSeleccionado = null;
-
-            // Obtén el ID del proyecto seleccionado de forma segura
             if (cmbProyecto.SelectedItem is Proyecto proyectoSeleccionado && proyectoSeleccionado.id_proyecto > 0)
             {
+
                 idProyectoSeleccionado = proyectoSeleccionado.id_proyecto;
             }
             // Llama al método centralizado para cargar/refrescar TODOS los datos
             CargarDatosDashboard(idProyectoSeleccionado);
         }
-        private void CargarProyectos()
-        {
-            // Deshabilitar el evento SelectedIndexChanged
-            cmbProyecto.SelectedIndexChanged -= cboProyecto_SelectedIndexChanged;
-
-            // Cargar los proyectos en el ComboBox
-            List<Proyecto> proyectos = proyectoRepository.ObtenerProyectos();
-            cmbProyecto.DataSource = proyectos;
-            cmbProyecto.DisplayMember = "nombre"; // Muestra el nombre del proyecto
-            cmbProyecto.ValueMember = "id_proyecto"; // Usa el ID como valor
-            cmbProyecto.SelectedIndex = -1; // No seleccionar ningún proyecto por defecto
-
-            // Rehabilitar el evento SelectedIndexChanged
-            cmbProyecto.SelectedIndexChanged += cboProyecto_SelectedIndexChanged;
-
-        }
-
-        private void pnlPacientesTotal_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pnlMuestrasDia_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-
-        private void lblBienvenido_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void mosTotalPac(int totalPacientes)
-        {
-            // Actualiza un control de la interfaz con el total de pacientes
-            lblPacientesTotal.Text = $"Total Pacientes: {totalPacientes}";
-        }
-
         private void btnAccionNuevaMuestra_Click(object sender, EventArgs e)
         {
             // Llama al método Abrir_Form del formulario principal (wMain)
@@ -263,9 +345,31 @@ namespace ZasTrack.Forms.Dashboard
             }
         }
 
+        #endregion
+        #region Windows Designer Auto Generated Code       
+
+        private void pnlMuestrasDia_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void lblBienvenido_Click(object sender, EventArgs e)
+        {
+
+        }
         private void pnlAccionRapida_Paint(object sender, PaintEventArgs e)
         {
 
         }
+
+        private void flowLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

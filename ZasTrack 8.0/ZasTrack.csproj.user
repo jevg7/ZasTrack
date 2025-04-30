@@ -28,9 +28,6 @@
     <Compile Update="Forms\Examenes\ExamWrite (No se usa)\EGO.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\FormSimplePrueba.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Forms\Informes\wInformes.cs">
       <SubType>Form</SubType>
     </Compile>
