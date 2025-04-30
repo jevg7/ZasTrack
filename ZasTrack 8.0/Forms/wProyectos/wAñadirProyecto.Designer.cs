@@ -1,4 +1,4 @@
-﻿namespace ZasTrack.Forms
+﻿namespace ZasTrack.Forms.wProyectos
 {
     partial class wAñadirProyecto
     {
@@ -35,97 +35,114 @@
             btnGuardarProyecto = new Button();
             txtCodigo = new TextBox();
             lblCodigoProyecto = new Label();
+            pnlAñadirProyecto = new Panel();
+            pnlAñadirProyecto.SuspendLayout();
             SuspendLayout();
             // 
             // dtpFechaInicio
             // 
-            dtpFechaInicio.Location = new Point(188, 184);
-            dtpFechaInicio.Margin = new Padding(4, 3, 4, 3);
+            dtpFechaInicio.Anchor = AnchorStyles.None;
+            dtpFechaInicio.Location = new Point(294, 297);
+            dtpFechaInicio.Margin = new Padding(5, 4, 5, 4);
             dtpFechaInicio.Name = "dtpFechaInicio";
-            dtpFechaInicio.Size = new Size(238, 23);
-            dtpFechaInicio.TabIndex = 7;
+            dtpFechaInicio.Size = new Size(271, 27);
+            dtpFechaInicio.TabIndex = 5;
             // 
             // txtNombreProyecto
             // 
-            txtNombreProyecto.Location = new Point(190, 90);
-            txtNombreProyecto.Margin = new Padding(4, 3, 4, 3);
+            txtNombreProyecto.Anchor = AnchorStyles.None;
+            txtNombreProyecto.Location = new Point(296, 172);
+            txtNombreProyecto.Margin = new Padding(5, 4, 5, 4);
             txtNombreProyecto.Name = "txtNombreProyecto";
-            txtNombreProyecto.Size = new Size(238, 23);
-            txtNombreProyecto.TabIndex = 9;
+            txtNombreProyecto.Size = new Size(271, 27);
+            txtNombreProyecto.TabIndex = 2;
             // 
             // lblNombreProy
             // 
+            lblNombreProy.Anchor = AnchorStyles.None;
             lblNombreProy.AutoSize = true;
-            lblNombreProy.Location = new Point(250, 72);
-            lblNombreProy.Margin = new Padding(4, 0, 4, 0);
+            lblNombreProy.Location = new Point(365, 148);
+            lblNombreProy.Margin = new Padding(5, 0, 5, 0);
             lblNombreProy.Name = "lblNombreProy";
-            lblNombreProy.Size = new Size(123, 15);
-            lblNombreProy.TabIndex = 8;
+            lblNombreProy.Size = new Size(154, 20);
+            lblNombreProy.TabIndex = 1;
             lblNombreProy.Text = "Nombre del Proyecto:";
             // 
             // lblFechaInicio
             // 
+            lblFechaInicio.Anchor = AnchorStyles.None;
             lblFechaInicio.AutoSize = true;
-            lblFechaInicio.Location = new Point(70, 190);
-            lblFechaInicio.Margin = new Padding(4, 0, 4, 0);
+            lblFechaInicio.Location = new Point(174, 300);
+            lblFechaInicio.Margin = new Padding(5, 0, 5, 0);
             lblFechaInicio.Name = "lblFechaInicio";
-            lblFechaInicio.Size = new Size(89, 15);
+            lblFechaInicio.Size = new Size(111, 20);
             lblFechaInicio.TabIndex = 10;
             lblFechaInicio.Text = "Fecha de Inicio:";
             // 
             // btnGuardarProyecto
             // 
+            btnGuardarProyecto.Anchor = AnchorStyles.None;
             btnGuardarProyecto.Cursor = Cursors.Hand;
-            btnGuardarProyecto.Location = new Point(221, 240);
-            btnGuardarProyecto.Margin = new Padding(4, 3, 4, 3);
+            btnGuardarProyecto.Location = new Point(345, 348);
+            btnGuardarProyecto.Margin = new Padding(5, 4, 5, 4);
             btnGuardarProyecto.Name = "btnGuardarProyecto";
-            btnGuardarProyecto.Size = new Size(147, 32);
-            btnGuardarProyecto.TabIndex = 14;
+            btnGuardarProyecto.Size = new Size(168, 43);
+            btnGuardarProyecto.TabIndex = 6;
             btnGuardarProyecto.Text = "Guardar";
             btnGuardarProyecto.UseVisualStyleBackColor = true;
             btnGuardarProyecto.Click += btnGuardarProyecto_Click;
             // 
             // txtCodigo
             // 
+            txtCodigo.Anchor = AnchorStyles.None;
             txtCodigo.ForeColor = Color.Black;
-            txtCodigo.Location = new Point(190, 140);
-            txtCodigo.Margin = new Padding(4, 3, 4, 3);
+            txtCodigo.Location = new Point(296, 239);
+            txtCodigo.Margin = new Padding(5, 4, 5, 4);
             txtCodigo.Name = "txtCodigo";
-            txtCodigo.Size = new Size(238, 23);
-            txtCodigo.TabIndex = 16;
-            txtCodigo.TextChanged += txtCodigo_TextChanged;
+            txtCodigo.Size = new Size(271, 27);
+            txtCodigo.TabIndex = 4;
             // 
             // lblCodigoProyecto
             // 
+            lblCodigoProyecto.Anchor = AnchorStyles.None;
             lblCodigoProyecto.AutoSize = true;
-            lblCodigoProyecto.Location = new Point(250, 122);
-            lblCodigoProyecto.Margin = new Padding(4, 0, 4, 0);
+            lblCodigoProyecto.Location = new Point(365, 215);
+            lblCodigoProyecto.Margin = new Padding(5, 0, 5, 0);
             lblCodigoProyecto.Name = "lblCodigoProyecto";
-            lblCodigoProyecto.Size = new Size(118, 15);
-            lblCodigoProyecto.TabIndex = 15;
+            lblCodigoProyecto.Size = new Size(148, 20);
+            lblCodigoProyecto.TabIndex = 3;
             lblCodigoProyecto.Text = "Codigo del Proyecto:";
-            lblCodigoProyecto.Click += lblCodigoProyecto_Click;
+            // 
+            // pnlAñadirProyecto
+            // 
+            pnlAñadirProyecto.Controls.Add(txtNombreProyecto);
+            pnlAñadirProyecto.Controls.Add(txtCodigo);
+            pnlAñadirProyecto.Controls.Add(dtpFechaInicio);
+            pnlAñadirProyecto.Controls.Add(lblCodigoProyecto);
+            pnlAñadirProyecto.Controls.Add(lblNombreProy);
+            pnlAñadirProyecto.Controls.Add(btnGuardarProyecto);
+            pnlAñadirProyecto.Controls.Add(lblFechaInicio);
+            pnlAñadirProyecto.Dock = DockStyle.Fill;
+            pnlAñadirProyecto.Location = new Point(0, 0);
+            pnlAñadirProyecto.Name = "pnlAñadirProyecto";
+            pnlAñadirProyecto.Size = new Size(864, 584);
+            pnlAñadirProyecto.TabIndex = 17;
             // 
             // wAñadirProyecto
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            AutoSize = true;
-            ClientSize = new Size(860, 557);
+            ClientSize = new Size(864, 584);
             ControlBox = false;
-            Controls.Add(txtCodigo);
-            Controls.Add(lblCodigoProyecto);
-            Controls.Add(btnGuardarProyecto);
-            Controls.Add(lblFechaInicio);
-            Controls.Add(txtNombreProyecto);
-            Controls.Add(lblNombreProy);
-            Controls.Add(dtpFechaInicio);
+            Controls.Add(pnlAñadirProyecto);
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(3, 4, 3, 4);
             Name = "wAñadirProyecto";
             Text = "wAñadirProyecto";
             Load += wAñadirProyecto_Load;
+            pnlAñadirProyecto.ResumeLayout(false);
+            pnlAñadirProyecto.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -137,5 +154,6 @@
         private Button btnGuardarProyecto;
         private TextBox txtCodigo;
         private Label lblCodigoProyecto;
+        private Panel pnlAñadirProyecto;
     }
 }

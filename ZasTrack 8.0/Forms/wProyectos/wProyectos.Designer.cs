@@ -77,7 +77,6 @@
             pnlContenedor.Name = "pnlContenedor";
             pnlContenedor.Size = new Size(1561, 995);
             pnlContenedor.TabIndex = 9;
-            pnlContenedor.Paint += pnlContenedor_Paint;
             // 
             // wProyectos
             // 

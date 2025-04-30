@@ -1,162 +1,99 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ZasTrack.Models;
-using ZasTrack.Forms;
-using ZasTrack.Repositories;
+using System.Drawing; // Necesario para Point, Color, etc. si se usaran (FontStyle no es de aquí)
+using System.Windows.Forms; // Namespace principal de WinForms
+// using ZasTrack.Models; // No parece usarse directamente aquí
+// using ZasTrack.Forms; // No parece usarse directamente aquí
+using ZasTrack.Repositories; // Necesario para ProyectoRepository si se usara aquí (actualmente no)
 
+// Asegúrate que el namespace sea el correcto para TU estructura
 namespace ZasTrack.Forms.wProyectos
 {
     public partial class wProyectos : Form
     {
-        private ProyectoRepository proyectoRepository; // Declarar la variable
+        // --- Campos ---
+        // Ya no necesitamos el repositorio aquí si solo navegamos
+        // private ProyectoRepository proyectoRepository;
+        private Form? activeProyectosForm = null; // Guarda referencia al form hijo activo EN ESTE PANEL
 
         public wProyectos()
         {
             InitializeComponent();
-            proyectoRepository = new ProyectoRepository(); // Inicializar el repositorio
-        }      
+            // Ya no necesitamos inicializar el repositorio aquí
+            // proyectoRepository = new ProyectoRepository();
+        }
+
         private void wProyectos_Load(object sender, EventArgs e)
         {
-            Abrir_Form(new ZasTrack.Forms.wProyectos.wVerProyecto());
-            
+            // Carga el formulario de ver proyectos por defecto al iniciar
+            // Usamos el nuevo método ShowChildForm
+            ShowChildForm(new ZasTrack.Forms.wProyectos.wVerProyecto()); // Ajusta namespace si es diferente
         }
 
-        private void btnAggProyect_Click1(object sender, EventArgs e)
+      
+        private void ShowChildForm(Form childForm)
         {
-            // Abrir el formulario wAñadirProyecto como un diálogo
-            using (var form = new wAñadirProyecto()) ;
+            // 1. No hacer nada si se intenta abrir el mismo tipo de form que ya está activo
+            if (activeProyectosForm?.GetType() == childForm.GetType())
+            {
+                childForm.Dispose(); // Liberar la instancia recién creada que no se usará
+                return;
+            }
 
-        }    
+            // 2. Cerrar y liberar el formulario activo anterior (si existe)
+            if (activeProyectosForm != null)
+            {
+                activeProyectosForm.Close(); // Esto debería llamar a Dispose internamente
+                // activeProyectosForm.Dispose(); // Alternativa más directa si Close no basta
+            }
 
-        private void Abrir_Form(object formhijo)
-        {
+            // 3. Configurar y mostrar el nuevo formulario
+            try
+            {
+                activeProyectosForm = childForm; // Guardar referencia
+                childForm.TopLevel = false;
+                childForm.FormBorderStyle = FormBorderStyle.None;
+                childForm.Dock = DockStyle.Fill;
+                // 'pnlContenedor' es el nombre del Panel dentro de wProyectos (verifica en tu Designer)
+                this.pnlContenedor.Controls.Add(childForm);
+                this.pnlContenedor.Tag = childForm; // Tag es opcional
+                childForm.BringToFront();
+                childForm.Show();
+                Console.WriteLine($"DEBUG: Cargado {childForm.GetType().Name} en pnlContenedor de wProyectos.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al intentar abrir la sección:\n{ex.Message}",
+                                "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"ERROR ShowChildForm (wProyectos): {ex}");
+                if (childForm != null) { childForm.Dispose(); } // Liberar si falla
+                activeProyectosForm = null; // Resetear
+            }
+        }
 
-            if (this.pnlContenedor.Controls.Count > 0)
-                this.pnlContenedor.Controls.RemoveAt(0); // Elimina cualquier control existente del panel contenedor.
-
-            Form fh = formhijo as Form; // Convierte el objeto de entrada en un formulario.
-            fh.TopLevel = false; // Establece la propiedad TopLevel del formulario como false.
-            fh.Dock = DockStyle.Fill; // Establece la propiedad Dock del formulario para que ocupe todo el espacio del panel contenedor.
-            this.pnlContenedor.Controls.Add(fh); // Agrega el formulario al panel contenedor.
-            this.pnlContenedor.Tag = fh; // Establece la propiedad Tag del panel contenedor como el formulario.
-            fh.Show(); // Muestra el formulario.
-        }             
-
+        // --- Eventos del MenuStrip ---
         private void agregarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new Forms.wAñadirProyecto());
-
-        }
-
-        private void editarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+            // Llama al nuevo método con el formulario correspondiente
+            ShowChildForm(new ZasTrack.Forms.wProyectos.wAñadirProyecto()); // Ajusta namespace si es diferente
         }
 
         private void verProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Abrir_Form(new Forms.wProyectos.wVerProyecto());
+            // Llama al nuevo método con el formulario correspondiente
+            ShowChildForm(new ZasTrack.Forms.wProyectos.wVerProyecto()); // Ajusta namespace si es diferente
+        }
+
+        // Los handlers para editar/eliminar (aún vacíos)
+        private void editarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: Implementar lógica para abrir wEditarProyecto (probablemente necesite el ID del proyecto seleccionado en wVerProyecto)
+            MessageBox.Show("Funcionalidad Editar Proyecto - Pendiente de implementar.");
         }
 
         private void eliminarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // TODO: Implementar lógica para eliminar proyecto (necesita ID, confirmación y llamada al repo)
+            MessageBox.Show("Funcionalidad Eliminar Proyecto - Pendiente de implementar.");
         }
-        #region Windows Form Designer generated code
-        private void tsmiAñadirProyectos_Click(object sender, EventArgs e)
-        {
-
-        }
-
-   
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void pnlProyectos_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void splitContainer1_Panel1_Paint_1(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void splitContainer1_Panel1_Paint_2(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pnlAggProy_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblAdmProyec_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void pnlContenedor_Paint(object sender, PaintEventArgs e)
-        {
-         
-
-        }
-        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
-        {
-
-        }
-        private void flpProyList_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        private void pnlProyList_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void pnlProyFather_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void splProyectos_Panel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void flpProyList_Paint_1(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void pnlProyChildren_Paint(object sender, PaintEventArgs e)
-        {
-            
-        }
-        private void flpProyList_Paint_2(object sender, PaintEventArgs e)
-        {
-
-        }
-        #endregion
-    }
-}
-
-
-    
-
-
-
+    } // Fin clase wProyectos
+} // Fin namespace

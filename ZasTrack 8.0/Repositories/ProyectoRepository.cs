@@ -166,7 +166,56 @@ namespace ZasTrack.Repositories
             return proyectos;
         }
 
+        public bool ActualizarProyecto(Proyecto proyecto)
+        {
+            // Validar que el objeto y su ID sean válidos
+            if (proyecto == null || proyecto.id_proyecto <= 0)
+            {
+                throw new ArgumentException("Datos del proyecto inválidos para actualizar.");
+            }
 
+            // Sentencia UPDATE
+            // Asegúrate que los nombres de columna (nombre, codigo, fecha_inicio)
+            // y tabla (proyecto) coincidan exactamente con tu base de datos.
+            string query = @"UPDATE proyecto
+                     SET nombre = @nombre,
+                         codigo = @codigo,
+                         fecha_inicio = @fechaInicio
+                         -- No actualizamos is_archived ni fecha_fin aquí
+                     WHERE id_proyecto = @idProyecto;";
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    // Asignar parámetros desde el objeto proyecto
+                    cmd.Parameters.AddWithValue("@nombre", proyecto.nombre.Trim());
+                    cmd.Parameters.AddWithValue("@codigo", proyecto.codigo.Trim());
+                    // Asegurarse que fecha_inicio no sea null (aunque no debería serlo)
+                    cmd.Parameters.AddWithValue("@fechaInicio", proyecto.fecha_inicio);
+                    cmd.Parameters.AddWithValue("@idProyecto", proyecto.id_proyecto);
+
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery(); // ExecuteNonQuery devuelve el número de filas afectadas
+
+                    // Devolver true si se actualizó al menos una fila (debería ser 1)
+                    return rowsAffected > 0;
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine($"Error DB en ActualizarProyecto (ID: {proyecto.id_proyecto}): {ex}");
+                // Relanzar para que la capa superior (el formulario) sepa del error
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error General en ActualizarProyecto (ID: {proyecto.id_proyecto}): {ex}");
+                // Relanzar
+                throw;
+            }
+        }
         // --- NUEVO MÉTODO: Reactivar Proyecto ---
         public bool ReactivarProyecto(int idProyecto, bool limpiarFechaFin)
         {
@@ -207,6 +256,52 @@ namespace ZasTrack.Repositories
             {
                 Console.WriteLine($"Error general en ReactivarProyecto: {ex.ToString()}");
                 return false; // Devuelve false en caso de error general
+            }
+        }
+        // En ProyectoRepository.cs
+        public bool NombreExiste(string nombre, int idExcluir = 0) // idExcluir es útil para editar
+        {
+            // Compara sin distinguir mayúsculas/minúsculas
+            // Excluye el ID actual si se proporciona (para el modo edición)
+            string query = "SELECT COUNT(*) FROM proyecto WHERE LOWER(nombre) = LOWER(@nombre) AND id_proyecto != @idExcluir";
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", nombre.Trim());
+                    cmd.Parameters.AddWithValue("@idExcluir", idExcluir);
+                    conn.Open();
+                    return (long)cmd.ExecuteScalar() > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en NombreExiste: {ex}");
+                throw; // Relanzar para que la UI sepa que falló la validación
+            }
+        }
+
+        public bool CodigoExiste(string codigo, int idExcluir = 0) // idExcluir es útil para editar
+        {
+            // Compara sin distinguir mayúsculas/minúsculas
+            // Excluye el ID actual si se proporciona (para el modo edición)
+            string query = "SELECT COUNT(*) FROM proyecto WHERE LOWER(codigo) = LOWER(@codigo) AND id_proyecto != @idExcluir";
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@codigo", codigo.Trim());
+                    cmd.Parameters.AddWithValue("@idExcluir", idExcluir);
+                    conn.Open();
+                    return (long)cmd.ExecuteScalar() > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en CodigoExiste: {ex}");
+                throw; // Relanzar para que la UI sepa que falló la validación
             }
         }
 

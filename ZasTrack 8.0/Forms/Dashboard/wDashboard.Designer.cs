@@ -141,6 +141,7 @@
             // 
             // pnlBotonesAcciones
             // 
+            pnlBotonesAcciones.BackColor = SystemColors.MenuBar;
             pnlBotonesAcciones.Controls.Add(btnAccionVerPendientes);
             pnlBotonesAcciones.Controls.Add(btnAccionNuevaMuestra);
             pnlBotonesAcciones.Dock = DockStyle.Fill;
@@ -177,6 +178,7 @@
             // 
             // pnlAccionRapidalbl
             // 
+            pnlAccionRapidalbl.BackColor = SystemColors.MenuBar;
             pnlAccionRapidalbl.Controls.Add(lblAccionRapida);
             pnlAccionRapidalbl.Dock = DockStyle.Top;
             pnlAccionRapidalbl.Location = new Point(0, 0);
@@ -198,7 +200,7 @@
             // 
             // pnlPacientesTotal
             // 
-            pnlPacientesTotal.BackColor = SystemColors.GradientInactiveCaption;
+            pnlPacientesTotal.BackColor = SystemColors.MenuBar;
             pnlPacientesTotal.Controls.Add(lblPacientesTotal);
             pnlPacientesTotal.Dock = DockStyle.Fill;
             pnlPacientesTotal.Location = new Point(10, 5);
@@ -219,7 +221,7 @@
             // 
             // pnlExamenesRev
             // 
-            pnlExamenesRev.BackColor = SystemColors.GradientInactiveCaption;
+            pnlExamenesRev.BackColor = SystemColors.MenuBar;
             pnlExamenesRev.Controls.Add(lblExamenesRev);
             pnlExamenesRev.Dock = DockStyle.Fill;
             pnlExamenesRev.Location = new Point(419, 5);
@@ -240,7 +242,7 @@
             // 
             // pnlInformes
             // 
-            pnlInformes.BackColor = SystemColors.GradientInactiveCaption;
+            pnlInformes.BackColor = SystemColors.MenuBar;
             pnlInformes.Controls.Add(lblInfomes);
             pnlInformes.Dock = DockStyle.Fill;
             pnlInformes.Location = new Point(626, 5);
@@ -262,7 +264,7 @@
             // 
             // pnlMuestrasDia
             // 
-            pnlMuestrasDia.BackColor = SystemColors.GradientInactiveCaption;
+            pnlMuestrasDia.BackColor = SystemColors.MenuBar;
             pnlMuestrasDia.Controls.Add(lblMuestrasDia);
             pnlMuestrasDia.Dock = DockStyle.Fill;
             pnlMuestrasDia.Location = new Point(212, 5);
@@ -374,7 +376,7 @@
             // pnlExamenesUltimos
             // 
             pnlExamenesUltimos.AutoScroll = true;
-            pnlExamenesUltimos.BackColor = SystemColors.Info;
+            pnlExamenesUltimos.BackColor = SystemColors.ControlLight;
             pnlExamenesUltimos.Controls.Add(lblExamenesUltimos);
             pnlExamenesUltimos.Dock = DockStyle.Fill;
             pnlExamenesUltimos.Location = new Point(522, 4);
@@ -396,7 +398,7 @@
             // pnlMuestrasUltimas
             // 
             pnlMuestrasUltimas.AutoScroll = true;
-            pnlMuestrasUltimas.BackColor = SystemColors.Info;
+            pnlMuestrasUltimas.BackColor = SystemColors.ControlLight;
             pnlMuestrasUltimas.Controls.Add(lblMuestrasUltimas);
             pnlMuestrasUltimas.Dock = DockStyle.Fill;
             pnlMuestrasUltimas.Location = new Point(10, 4);

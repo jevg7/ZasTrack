@@ -11,27 +11,24 @@ using Npgsql;
 using ZasTrack.Models;
 using ZasTrack.Repositories;
 
-namespace ZasTrack.Forms
+namespace ZasTrack.Forms.wProyectos
 {
     public partial class wAñadirProyecto : Form
     {
         private ProyectoRepository proyectoRepository;
-
         public wAñadirProyecto()
         {
             InitializeComponent();
             proyectoRepository = new ProyectoRepository();
           ;
         }
-
-
-        // --- Evento Load (YA NO PONE MinDate) ---
         private void wAñadirProyecto_Load(object sender, EventArgs e)
         {
            
             dtpFechaInicio.Value = DateTime.Today;
             Console.WriteLine("DEBUG: wAñadirProyecto cargado. Fecha inicio permite cualquier fecha.");
         }
+        #region Eventos
         private void btnGuardarProyecto_Click(object sender, EventArgs e)
         {
             // 1. Validar Campos Vacíos
@@ -49,37 +46,38 @@ namespace ZasTrack.Forms
                 txtCodigo.Focus(); return; // Detener y enfocar
             }
 
-         
+
 
             // 3. Validar Nombre Duplicado (llamando al repositorio)
             try
             {
-                if (ExisteNombreProyecto(nombreProyecto))
+                // Llamamos al método del repositorio. Pasamos 0 como idExcluir porque estamos añadiendo uno nuevo.
+                if (proyectoRepository.NombreExiste(nombreProyecto, 0))
                 {
                     MessageBox.Show($"Ya existe un proyecto con el nombre '{nombreProyecto}'.\nPor favor, elija otro nombre.", "Nombre Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtNombreProyecto.Focus(); return; // Detener
+                    txtNombreProyecto.Focus(); return;
                 }
             }
-            catch (Exception exValNombre)
+            catch (Exception exValNombre) // Captura error si falla la consulta de validación
             {
                 MessageBox.Show($"Error al validar el nombre del proyecto:\n{exValNombre.Message}", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; // Detener si falla la validación
+                return;
             }
-
 
             // 4. Validar Código Duplicado (llamando al repositorio)
             try
             {
-                if (ExisteCodigoProyecto(codigoProyecto))
+                // Llamamos al método del repositorio.
+                if (proyectoRepository.CodigoExiste(codigoProyecto, 0))
                 {
                     MessageBox.Show($"Ya existe un proyecto con el código '{codigoProyecto}'.\nPor favor, elija otro código.", "Código Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtCodigo.Focus(); return; // Detener
+                    txtCodigo.Focus(); return;
                 }
             }
-            catch (Exception exValCodigo)
+            catch (Exception exValCodigo) // Captura error si falla la consulta de validación
             {
                 MessageBox.Show($"Error al validar el código del proyecto:\n{exValCodigo.Message}", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; // Detener si falla la validación
+                return;
             }
 
 
@@ -95,12 +93,11 @@ namespace ZasTrack.Forms
 
             try
             {
-                // Usar la instancia miembro del repositorio
                 proyectoRepository.GuardarProyecto(proyecto);
                 MessageBox.Show("Proyecto guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                this.DialogResult = DialogResult.OK; // Indicar éxito al cerrar
-                this.Close();
+                // Decide qué hacer aquí: ¿Cerrar o Limpiar?
+                LimpiarFormulario(); // Indicar éxito al cerrar
             }
             catch (NpgsqlException exDb) // Capturar error específico de DB
             {
@@ -115,6 +112,15 @@ namespace ZasTrack.Forms
                 MessageBox.Show($"Ocurrió un error inesperado al guardar:\n{ex.Message}", "Error General", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 // NO relanzar aquí normalmente
             }
+        }
+        #endregion
+        #region Metodos de Validación
+        private void LimpiarFormulario()
+        {
+            txtNombreProyecto.Clear();
+            txtCodigo.Clear();
+            dtpFechaInicio.Value = DateTime.Today;
+            txtNombreProyecto.Focus(); // Poner foco en el primer campo
         }
         public bool ExisteNombreProyecto(string nombre)
         {
@@ -144,9 +150,6 @@ namespace ZasTrack.Forms
             }
             return count > 0; // Devuelve true si el contador es mayor a 0 (ya existe)
         }
-
-        // Verifica si ya existe un proyecto con ese código (ignorando mayús/minús)
-        // Busca en TODOS los proyectos, incluyendo archivados.
         public bool ExisteCodigoProyecto(string codigo)
         {
             if (string.IsNullOrWhiteSpace(codigo)) return false; // Código vacío no "existe"
@@ -173,26 +176,7 @@ namespace ZasTrack.Forms
             }
             return count > 0; // Devuelve true si ya existe
         }
-        #region windows forms generated
-      
-      
-      
-        private void txtCodigo_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblCodigoProyecto_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dtpFechaFin_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
         #endregion
-
 
     }
 }

@@ -46,6 +46,7 @@ namespace ZasTrack.Forms.wProyectos
                 vistaActual = EstadoVista.Activos;
                 proyectoSeleccionado = null;
                 ActualizarEstiloBotonesVista();
+                ActualizarEstadoBotonesAdmin(); 
                 CargarProyectosAsync();
             }
         }
@@ -65,6 +66,7 @@ namespace ZasTrack.Forms.wProyectos
         #endregion
 
         #region Metodos Principales (Carga y UI)
+
 
         // --- REEMPLAZAR: Método CargarProyectosAsync completo y actualizado ---
         private async void CargarProyectosAsync()
@@ -171,7 +173,6 @@ namespace ZasTrack.Forms.wProyectos
                         };
                         lblFechaFin.Text = proyecto.fecha_fin.HasValue ? $"Fin: {proyecto.fecha_fin.Value:dd/MM/yyyy}" : "Fin: Activo";
                         pnlProyecto.Controls.Add(lblFechaFin);
-                        // currentY += lblFechaFin.Height + spacing; // Actualizar si algo fuera debajo
 
                         // --- Crear Panel para Botones (FlowLayoutPanel anidado) ---
                         FlowLayoutPanel flpBotonesInterno = new FlowLayoutPanel
@@ -207,13 +208,41 @@ namespace ZasTrack.Forms.wProyectos
                             ForeColor = Color.White,
                         };
                         btnAccion.FlatAppearance.BorderSize = 0;
+                        flpBotonesInterno.Controls.Add(btnAccion);
+                        Button btnEditar = new Button
+                        {
+                            Text = "Editar",
+                            Name = $"btnEditar_{proyecto.id_proyecto}", // Nombre único por si acaso
+                            Size = new Size(80, 30),
+                            Tag = proyecto,
+                            Margin = new Padding(spacing, 0, spacing, 0), // Añadir margen izquierdo y derecho
+                            FlatStyle = FlatStyle.System,
+                            Visible = false, // <-- INVISIBLE por defecto
+                            Enabled = false  // <-- DESHABILITADO por defecto
+                        };
+                        btnEditar.Click += BtnEditar_Click; // Asigna el evento (crearemos el método luego)
+                        flpBotonesInterno.Controls.Add(btnEditar); // Añade al panel de botones
 
+                        Button btnEliminar = new Button
+                        {
+                            Text = "Eliminar",
+                            Name = $"btnEliminar_{proyecto.id_proyecto}", // Nombre único
+                            Size = new Size(80, 30),
+                            Tag = proyecto,
+                            Margin = new Padding(0, 0, spacing, 0), // Margen derecho
+                            FlatStyle = FlatStyle.Flat,
+                            BackColor = Color.DarkRed, // Color distintivo peligroso
+                            ForeColor = Color.White,
+                            Visible = false, // <-- INVISIBLE por defecto
+                            Enabled = false  // <-- DESHABILITADO por defecto
+                        };
+                        btnEliminar.FlatAppearance.BorderSize = 0;
+                        btnEliminar.Click += BtnEliminar_Click;
                         if (vistaActual == EstadoVista.Activos)
                         {
                             btnAccion.Text = "Finalizar";
                             btnAccion.Name = $"btnFinalizar_{proyecto.id_proyecto}";
                             btnAccion.BackColor = Color.OrangeRed;
-                            // Asegúrate que el handler BtnFinalizar_Click exista
                             btnAccion.Click += BtnFinalizar_Click;
                         }
                         else
@@ -224,13 +253,16 @@ namespace ZasTrack.Forms.wProyectos
                             // Asegúrate que el handler BtnReactivar_Click exista
                             btnAccion.Click += BtnReactivar_Click;
                         }
-                        flpBotonesInterno.Controls.Add(btnAccion);
+                       // Asigna el evento (crearemos el método luego)
+                        flpBotonesInterno.Controls.Add(btnEliminar); // Añade al panel de botones
+
+                        // --- FIN AÑADIR BOTONES EDITAR Y ELIMINAR ---
+
 
                         // Añadir el panel de botones al panel principal del proyecto
-                        // (Añadir al final para que DockStyle.Bottom funcione bien)
                         pnlProyecto.Controls.Add(flpBotonesInterno);
 
-                        // --- Añadir el Panel completo del proyecto a la lista principal ---
+                        // Añadir el Panel completo del proyecto a la lista principal
                         flpProyList.Controls.Add(pnlProyecto);
 
                     } // --- FIN foreach ---
@@ -261,13 +293,65 @@ namespace ZasTrack.Forms.wProyectos
                 MostrarCargando(false); // Ocultar indicador de carga
             }
         }
+        // En wVerProyecto.cs
+        private void ActualizarEstadoBotonesAdmin()
+        {
+            Console.WriteLine("--- ActualizarEstadoBotonesAdmin INICIO ---");
+            bool modoAdmin = chkModoAdmin.Checked;
+            bool haySeleccion = proyectoSeleccionado != null;
+            bool habilitar = modoAdmin && haySeleccion;
 
-        // --- NUEVO: Método para actualizar estilo de botones de vista ---
+            Console.WriteLine($"ModoAdmin={modoAdmin}, HaySeleccion={haySeleccion}, Habilitar={habilitar}");
+            Console.WriteLine($"Proyecto Seleccionado: {proyectoSeleccionado?.nombre ?? "NULL"} (ID: {proyectoSeleccionado?.id_proyecto.ToString() ?? "N/A"})");
+
+            // Deshabilitar y resetear TODOS los botones de admin primero
+            foreach (Control panelControl in flpProyList.Controls.OfType<Panel>())
+            {
+                FlowLayoutPanel flpBotones = panelControl.Controls.OfType<FlowLayoutPanel>().FirstOrDefault();
+                if (flpBotones != null)
+                {
+                    Button btnEd = flpBotones.Controls.OfType<Button>().FirstOrDefault(b => b.Name.StartsWith("btnEditar_"));
+                    Button btnDel = flpBotones.Controls.OfType<Button>().FirstOrDefault(b => b.Name.StartsWith("btnEliminar_"));
+                    if (btnEd != null) { btnEd.Enabled = false; btnEd.Text = "Editar"; } // Resetea texto
+                    if (btnDel != null) { btnDel.Enabled = false; }
+                }
+            }
+
+            // Ahora, intentar habilitar y cambiar texto SOLO en el seleccionado si aplica
+            if (habilitar) // Solo si modo admin está ON Y hay selección
+            {
+                // Construimos los nombres EXACTOS de los botones que buscamos
+                string editButtonName = $"btnEditar_{proyectoSeleccionado.id_proyecto}";
+                string deleteButtonName = $"btnEliminar_{proyectoSeleccionado.id_proyecto}";
+
+                // Usamos Controls.Find(key, searchAllChildren) buscando DENTRO de flpProyList
+                // Devuelve una colección, tomamos el primero (debería ser único)
+                Button btnEdit = flpProyList.Controls.Find(editButtonName, true).FirstOrDefault() as Button;
+                Button btnDelete = flpProyList.Controls.Find(deleteButtonName, true).FirstOrDefault() as Button;
+
+                // Verificamos si se encontraron y aplicamos estado/texto
+                if (btnEdit != null)
+                {
+                    Console.WriteLine($"Botón Editar encontrado ({btnEdit.Name}) por Find. Habilitar={habilitar}");
+                    btnEdit.Enabled = habilitar;
+                }
+                else { Console.WriteLine($"Botón Editar con nombre '{editButtonName}' NO encontrado en flpProyList."); }
+
+                if (btnDelete != null)
+                {
+                    Console.WriteLine($"Botón Eliminar encontrado ({btnDelete.Name}) por Find. Habilitar={habilitar}");
+                    btnDelete.Enabled = habilitar;
+                }
+                else { Console.WriteLine($"Botón Eliminar con nombre '{deleteButtonName}' NO encontrado en flpProyList."); }
+            }
+            else { Console.WriteLine("Condición para habilitar no cumplida."); }
+
+            Console.WriteLine("--- ActualizarEstadoBotonesAdmin FIN ---");
+        }
         private void ActualizarEstiloBotonesVista()
         {
             // Asigna estilos a los botones btnVerActivos y btnVerArchivados
             // según el valor de 'vistaActual'
-            // (Puedes copiar el código que te di en la respuesta anterior)
             if (vistaActual == EstadoVista.Activos)
             {
                 // Estilo para botón activo
@@ -305,24 +389,18 @@ namespace ZasTrack.Forms.wProyectos
 
             }
         }
-        // ---------------------------------------------------------
-
-
         private void PnlProyecto_Click(object sender, EventArgs e)
         {
-            // Lógica para resaltar panel clickeado y guardar 'proyectoSeleccionado'
-            // (Copiar el código que te di en la respuesta anterior)
+        
             if (sender is Panel pnlClickeado && pnlClickeado.Tag is Proyecto proy)
             {
                 foreach (Control ctrl in flpProyList.Controls) { if (ctrl is Panel pnl) { pnl.BackColor = SystemColors.Control; } }
                 pnlClickeado.BackColor = SystemColors.Highlight;
                 proyectoSeleccionado = proy;
                 Console.WriteLine($"Seleccionado: {proyectoSeleccionado.nombre}");
-                // TODO: Habilitar/Deshabilitar botones Edit/Delete aquí si Modo Avanzado está activo
+                ActualizarEstadoBotonesAdmin();
             }
         }
-        // --- REEMPLAZAR: Método MostrarCargando actualizado ---
-        // Asegúrate de que pnlCargando SÍ exista en el diseñador y NO esté dentro de flpProyList
         private void MostrarCargando(bool mostrar)
         {
             string nombreLabelCargando = "lblCargandoDinamic";
@@ -374,8 +452,6 @@ namespace ZasTrack.Forms.wProyectos
                 }
             }
         }
-        // ---------------------------------------------------------
-
         private void BtnDetalles_Click(object sender, EventArgs e)
         {
             // Obtener el objeto Proyecto completo y el flag esArchivado, luego abrir detalles
@@ -393,46 +469,182 @@ namespace ZasTrack.Forms.wProyectos
                 MessageBox.Show("No se pudo obtener info del proyecto.", "Error Tag", MessageBoxButtons.OK, MessageBoxIcon.Warning); // Corregido a Warning
             }
         }
-
-        // --- BtnFinalizar_Click (sin cambios respecto a tu código original) ---
         private void BtnFinalizar_Click(object sender, EventArgs e)
         {
-            // (Tu código existente para finalizar/archivar)
-            // ... igual que lo tenías ...
             if (sender is Button btn && btn.Tag is Proyecto proyectoParaArchivar)
             {
-                var confirmResult = MessageBox.Show($"¿Está seguro de que desea finalizar y archivar el proyecto '{proyectoParaArchivar.nombre}'?\n\nEsta acción establecerá la fecha de fin a hoy ({DateTime.Today:dd/MM/yyyy}) y lo ocultará de las listas activas.",
-                                                      "Confirmar Finalizar Proyecto", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (confirmResult == DialogResult.Yes)
-                {
-                    DateTime fechaFin = DateTime.Today;
-                    bool exito = false;
-                    this.Cursor = Cursors.WaitCursor;
-                    try
-                    {
-                        // Asumiendo que ArchivarProyecto hace SET is_archived=true, fecha_fin=fechaFin
-                        exito = proyectoRepository.ArchivarProyecto(proyectoParaArchivar.id_proyecto, fechaFin);
-                    }
-                    catch (Exception ex)
-                    { /* ... manejo error ... */ this.Cursor = Cursors.Default; MessageBox.Show($"Error: {ex.Message}"); return; }
-                    finally { this.Cursor = Cursors.Default; }
+                DateTime fechaFinParaGuardar; // Variable para guardar la fecha decidida
 
-                    if (exito)
-                    { /* ... mensaje éxito y CargarProyectosAsync() ... */ MessageBox.Show("Éxito"); CargarProyectosAsync(); }
-                    else { /* ... mensaje error ... */ MessageBox.Show("Error al finalizar"); }
+                // Verificar si ya existe una fecha de fin previa
+                if (proyectoParaArchivar.fecha_fin.HasValue)
+                {
+                    // --- Lógica para proyecto previamente archivado ---
+                    string fechaExistenteStr = proyectoParaArchivar.fecha_fin.Value.ToString("dd/MM/yyyy");
+                    string fechaHoyStr = DateTime.Today.ToString("dd/MM/yyyy");
+
+                    string mensaje = $"El proyecto '{proyectoParaArchivar.nombre}' ya tiene una fecha de finalización registrada: {fechaExistenteStr}.\n\n" +
+                                     $"Al finalizarlo de nuevo, ¿qué fecha desea usar?\n\n" +
+                                     $"- Pulse [Sí] para MANTENER la fecha original ({fechaExistenteStr}).\n" +
+                                     $"- Pulse [No] para USAR la fecha de HOY ({fechaHoyStr}).\n" +
+                                     $"- Pulse [Cancelar] para no hacer nada.";
+
+                    DialogResult resultFecha = MessageBox.Show(mensaje,
+                                                           "Elegir Fecha de Finalización",
+                                                           MessageBoxButtons.YesNoCancel, // Da las tres opciones
+                                                           MessageBoxIcon.Question);
+
+                    if (resultFecha == DialogResult.Cancel)
+                    {
+                        return; // El usuario canceló
+                    }
+                    else if (resultFecha == DialogResult.Yes)
+                    {
+                        // El usuario quiere mantener la fecha existente
+                        fechaFinParaGuardar = proyectoParaArchivar.fecha_fin.Value;
+                        Console.WriteLine($"DEBUG: Finalizar manteniendo fecha existente: {fechaFinParaGuardar:dd/MM/yyyy}");
+                    }
+                    else // resultFecha == DialogResult.No
+                    {
+                        // El usuario quiere usar la fecha de hoy
+                        fechaFinParaGuardar = DateTime.Today;
+                        Console.WriteLine($"DEBUG: Finalizar usando fecha de hoy: {fechaFinParaGuardar:dd/MM/yyyy}");
+                    }
+                }
+                else
+                {
+                    // --- Lógica original para proyecto nunca antes archivado ---
+                    var confirmResult = MessageBox.Show($"¿Está seguro de que desea finalizar y archivar el proyecto '{proyectoParaArchivar.nombre}'?\n\n" +
+                                                      $"Esta acción establecerá la fecha de fin a hoy ({DateTime.Today:dd/MM/yyyy}) y lo ocultará de las listas activas.",
+                                                      "Confirmar Finalizar Proyecto",
+                                                      MessageBoxButtons.YesNo,
+                                                      MessageBoxIcon.Question);
+
+                    if (confirmResult == DialogResult.No)
+                    {
+                        return; // El usuario canceló
+                    }
+                    // Si confirma, usa la fecha de hoy
+                    fechaFinParaGuardar = DateTime.Today;
+                    Console.WriteLine($"DEBUG: Finalizar por primera vez usando fecha de hoy: {fechaFinParaGuardar:dd/MM/yyyy}");
+                }
+
+                // --- Proceder a Archivar con la fecha determinada ---
+                bool exito = false;
+                this.Cursor = Cursors.WaitCursor;
+                try
+                {
+                    // Llamar al repositorio pasando la fecha decidida
+                    exito = proyectoRepository.ArchivarProyecto(proyectoParaArchivar.id_proyecto, fechaFinParaGuardar);
+                }
+                catch (Exception ex)
+                {
+                    this.Cursor = Cursors.Default;
+                    MessageBox.Show($"Error al archivar el proyecto: {ex.Message}", "Error Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Console.WriteLine($"ERROR ArchivarProyecto: {ex.ToString()}");
+                    return;
+                }
+                finally
+                {
+                    this.Cursor = Cursors.Default;
+                }
+
+                if (exito)
+                {
+                    MessageBox.Show($"Proyecto '{proyectoParaArchivar.nombre}' finalizado y archivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Recargar la vista actual (que es la de activos)
+                    // El proyecto archivado ya no debería aparecer aquí.
+                    CargarProyectosAsync();
+                }
+                else
+                {
+                    MessageBox.Show("No se pudo archivar el proyecto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else { /* ... mensaje error Tag ... */ MessageBox.Show("Error Tag"); }
+            else
+            {
+                MessageBox.Show("No se pudo obtener la información del proyecto desde el botón Finalizar.", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        private void BtnEditar_Click(object sender, EventArgs e)
+        {
+            // 1. Obtener el proyecto desde el Tag del botón presionado
+            if (sender is Button btnEditar && btnEditar.Tag is Proyecto proyectoParaEditar)
+            {
+                Console.WriteLine($"DEBUG: Abriendo editor para proyecto ID: {proyectoParaEditar.id_proyecto}, Nombre: {proyectoParaEditar.nombre}");
+
+                // 2. Crear una instancia del formulario de edición, pasándole el proyecto
+                //    Usamos 'using' para asegurarnos que se liberen los recursos del formulario de edición al cerrarse
+                using (wEditarProyecto formEditar = new wEditarProyecto(proyectoParaEditar))
+                {
+                    // 3. Mostrar el formulario de edición como un DIÁLOGO MODAL.
+                    //    Esto detiene la ejecución aquí hasta que el usuario cierre wEditarProyecto.
+                    DialogResult resultado = formEditar.ShowDialog(this); // 'this' lo hace hijo de wVerProyecto
+
+                    // 4. (Opcional pero recomendado) Verificar si se guardaron cambios y refrescar
+                    //    Para que esto funcione bien, necesitaremos que btnGuardarCambios_Click en wEditarProyecto
+                    //    establezca this.DialogResult = DialogResult.OK; si el guardado fue exitoso.
+                    //    Por ahora, simplemente recargaremos la lista si no se canceló.
+                    if (resultado != DialogResult.Cancel)
+                    {
+                        Console.WriteLine("DEBUG: El formulario de edición se cerró (posiblemente guardó). Recargando lista de proyectos...");
+                        CargarProyectosAsync(); // Recargar la lista para reflejar posibles cambios
+                    }
+                    else
+                    {
+                        Console.WriteLine("DEBUG: El formulario de edición se cerró con Cancelar.");
+                    }
+                } // El 'using' llama a formEditar.Dispose() aquí automáticamente
+            }
+            else
+            {
+                // Error si no se pudo obtener el proyecto del botón
+                MessageBox.Show("No se pudo obtener la información del proyecto para editar.",
+                                "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
+        private void BtnEliminar_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is Proyecto proyectoParaEliminar)
+            {
+                Console.WriteLine($"Clic en Eliminar para: {proyectoParaEliminar.nombre}");
+                // TODO: Mostrar confirmación MUY clara. Si confirma, llamar a repo y recargar.
+                MessageBox.Show($"Eliminar proyecto: {proyectoParaEliminar.nombre}\n(Funcionalidad pendiente)", "Eliminar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        private void chkModoAdmin_CheckedChanged(object sender, EventArgs e)
+        {
+            bool modoAdminActivado = chkModoAdmin.Checked;
+            Console.WriteLine($"Modo Admin cambiado a: {modoAdminActivado}");
 
+            // Recorre todos los paneles de proyecto en el FlowLayoutPanel
+            foreach (Control controlPnlProyecto in flpProyList.Controls)
+            {
+                if (controlPnlProyecto is Panel pnlProyecto) // Asegura que sea un Panel
+                {
+                    // Busca el FlowLayoutPanel anidado que contiene los botones
+                    FlowLayoutPanel flpBotones = pnlProyecto.Controls.OfType<FlowLayoutPanel>().FirstOrDefault();
+                    if (flpBotones != null)
+                    {
+                        // Busca los botones Editar y Eliminar DENTRO del FLP de botones
+                        Button btnEdit = flpBotones.Controls.OfType<Button>().FirstOrDefault(b => b.Name.StartsWith("btnEditar_"));
+                        Button btnDelete = flpBotones.Controls.OfType<Button>().FirstOrDefault(b => b.Name.StartsWith("btnEliminar_"));
+
+                        // Cambia su visibilidad según el modo admin
+                        if (btnEdit != null) btnEdit.Visible = modoAdminActivado;
+                        if (btnDelete != null) btnDelete.Visible = modoAdminActivado;
+                    }
+                }
+            }
+
+            // Después de cambiar la visibilidad, actualiza el estado Enabled (basado en si hay selección)
+            ActualizarEstadoBotonesAdmin();
+        }
         #endregion
 
         #region Handlers Pendientes / Nuevos
 
-        // --- AÑADIR: Esqueleto para BtnReactivar_Click ---
-        // Este método se llamará desde los botones "Reactivar" que se crean
-        // cuando vistaActual es EstadoVista.Archivados
+
         private void BtnReactivar_Click(object sender, EventArgs e)
         {
             if (sender is Button btnReactivar && btnReactivar.Tag is Proyecto proyectoParaReactivar)
@@ -486,14 +698,5 @@ namespace ZasTrack.Forms.wProyectos
         // ---------------------------
 
         #endregion
-
-        private void flpProyList_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        private void wVerProyecto_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

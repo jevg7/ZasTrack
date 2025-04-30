@@ -154,7 +154,6 @@ C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.wPaciente.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.Estudiantes.wVerPaciente.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.wMain.resources
-C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wAñadirProyecto.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wProyectos.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Properties.Resources.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.csproj.GenerateResource.cache
@@ -286,3 +285,5 @@ C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wAñadirProyecto.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wEditarProyecto.resources
