@@ -1005,6 +1005,171 @@ public class ExamenRepository
         catch (Exception ex) { Console.WriteLine($"Error en GetUltimosExamenesProcesadosPorProyectoAsync: {ex}"); throw; }
         return ultimosExamenes;
     }
-    // ***** FIN *****
+    public async Task<int> ContarProcesadosPorProyectoIdAsync(int idProyecto)
+    {
+        // Contamos los registros en la tabla 'examen' que pertenecen al proyecto
+        // Y tienen una entrada correspondiente en alguna tabla examen_* con procesado = TRUE
+        string query = @"
+            SELECT COUNT(DISTINCT e.id_examen)
+            FROM examen e
+            INNER JOIN muestra m ON e.id_muestra = m.id_muestra
+            LEFT JOIN examen_orina eo ON e.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+            LEFT JOIN examen_heces eh ON e.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+            LEFT JOIN examen_sangre es ON e.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+            WHERE m.id_proyecto = @idProyecto
+              AND ( (e.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+                    (e.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+                    (e.id_tipo_examen = 3 AND es.procesado = TRUE) );";
+        int count = 0;
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            using (var cmd = new NpgsqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                await conn.OpenAsync();
+                var result = await cmd.ExecuteScalarAsync();
+                count = Convert.ToInt32(result ?? 0L);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en ExamenRepository.ContarProcesadosPorProyectoIdAsync (ID: {idProyecto}): {ex}");
+            throw;
+        }
+        return count;
+    }
+    public async Task<List<ExamenDetalleViewModel>> ObtenerProcesadosPorProyectoIdAsync(int idProyecto)
+    {
+        var listaExamenes = new List<ExamenDetalleViewModel>();
+
+        // --- QUERY CORREGIDA ---
+        string query = @"
+        SELECT
+            e.id_examen, e.id_paciente, e.id_muestra,
+            m.numero_muestra, m.fecha_recepcion,
+            p.nombres || ' ' || p.apellidos AS nombre_paciente,
+            te.nombre AS tipo_examen,
+            e.fecha_procesamiento
+        FROM examen e
+        INNER JOIN muestra m ON e.id_muestra = m.id_muestra
+        INNER JOIN pacientes p ON e.id_paciente = p.id_paciente
+        INNER JOIN tipo_examen te ON e.id_tipo_examen = te.id_tipo_examen
+        -- Condiciones ON corregidas para los LEFT JOIN:
+        LEFT JOIN examen_orina eo ON e.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+        LEFT JOIN examen_heces eh ON e.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+        LEFT JOIN examen_sangre es ON e.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+        WHERE m.id_proyecto = @idProyecto
+          AND ( (e.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+                (e.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+                (e.id_tipo_examen = 3 AND es.procesado = TRUE) )
+        ORDER BY e.fecha_procesamiento DESC;";
+        // --- FIN QUERY CORREGIDA ---
+
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            using (var cmd = new NpgsqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                await conn.OpenAsync();
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        listaExamenes.Add(new ExamenDetalleViewModel
+                        {
+                            IdExamen = reader.GetInt32(reader.GetOrdinal("id_examen")),
+                            IdMuestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                            IdPaciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                            NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                            NombrePaciente = reader.GetString(reader.GetOrdinal("nombre_paciente")),
+                            TipoExamen = reader.GetString(reader.GetOrdinal("tipo_examen")),
+                            FechaProcesamiento = reader.GetDateTime(reader.GetOrdinal("fecha_procesamiento")),
+                            FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
+                            Estado = "Procesado"
+                        });
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en ExamenRepository.ObtenerProcesadosPorProyectoIdAsync (ID: {idProyecto}): {ex}");
+            throw;
+        }
+        return listaExamenes;
+    }
+
+    public async Task<List<MuestraInfoViewModel>> ObtenerMuestrasConExamenesCompletadosPorProyectoIdAsync(int idProyecto)
+    {
+        var resultados = new List<MuestraInfoViewModel>();
+        
+        string query = @"
+            SELECT
+                m.id_muestra, m.numero_muestra, p.nombres || ' ' || p.apellidos AS paciente,
+                p.genero, p.edad, m.fecha_recepcion,
+                COALESCE(
+                    STRING_AGG(DISTINCT te.nombre, ', ' ORDER BY te.nombre) FILTER (WHERE
+                        te.activo = TRUE AND (
+                             (te.id_tipo_examen = 1 AND eo.procesado = TRUE) OR
+                             (te.id_tipo_examen = 2 AND eh.procesado = TRUE) OR
+                             (te.id_tipo_examen = 3 AND es.procesado = TRUE)
+                        )
+                    ), '[Ninguno Procesado]' -- Mensaje si no hay ninguno procesado para esta muestra
+                ) AS examenes_completados_str
+            FROM muestra m
+            INNER JOIN pacientes p ON m.id_paciente = p.id_paciente
+            LEFT JOIN muestra_examen me ON m.id_muestra = me.id_muestra
+            LEFT JOIN tipo_examen te ON me.id_tipo_examen = te.id_tipo_examen
+            LEFT JOIN examen e ON e.id_muestra = m.id_muestra AND e.id_tipo_examen = te.id_tipo_examen
+            LEFT JOIN examen_orina eo ON te.id_tipo_examen = 1 AND eo.id_examen = e.id_examen
+            LEFT JOIN examen_heces eh ON te.id_tipo_examen = 2 AND eh.id_examen = e.id_examen
+            LEFT JOIN examen_sangre es ON te.id_tipo_examen = 3 AND es.id_examen = e.id_examen
+            WHERE
+                m.id_proyecto = @idProyecto
+                AND EXISTS ( -- Asegura que al menos UNO esté procesado
+                    SELECT 1
+                    FROM examen e_proc
+                    LEFT JOIN examen_orina eo_proc ON e_proc.id_tipo_examen = 1 AND eo_proc.id_examen = e_proc.id_examen
+                    LEFT JOIN examen_heces eh_proc ON e_proc.id_tipo_examen = 2 AND eh_proc.id_examen = e_proc.id_examen
+                    LEFT JOIN examen_sangre es_proc ON e_proc.id_tipo_examen = 3 AND es_proc.id_examen = e_proc.id_examen
+                    WHERE e_proc.id_muestra = m.id_muestra
+                      AND ( (e_proc.id_tipo_examen = 1 AND eo_proc.procesado = TRUE) OR
+                            (e_proc.id_tipo_examen = 2 AND eh_proc.procesado = TRUE) OR
+                            (e_proc.id_tipo_examen = 3 AND es_proc.procesado = TRUE) )
+                )
+            GROUP BY m.id_muestra, m.numero_muestra, paciente, p.genero, p.edad, m.fecha_recepcion
+            ORDER BY m.fecha_recepcion DESC, m.numero_muestra DESC;"; // Ordenar por fecha o número
+
+        try
+        {
+            using (var conn = DatabaseConnection.GetConnection())
+            using (var cmd = new NpgsqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                await conn.OpenAsync();
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        resultados.Add(new MuestraInfoViewModel
+                        {
+                            id_Muestra = reader.GetInt32(reader.GetOrdinal("id_muestra")),
+                            NumeroMuestra = reader.GetInt32(reader.GetOrdinal("numero_muestra")),
+                            Paciente = reader.GetString(reader.GetOrdinal("paciente")),
+                            Genero = reader.GetString(reader.GetOrdinal("genero")),
+                            Edad = reader.GetInt32(reader.GetOrdinal("edad")),
+                            FechaRecepcion = reader.GetDateTime(reader.GetOrdinal("fecha_recepcion")),
+                            ExamenesCompletadosStr = reader.GetString(reader.GetOrdinal("examenes_completados_str")),
+                            ExamenesPendientesStr = "" // No aplica en esta vista
+                        });
+                    }
+                }
+            }
+        }
+        catch (Exception ex) { Console.WriteLine($"Error en ObtenerMuestrasConExamenesCompletadosPorProyectoIdAsync: {ex}"); throw; }
+        return resultados;
+    }
 }
 

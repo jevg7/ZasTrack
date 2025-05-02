@@ -301,8 +301,6 @@ namespace ZasTrack.Repositories
 
             return pacientes;
         }
-
-
         public bool ExisteCodigoBeneficiario(string codigoBeneficiario)
         {
             // Consulta para contar cuántos pacientes tienen ese código
@@ -594,7 +592,77 @@ namespace ZasTrack.Repositories
             catch (Exception ex) { Console.WriteLine($"ERROR en BuscarPacientesCompleto: {ex.ToString()}"); throw; }
             return pacientesVM;
         }
+        public async Task<List<pacientes>> ObtenerPorProyectoIdAsync(int idProyecto)
+        {
+            var listaPacientes = new List<pacientes>();
+            // Asegúrate que los nombres de columnas y tabla sean correctos
+            string query = @"SELECT id_paciente, nombres, apellidos, edad, genero,
+                                codigo_beneficiario, fecha_nacimiento, observacion
+                         FROM pacientes
+                         WHERE id_proyecto = @idProyecto
+                         ORDER BY apellidos, nombres;"; // Ordenar alfabéticamente
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    await conn.OpenAsync();
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            listaPacientes.Add(new pacientes
+                            {
+                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                edad = reader.IsDBNull(reader.GetOrdinal("edad")) ? 0 : reader.GetInt32(reader.GetOrdinal("edad")), // Manejar posible NULL en edad
+                                genero = reader.IsDBNull(reader.GetOrdinal("genero")) ? "" : reader.GetString(reader.GetOrdinal("genero")), // Manejar NULL
+                                codigo_beneficiario = reader.IsDBNull(reader.GetOrdinal("codigo_beneficiario")) ? "" : reader.GetString(reader.GetOrdinal("codigo_beneficiario")), // Manejar NULL
+                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")), // Leer directamente
+                                observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? null : reader.GetString(reader.GetOrdinal("observacion")), // Manejar NULL
+                                id_proyecto = idProyecto // Ya sabemos el id del proyecto
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en PacienteRepository.ObtenerPorProyectoIdAsync (ID: {idProyecto}): {ex}");
+                // Relanzar para que la UI maneje el error
+                throw;
+            }
+            return listaPacientes;
+        }
+        public async Task<int> ContarPorProyectoIdAsync(int idProyecto)
+        {
+            string query = "SELECT COUNT(*) FROM pacientes WHERE id_proyecto = @idProyecto";
+            int count = 0;
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    await conn.OpenAsync();
+                    // ExecuteScalarAsync devuelve object, hacemos cast seguro a long y luego a int
+                    var result = await cmd.ExecuteScalarAsync();
+                    count = Convert.ToInt32(result ?? 0L); // Convertir a long (0L) si es null, luego a int
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en PacienteRepository.ContarPorProyectoIdAsync (ID: {idProyecto}): {ex}");
+                // Relanzar para que la UI maneje el error, o devolver -1 si prefieres
+                throw;
+            }
+            return count;
+        }
 
     }
+
 
 }

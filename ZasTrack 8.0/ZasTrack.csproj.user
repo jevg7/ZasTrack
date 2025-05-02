@@ -64,6 +64,9 @@
     <Compile Update="Forms\wProyectos\wProyectos.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\wProyectos\wVerDetallesProyecto.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\wProyectos\wVerProyecto.cs">
       <SubType>Form</SubType>
     </Compile>

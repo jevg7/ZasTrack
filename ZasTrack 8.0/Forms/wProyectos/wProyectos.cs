@@ -9,27 +9,18 @@ using ZasTrack.Repositories; // Necesario para ProyectoRepository si se usara aq
 namespace ZasTrack.Forms.wProyectos
 {
     public partial class wProyectos : Form
-    {
-        // --- Campos ---
-        // Ya no necesitamos el repositorio aquí si solo navegamos
-        // private ProyectoRepository proyectoRepository;
+    {       
         private Form? activeProyectosForm = null; // Guarda referencia al form hijo activo EN ESTE PANEL
-
         public wProyectos()
         {
             InitializeComponent();
-            // Ya no necesitamos inicializar el repositorio aquí
-            // proyectoRepository = new ProyectoRepository();
         }
-
         private void wProyectos_Load(object sender, EventArgs e)
         {
             // Carga el formulario de ver proyectos por defecto al iniciar
             // Usamos el nuevo método ShowChildForm
             ShowChildForm(new ZasTrack.Forms.wProyectos.wVerProyecto()); // Ajusta namespace si es diferente
-        }
-
-      
+        }      
         private void ShowChildForm(Form childForm)
         {
             // 1. No hacer nada si se intenta abrir el mismo tipo de form que ya está activo
@@ -69,31 +60,25 @@ namespace ZasTrack.Forms.wProyectos
                 activeProyectosForm = null; // Resetear
             }
         }
-
-        // --- Eventos del MenuStrip ---
+        #region Eventos
         private void agregarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Llama al nuevo método con el formulario correspondiente
-            ShowChildForm(new ZasTrack.Forms.wProyectos.wAñadirProyecto()); // Ajusta namespace si es diferente
+            ShowChildForm(new ZasTrack.Forms.wProyectos.wAñadirProyecto());
         }
-
         private void verProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Llama al nuevo método con el formulario correspondiente
-            ShowChildForm(new ZasTrack.Forms.wProyectos.wVerProyecto()); // Ajusta namespace si es diferente
+            ShowChildForm(new ZasTrack.Forms.wProyectos.wVerProyecto()); 
         }
-
-        // Los handlers para editar/eliminar (aún vacíos)
         private void editarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // TODO: Implementar lógica para abrir wEditarProyecto (probablemente necesite el ID del proyecto seleccionado en wVerProyecto)
             MessageBox.Show("Funcionalidad Editar Proyecto - Pendiente de implementar.");
         }
-
-        private void eliminarProyectoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // TODO: Implementar lógica para eliminar proyecto (necesita ID, confirmación y llamada al repo)
+        private void eliminarProyectoToolStripMenuItem_Click(object sender, EventArgs e)        {
             MessageBox.Show("Funcionalidad Eliminar Proyecto - Pendiente de implementar.");
         }
+        #endregion
     } // Fin clase wProyectos
 } // Fin namespace

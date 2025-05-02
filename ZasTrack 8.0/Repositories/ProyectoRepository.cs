@@ -304,6 +304,48 @@ namespace ZasTrack.Repositories
                 throw; // Relanzar para que la UI sepa que falló la validación
             }
         }
+        // En ProyectoRepository.cs
 
+        public async Task<Proyecto?> ObtenerProyectoPorIdAsync(int idProyecto)
+        {
+            Proyecto? proyecto = null;
+            // --- CAMBIO AQUÍ: Usar @idProyecto en la query ---
+            string query = "SELECT id_proyecto, nombre, codigo, fecha_inicio, fecha_fin, is_archived " +
+                           "FROM proyecto WHERE id_proyecto = @idProyecto LIMIT 1;";
+            // (También es buena práctica listar las columnas explícitamente en lugar de SELECT *)
+            // --- FIN CAMBIO ---
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    // El nombre del parámetro aquí SÍ coincide con la query ahora
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    await conn.OpenAsync();
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            proyecto = new Proyecto
+                            {
+                                id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto")),
+                                nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                                codigo = reader.GetString(reader.GetOrdinal("codigo")),
+                                fecha_inicio = reader.GetDateTime(reader.GetOrdinal("fecha_inicio")),
+                                fecha_fin = reader.IsDBNull(reader.GetOrdinal("fecha_fin")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("fecha_fin")),
+                                IsArchived = reader.GetBoolean(reader.GetOrdinal("is_archived")) // Asumiendo que IsArchived se mapea a is_archived en DB
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en ObtenerProyectoPorIdAsync (ID: {idProyecto}): {ex}");
+                // throw; // Opcional: relanzar
+            }
+            return proyecto;
+        }
     }
 }

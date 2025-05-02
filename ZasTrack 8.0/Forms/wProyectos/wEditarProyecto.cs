@@ -8,13 +8,9 @@ namespace ZasTrack.Forms.wProyectos // O tu namespace correcto
 {
     public partial class wEditarProyecto : Form
     {
-        // Campo privado para guardar el proyecto que estamos editando
         private readonly Proyecto _proyectoActual;
-        // Repositorio (lo necesitaremos para guardar y validar después)
         private readonly ProyectoRepository _proyectoRepository;
 
-        // --- CONSTRUCTOR MODIFICADO ---
-        // Ahora acepta un objeto Proyecto
         public wEditarProyecto(Proyecto proyectoAEditar)
         {
             InitializeComponent();
@@ -27,8 +23,6 @@ namespace ZasTrack.Forms.wProyectos // O tu namespace correcto
             // Inicializamos el repositorio
             _proyectoRepository = new ProyectoRepository();
         }
-
-        // --- EVENTO LOAD: Llenar los campos con datos existentes ---
         private void wEditarProyecto_Load(object sender, EventArgs e)
         {
             if (_proyectoActual != null)
@@ -45,9 +39,7 @@ namespace ZasTrack.Forms.wProyectos // O tu namespace correcto
                 this.Close(); // Cerrar si no hay proyecto
             }
         }
-
-        // En wEditarProyecto.cs
-
+        #region Evento de Botones
         private void btnGuardarCambios_Click(object sender, EventArgs e)
         {
             // 1. Validar Campos Vacíos (igual que en añadir)
@@ -135,19 +127,12 @@ namespace ZasTrack.Forms.wProyectos // O tu namespace correcto
                 MessageBox.Show($"Ocurrió un error inesperado al actualizar:\n{ex.Message}", "Error General", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        // --- BOTÓN CANCELAR ---
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             // Simplemente cierra el formulario sin guardar nada
             this.DialogResult = DialogResult.Cancel; // Opcional, útil si se abre con ShowDialog()
             this.Close();
         }
-
-        // --- BORRAR MANEJADORES VACÍOS ---
-        // Borra los métodos vacíos como txtCodigo_TextChanged, lblCodigoProyecto_Click, etc.
-        // que el diseñador pudo haber creado si hiciste doble clic por error.
-        // Recuerda desconectarlos primero en el diseñador (Propiedades -> Eventos ⚡).
-
+        #endregion
     } // Fin clase wEditarProyecto
 } // Fin namespace

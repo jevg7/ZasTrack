@@ -42,7 +42,7 @@
             // dtpFechaInicio
             // 
             dtpFechaInicio.Anchor = AnchorStyles.None;
-            dtpFechaInicio.Location = new Point(294, 297);
+            dtpFechaInicio.Location = new Point(280, 299);
             dtpFechaInicio.Margin = new Padding(5, 4, 5, 4);
             dtpFechaInicio.Name = "dtpFechaInicio";
             dtpFechaInicio.Size = new Size(271, 27);
@@ -51,7 +51,7 @@
             // txtNombreProyecto
             // 
             txtNombreProyecto.Anchor = AnchorStyles.None;
-            txtNombreProyecto.Location = new Point(296, 172);
+            txtNombreProyecto.Location = new Point(282, 174);
             txtNombreProyecto.Margin = new Padding(5, 4, 5, 4);
             txtNombreProyecto.Name = "txtNombreProyecto";
             txtNombreProyecto.Size = new Size(271, 27);
@@ -61,7 +61,7 @@
             // 
             lblNombreProy.Anchor = AnchorStyles.None;
             lblNombreProy.AutoSize = true;
-            lblNombreProy.Location = new Point(365, 148);
+            lblNombreProy.Location = new Point(351, 150);
             lblNombreProy.Margin = new Padding(5, 0, 5, 0);
             lblNombreProy.Name = "lblNombreProy";
             lblNombreProy.Size = new Size(154, 20);
@@ -72,7 +72,7 @@
             // 
             lblFechaInicio.Anchor = AnchorStyles.None;
             lblFechaInicio.AutoSize = true;
-            lblFechaInicio.Location = new Point(174, 300);
+            lblFechaInicio.Location = new Point(160, 302);
             lblFechaInicio.Margin = new Padding(5, 0, 5, 0);
             lblFechaInicio.Name = "lblFechaInicio";
             lblFechaInicio.Size = new Size(111, 20);
@@ -83,7 +83,7 @@
             // 
             btnGuardarProyecto.Anchor = AnchorStyles.None;
             btnGuardarProyecto.Cursor = Cursors.Hand;
-            btnGuardarProyecto.Location = new Point(345, 348);
+            btnGuardarProyecto.Location = new Point(331, 350);
             btnGuardarProyecto.Margin = new Padding(5, 4, 5, 4);
             btnGuardarProyecto.Name = "btnGuardarProyecto";
             btnGuardarProyecto.Size = new Size(168, 43);
@@ -96,7 +96,7 @@
             // 
             txtCodigo.Anchor = AnchorStyles.None;
             txtCodigo.ForeColor = Color.Black;
-            txtCodigo.Location = new Point(296, 239);
+            txtCodigo.Location = new Point(282, 241);
             txtCodigo.Margin = new Padding(5, 4, 5, 4);
             txtCodigo.Name = "txtCodigo";
             txtCodigo.Size = new Size(271, 27);
@@ -106,7 +106,7 @@
             // 
             lblCodigoProyecto.Anchor = AnchorStyles.None;
             lblCodigoProyecto.AutoSize = true;
-            lblCodigoProyecto.Location = new Point(365, 215);
+            lblCodigoProyecto.Location = new Point(351, 217);
             lblCodigoProyecto.Margin = new Padding(5, 0, 5, 0);
             lblCodigoProyecto.Name = "lblCodigoProyecto";
             lblCodigoProyecto.Size = new Size(148, 20);

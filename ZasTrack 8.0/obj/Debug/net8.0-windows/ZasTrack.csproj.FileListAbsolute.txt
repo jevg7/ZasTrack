@@ -287,3 +287,4 @@ C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wAñadirProyecto.resources
 C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wEditarProyecto.resources
+C:\Users\alexj\OneDrive\Documentos\Github\ZasTrack\ZasTrack 8.0\obj\Debug\net8.0-windows\ZasTrack.Forms.wProyectos.wVerDetallesProyecto.resources
