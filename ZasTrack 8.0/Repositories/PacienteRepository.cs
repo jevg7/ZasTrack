@@ -661,6 +661,60 @@ namespace ZasTrack.Repositories
             }
             return count;
         }
+        public async Task<List<pacientes>> BuscarPacientesAsync(string criterioBusqueda, int idProyecto) // Usa tu clase 'pacientes'
+        {
+            var listaPacientes = new List<pacientes>();
+            // Prepara el criterio para búsqueda parcial con ILIKE (insensible a mayúsculas/minúsculas)
+            string likePattern = $"%{criterioBusqueda}%";
+
+            // Query que busca en varios campos y filtra por proyecto
+            string query = @"SELECT id_paciente, nombres, apellidos, edad, genero,
+                                codigo_beneficiario, fecha_nacimiento, observacion, id_proyecto
+                         FROM pacientes
+                         WHERE id_proyecto = @idProyecto
+                           AND (nombres ILIKE @criterio OR
+                                apellidos ILIKE @criterio OR
+                                codigo_beneficiario ILIKE @criterio)
+                         ORDER BY apellidos, nombres;";
+
+            try
+            {
+                using (var conn = DatabaseConnection.GetConnection())
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idProyecto", idProyecto);
+                    cmd.Parameters.AddWithValue("@criterio", likePattern);
+
+                    await conn.OpenAsync();
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // *** OJO: Usa el nombre de tu clase (pacientes o Paciente) ***
+                            // *** y asegúrate que las propiedades coincidan ***
+                            listaPacientes.Add(new pacientes
+                            {
+                                id_paciente = reader.GetInt32(reader.GetOrdinal("id_paciente")),
+                                nombres = reader.GetString(reader.GetOrdinal("nombres")),
+                                apellidos = reader.GetString(reader.GetOrdinal("apellidos")),
+                                edad = reader.IsDBNull(reader.GetOrdinal("edad")) ? 0 : reader.GetInt32(reader.GetOrdinal("edad")),
+                                genero = reader.IsDBNull(reader.GetOrdinal("genero")) ? "" : reader.GetString(reader.GetOrdinal("genero")),
+                                codigo_beneficiario = reader.IsDBNull(reader.GetOrdinal("codigo_beneficiario")) ? "" : reader.GetString(reader.GetOrdinal("codigo_beneficiario")),
+                                fecha_nacimiento = reader.GetDateTime(reader.GetOrdinal("fecha_nacimiento")), // Asumiendo que es DateTime no nullable
+                                observacion = reader.IsDBNull(reader.GetOrdinal("observacion")) ? null : reader.GetString(reader.GetOrdinal("observacion")),
+                                id_proyecto = reader.GetInt32(reader.GetOrdinal("id_proyecto"))
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en PacienteRepository.BuscarPacientesAsync: {ex}");
+                throw; // Relanzar para que la UI lo maneje
+            }
+            return listaPacientes;
+        }
 
     }
 

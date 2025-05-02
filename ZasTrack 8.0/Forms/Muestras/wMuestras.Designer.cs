@@ -30,6 +30,11 @@
         {
             components = new System.ComponentModel.Container();
             pnlProyecto = new Panel();
+            dgvResultadosBusqueda = new DataGridView();
+            colCodigoResultado = new DataGridViewTextBoxColumn();
+            colNombresResultado = new DataGridViewTextBoxColumn();
+            colApellidosResultado = new DataGridViewTextBoxColumn();
+            colFechaNacResultado = new DataGridViewTextBoxColumn();
             txtIdPaciente = new TextBox();
             btnBuscar = new Button();
             txtBuscar = new TextBox();
@@ -49,11 +54,13 @@
             lblMuestrasId = new Label();
             proyectoBindingSource = new BindingSource(components);
             pnlProyecto.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvResultadosBusqueda).BeginInit();
             ((System.ComponentModel.ISupportInitialize)proyectoBindingSource).BeginInit();
             SuspendLayout();
             // 
             // pnlProyecto
             // 
+            pnlProyecto.Controls.Add(dgvResultadosBusqueda);
             pnlProyecto.Controls.Add(txtIdPaciente);
             pnlProyecto.Controls.Add(btnBuscar);
             pnlProyecto.Controls.Add(txtBuscar);
@@ -79,6 +86,55 @@
             pnlProyecto.TabIndex = 0;
             pnlProyecto.Paint += pnlProyecto_Paint;
             // 
+            // dgvResultadosBusqueda
+            // 
+            dgvResultadosBusqueda.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            dgvResultadosBusqueda.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvResultadosBusqueda.Columns.AddRange(new DataGridViewColumn[] { colCodigoResultado, colNombresResultado, colApellidosResultado, colFechaNacResultado });
+            dgvResultadosBusqueda.Location = new Point(483, 301);
+            dgvResultadosBusqueda.MultiSelect = false;
+            dgvResultadosBusqueda.Name = "dgvResultadosBusqueda";
+            dgvResultadosBusqueda.ReadOnly = true;
+            dgvResultadosBusqueda.RowHeadersWidth = 51;
+            dgvResultadosBusqueda.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvResultadosBusqueda.Size = new Size(446, 138);
+            dgvResultadosBusqueda.TabIndex = 23;
+            dgvResultadosBusqueda.TabStop = false;
+            dgvResultadosBusqueda.Visible = false;
+            dgvResultadosBusqueda.CellDoubleClick += dgvResultadosBusqueda_CellDoubleClick;
+            // 
+            // colCodigoResultado
+            // 
+            colCodigoResultado.HeaderText = "Código";
+            colCodigoResultado.MinimumWidth = 6;
+            colCodigoResultado.Name = "colCodigoResultado";
+            colCodigoResultado.ReadOnly = true;
+            colCodigoResultado.Width = 87;
+            // 
+            // colNombresResultado
+            // 
+            colNombresResultado.HeaderText = "Nombres";
+            colNombresResultado.MinimumWidth = 6;
+            colNombresResultado.Name = "colNombresResultado";
+            colNombresResultado.ReadOnly = true;
+            colNombresResultado.Width = 99;
+            // 
+            // colApellidosResultado
+            // 
+            colApellidosResultado.HeaderText = "Apellidos";
+            colApellidosResultado.MinimumWidth = 6;
+            colApellidosResultado.Name = "colApellidosResultado";
+            colApellidosResultado.ReadOnly = true;
+            colApellidosResultado.Width = 101;
+            // 
+            // colFechaNacResultado
+            // 
+            colFechaNacResultado.HeaderText = "Fecha Nac.";
+            colFechaNacResultado.MinimumWidth = 6;
+            colFechaNacResultado.Name = "colFechaNacResultado";
+            colFechaNacResultado.ReadOnly = true;
+            colFechaNacResultado.Width = 109;
+            // 
             // txtIdPaciente
             // 
             txtIdPaciente.Location = new Point(67, 69);
@@ -90,11 +146,11 @@
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(67, 305);
+            btnBuscar.Location = new Point(372, 261);
             btnBuscar.Margin = new Padding(3, 4, 3, 4);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(278, 33);
-            btnBuscar.TabIndex = 21;
+            btnBuscar.Size = new Size(84, 33);
+            btnBuscar.TabIndex = 4;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
@@ -105,13 +161,14 @@
             txtBuscar.Margin = new Padding(3, 4, 3, 4);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.Size = new Size(277, 27);
-            txtBuscar.TabIndex = 20;
+            txtBuscar.TabIndex = 2;
+            txtBuscar.KeyDown += txtBuscar_KeyDown;
             // 
             // lblExamenes
             // 
             lblExamenes.AutoSize = true;
             lblExamenes.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblExamenes.Location = new Point(67, 416);
+            lblExamenes.Location = new Point(61, 337);
             lblExamenes.Name = "lblExamenes";
             lblExamenes.Size = new Size(101, 28);
             lblExamenes.TabIndex = 19;
@@ -121,11 +178,11 @@
             // 
             chkSangre.AutoSize = true;
             chkSangre.Font = new Font("Segoe UI", 13F);
-            chkSangre.Location = new Point(287, 456);
+            chkSangre.Location = new Point(281, 377);
             chkSangre.Margin = new Padding(3, 4, 3, 4);
             chkSangre.Name = "chkSangre";
             chkSangre.Size = new Size(78, 34);
-            chkSangre.TabIndex = 18;
+            chkSangre.TabIndex = 9;
             chkSangre.Text = "BHC";
             chkSangre.UseVisualStyleBackColor = true;
             chkSangre.CheckedChanged += chkSangre_CheckedChanged_1;
@@ -134,11 +191,11 @@
             // 
             chkOrina.AutoSize = true;
             chkOrina.Font = new Font("Segoe UI", 13F);
-            chkOrina.Location = new Point(183, 456);
+            chkOrina.Location = new Point(177, 377);
             chkOrina.Margin = new Padding(3, 4, 3, 4);
             chkOrina.Name = "chkOrina";
             chkOrina.Size = new Size(78, 34);
-            chkOrina.TabIndex = 17;
+            chkOrina.TabIndex = 8;
             chkOrina.Text = "EGO";
             chkOrina.UseVisualStyleBackColor = true;
             // 
@@ -146,22 +203,23 @@
             // 
             chkHeces.AutoSize = true;
             chkHeces.Font = new Font("Segoe UI", 13F);
-            chkHeces.Location = new Point(67, 456);
+            chkHeces.Location = new Point(61, 377);
             chkHeces.Margin = new Padding(3, 4, 3, 4);
             chkHeces.Name = "chkHeces";
             chkHeces.Size = new Size(77, 34);
-            chkHeces.TabIndex = 16;
+            chkHeces.TabIndex = 7;
             chkHeces.Text = "EGH";
             chkHeces.UseVisualStyleBackColor = true;
             chkHeces.CheckedChanged += chkHeces_CheckedChanged;
             // 
             // txtFecha
             // 
-            txtFecha.Location = new Point(375, 267);
+            txtFecha.Location = new Point(483, 267);
             txtFecha.Margin = new Padding(3, 4, 3, 4);
             txtFecha.Name = "txtFecha";
             txtFecha.Size = new Size(277, 27);
-            txtFecha.TabIndex = 15;
+            txtFecha.TabIndex = 6;
+            txtFecha.TabStop = false;
             txtFecha.TextChanged += txtFecha_TextChanged_1;
             // 
             // cmbProyecto
@@ -171,7 +229,7 @@
             cmbProyecto.Margin = new Padding(3, 4, 3, 4);
             cmbProyecto.Name = "cmbProyecto";
             cmbProyecto.Size = new Size(215, 28);
-            cmbProyecto.TabIndex = 13;
+            cmbProyecto.TabIndex = 1;
             cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
             // 
             // lblProyecto
@@ -186,7 +244,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(61, 565);
+            btnGuardar.Location = new Point(55, 435);
             btnGuardar.Margin = new Padding(3, 4, 3, 4);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(242, 55);
@@ -199,7 +257,7 @@
             // 
             lblFecha.AutoSize = true;
             lblFecha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblFecha.Location = new Point(375, 235);
+            lblFecha.Location = new Point(483, 235);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(66, 28);
             lblFecha.TabIndex = 8;
@@ -207,11 +265,13 @@
             // 
             // txtPaciente
             // 
-            txtPaciente.Location = new Point(67, 381);
+            txtPaciente.Location = new Point(67, 302);
             txtPaciente.Margin = new Padding(3, 4, 3, 4);
             txtPaciente.Name = "txtPaciente";
+            txtPaciente.ReadOnly = true;
             txtPaciente.Size = new Size(277, 27);
-            txtPaciente.TabIndex = 7;
+            txtPaciente.TabIndex = 3;
+            txtPaciente.TabStop = false;
             txtPaciente.TextChanged += txtIdPaciente_TextChanged;
             // 
             // lblRegMuestra
@@ -226,11 +286,12 @@
             // 
             // txtMuestrasId
             // 
-            txtMuestrasId.Location = new Point(375, 187);
+            txtMuestrasId.Location = new Point(483, 187);
             txtMuestrasId.Margin = new Padding(3, 4, 3, 4);
             txtMuestrasId.Name = "txtMuestrasId";
             txtMuestrasId.Size = new Size(277, 27);
             txtMuestrasId.TabIndex = 5;
+            txtMuestrasId.TabStop = false;
             txtMuestrasId.TextChanged += txtMuestrasId_TextChanged;
             // 
             // label2
@@ -247,7 +308,7 @@
             // 
             lblMuestrasId.AutoSize = true;
             lblMuestrasId.Font = new Font("Segoe UI", 12F);
-            lblMuestrasId.Location = new Point(375, 155);
+            lblMuestrasId.Location = new Point(483, 155);
             lblMuestrasId.Name = "lblMuestrasId";
             lblMuestrasId.Size = new Size(115, 28);
             lblMuestrasId.TabIndex = 0;
@@ -270,6 +331,7 @@
             Load += wMuestras_Load;
             pnlProyecto.ResumeLayout(false);
             pnlProyecto.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvResultadosBusqueda).EndInit();
             ((System.ComponentModel.ISupportInitialize)proyectoBindingSource).EndInit();
             ResumeLayout(false);
         }
@@ -295,5 +357,10 @@
         private Button btnBuscar;
         private TextBox txtBuscar;
         private TextBox txtIdPaciente;
+        private DataGridView dgvResultadosBusqueda;
+        private DataGridViewTextBoxColumn colCodigoResultado;
+        private DataGridViewTextBoxColumn colNombresResultado;
+        private DataGridViewTextBoxColumn colApellidosResultado;
+        private DataGridViewTextBoxColumn colFechaNacResultado;
     }
 }

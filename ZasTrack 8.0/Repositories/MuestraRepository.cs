@@ -259,9 +259,106 @@ namespace ZasTrack.Repositories
             }
             return listaMuestras;
         }
-        // --- FIN NUEVO MÉTODO ---
+        public async Task<int> GuardarMuestraCompletaAsync(Muestra muestra, List<int> idsTiposExamen)
+        {
+            int newMuestraId = 0; // 0 o -1 indicará fallo
 
-        // ... resto de la clase ...
+            // Abre conexión una sola vez
+            await using var conn = DatabaseConnection.GetConnection();
+            await conn.OpenAsync();
+
+            // Inicia transacción
+            await using var transaction = await conn.BeginTransactionAsync();
+            Console.WriteLine("DEBUG: Transacción iniciada para guardar muestra completa.");
+
+            try
+            {
+                // --- 1. Guardar la Muestra ---
+                string queryMuestra = @"
+                INSERT INTO muestra (fecha_recepcion, id_proyecto, id_paciente, numero_muestra)
+                VALUES (@FechaRecepcion, @IdProyecto, @IdPaciente, @NumeroMuestra)
+                RETURNING id_muestra";
+
+                await using (var cmdMuestra = new NpgsqlCommand(queryMuestra, conn, transaction)) // Usa la transacción
+                {
+                    cmdMuestra.Parameters.AddWithValue("@FechaRecepcion", muestra.FechaRecepcion);
+                    cmdMuestra.Parameters.AddWithValue("@IdProyecto", muestra.IdProyecto);
+                    cmdMuestra.Parameters.AddWithValue("@IdPaciente", muestra.IdPaciente);
+                    cmdMuestra.Parameters.AddWithValue("@NumeroMuestra", muestra.NumeroMuestra);
+
+                    // Ejecutar y obtener el ID generado
+                    var result = await cmdMuestra.ExecuteScalarAsync();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        newMuestraId = Convert.ToInt32(result);
+                        Console.WriteLine($"DEBUG: Muestra guardada con ID: {newMuestraId}");
+                    }
+                    else
+                    {
+                        throw new Exception("No se pudo obtener el ID de la nueva muestra después de insertarla.");
+                    }
+                }
+
+                // --- 2. Guardar los Vínculos Muestra-Examen (Batch Insert) ---
+                if (idsTiposExamen != null && idsTiposExamen.Any())
+                {
+                    Console.WriteLine($"DEBUG: Intentando vincular {idsTiposExamen.Count} tipos de examen.");
+                    // Construir la parte VALUES de la consulta dinámicamente
+                    var sqlValues = new List<string>();
+                    var parameters = new List<NpgsqlParameter>();
+                    parameters.Add(new NpgsqlParameter("@idMuestra", newMuestraId)); // Parámetro común
+
+                    for (int i = 0; i < idsTiposExamen.Count; i++)
+                    {
+                        string paramName = $"@idTipoExamen{i}";
+                        sqlValues.Add($"(@idMuestra, {paramName})"); // Añade (idMuestra, @idTipoExamenN)
+                        parameters.Add(new NpgsqlParameter(paramName, idsTiposExamen[i]));
+                    }
+
+                    // Construir la consulta completa de batch insert
+                    string queryExamenes = $@"
+                    INSERT INTO muestra_examen (id_muestra, id_tipo_examen)
+                    VALUES {string.Join(", ", sqlValues)}
+                    ON CONFLICT (id_muestra, id_tipo_examen) DO NOTHING"; // Ignorar si ya existe el vínculo
+
+                    await using (var cmdExamenes = new NpgsqlCommand(queryExamenes, conn, transaction)) // Usa la transacción
+                    {
+                        cmdExamenes.Parameters.AddRange(parameters.ToArray());
+                        int rowsAffected = await cmdExamenes.ExecuteNonQueryAsync();
+                        Console.WriteLine($"DEBUG: Vínculos muestra_examen afectados: {rowsAffected}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("WARN: No se seleccionaron tipos de examen para vincular.");
+                    // No es un error necesariamente, pero es bueno saberlo.
+                }
+
+                // --- 3. Si todo fue bien, confirmar la transacción ---
+                await transaction.CommitAsync();
+                Console.WriteLine("DEBUG: Transacción completada (Commit).");
+                return newMuestraId; // Devuelve el ID de la muestra guardada
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR GuardarMuestraCompletaAsync: {ex.ToString()}");
+                try
+                {
+                    // Si algo falló, deshacer la transacción
+                    await transaction.RollbackAsync();
+                    Console.WriteLine("DEBUG: Transacción deshecha (Rollback).");
+                }
+                catch (Exception exRollback)
+                {
+                    Console.WriteLine($"ERROR ¡FALLÓ EL ROLLBACK!: {exRollback.ToString()}");
+                }
+                // Devolver 0 o -1 para indicar fallo, o relanzar la excepción original
+                // throw; // Opcional: relanzar si quieres manejarlo más arriba
+                return 0; // Indica fallo
+            }
+            // El using se encarga de cerrar la conexión
+        }
+
     }
 
 }
