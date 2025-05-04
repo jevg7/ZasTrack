@@ -60,225 +60,213 @@
             // 
             lblDiferencial.AutoSize = true;
             lblDiferencial.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblDiferencial.Location = new Point(712, 69);
+            lblDiferencial.Location = new Point(850, 91);
             lblDiferencial.Name = "lblDiferencial";
-            lblDiferencial.Size = new Size(103, 25);
+            lblDiferencial.Size = new Size(123, 31);
             lblDiferencial.TabIndex = 83;
             lblDiferencial.Text = "Diferencial";
             // 
             // txtBasofilos
             // 
-            txtBasofilos.Location = new Point(723, 402);
-            txtBasofilos.Margin = new Padding(3, 2, 3, 2);
+            txtBasofilos.Location = new Point(826, 536);
             txtBasofilos.Name = "txtBasofilos";
-            txtBasofilos.Size = new Size(153, 23);
+            txtBasofilos.Size = new Size(174, 27);
             txtBasofilos.TabIndex = 80;
             // 
             // lblBasofilos
             // 
             lblBasofilos.AutoSize = true;
             lblBasofilos.Font = new Font("Segoe UI", 12F);
-            lblBasofilos.Location = new Point(565, 399);
+            lblBasofilos.Location = new Point(646, 532);
             lblBasofilos.Name = "lblBasofilos";
-            lblBasofilos.Size = new Size(72, 21);
+            lblBasofilos.Size = new Size(89, 28);
             lblBasofilos.TabIndex = 79;
             lblBasofilos.Text = "Basofilos";
             // 
             // txtEosinofilos
             // 
-            txtEosinofilos.Location = new Point(723, 332);
-            txtEosinofilos.Margin = new Padding(3, 2, 3, 2);
+            txtEosinofilos.Location = new Point(826, 443);
             txtEosinofilos.Name = "txtEosinofilos";
-            txtEosinofilos.Size = new Size(153, 23);
+            txtEosinofilos.Size = new Size(174, 27);
             txtEosinofilos.TabIndex = 78;
             // 
             // lblEosinofilos
             // 
             lblEosinofilos.AutoSize = true;
             lblEosinofilos.Font = new Font("Segoe UI", 12F);
-            lblEosinofilos.Location = new Point(565, 329);
+            lblEosinofilos.Location = new Point(646, 439);
             lblEosinofilos.Name = "lblEosinofilos";
-            lblEosinofilos.Size = new Size(85, 21);
+            lblEosinofilos.Size = new Size(106, 28);
             lblEosinofilos.TabIndex = 77;
             lblEosinofilos.Text = "Eosinofilos";
             // 
             // txtMonocitos
             // 
-            txtMonocitos.Location = new Point(723, 259);
-            txtMonocitos.Margin = new Padding(3, 2, 3, 2);
+            txtMonocitos.Location = new Point(826, 345);
             txtMonocitos.Name = "txtMonocitos";
-            txtMonocitos.Size = new Size(153, 23);
+            txtMonocitos.Size = new Size(174, 27);
             txtMonocitos.TabIndex = 76;
             // 
             // lblMonocitos
             // 
             lblMonocitos.AutoSize = true;
             lblMonocitos.Font = new Font("Segoe UI", 12F);
-            lblMonocitos.Location = new Point(565, 256);
+            lblMonocitos.Location = new Point(646, 341);
             lblMonocitos.Name = "lblMonocitos";
-            lblMonocitos.Size = new Size(83, 21);
+            lblMonocitos.Size = new Size(106, 28);
             lblMonocitos.TabIndex = 75;
             lblMonocitos.Text = "Monocitos";
             // 
             // txtLinfocitos
             // 
-            txtLinfocitos.Location = new Point(723, 180);
-            txtLinfocitos.Margin = new Padding(3, 2, 3, 2);
+            txtLinfocitos.Location = new Point(826, 240);
             txtLinfocitos.Name = "txtLinfocitos";
-            txtLinfocitos.Size = new Size(153, 23);
+            txtLinfocitos.Size = new Size(174, 27);
             txtLinfocitos.TabIndex = 74;
             // 
             // lblLinfocitos
             // 
             lblLinfocitos.AutoSize = true;
             lblLinfocitos.Font = new Font("Segoe UI", 12F);
-            lblLinfocitos.Location = new Point(565, 177);
+            lblLinfocitos.Location = new Point(646, 236);
             lblLinfocitos.Name = "lblLinfocitos";
-            lblLinfocitos.Size = new Size(77, 21);
+            lblLinfocitos.Size = new Size(96, 28);
             lblLinfocitos.TabIndex = 73;
             lblLinfocitos.Text = "Linfocitos";
             // 
             // txtNeutrofilos
             // 
-            txtNeutrofilos.Location = new Point(723, 112);
-            txtNeutrofilos.Margin = new Padding(3, 2, 3, 2);
+            txtNeutrofilos.Location = new Point(826, 149);
             txtNeutrofilos.Name = "txtNeutrofilos";
-            txtNeutrofilos.Size = new Size(153, 23);
+            txtNeutrofilos.Size = new Size(174, 27);
             txtNeutrofilos.TabIndex = 72;
             // 
             // lblNeutrofilos
             // 
             lblNeutrofilos.AutoSize = true;
             lblNeutrofilos.Font = new Font("Segoe UI", 12F);
-            lblNeutrofilos.Location = new Point(561, 112);
+            lblNeutrofilos.Location = new Point(641, 149);
             lblNeutrofilos.Name = "lblNeutrofilos";
-            lblNeutrofilos.Size = new Size(88, 21);
+            lblNeutrofilos.Size = new Size(110, 28);
             lblNeutrofilos.TabIndex = 71;
             lblNeutrofilos.Text = "Neutrofilos";
             // 
             // txtMCHC
             // 
-            txtMCHC.Location = new Point(192, 413);
-            txtMCHC.Margin = new Padding(3, 2, 3, 2);
+            txtMCHC.Location = new Point(221, 551);
             txtMCHC.Name = "txtMCHC";
-            txtMCHC.Size = new Size(205, 23);
+            txtMCHC.Size = new Size(234, 27);
             txtMCHC.TabIndex = 70;
             // 
             // lblMCHC
             // 
             lblMCHC.AutoSize = true;
             lblMCHC.Font = new Font("Segoe UI", 12F);
-            lblMCHC.Location = new Point(68, 411);
+            lblMCHC.Location = new Point(89, 548);
             lblMCHC.Name = "lblMCHC";
-            lblMCHC.Size = new Size(55, 21);
+            lblMCHC.Size = new Size(68, 28);
             lblMCHC.TabIndex = 69;
             lblMCHC.Text = "MCHC";
             // 
             // txtMCH
             // 
-            txtMCH.Location = new Point(192, 354);
-            txtMCH.Margin = new Padding(3, 2, 3, 2);
+            txtMCH.Location = new Point(221, 472);
             txtMCH.Name = "txtMCH";
-            txtMCH.Size = new Size(205, 23);
+            txtMCH.Size = new Size(234, 27);
             txtMCH.TabIndex = 68;
             // 
             // lblMCH
             // 
             lblMCH.AutoSize = true;
             lblMCH.Font = new Font("Segoe UI", 12F);
-            lblMCH.Location = new Point(78, 352);
+            lblMCH.Location = new Point(89, 469);
             lblMCH.Name = "lblMCH";
-            lblMCH.Size = new Size(45, 21);
+            lblMCH.Size = new Size(56, 28);
             lblMCH.TabIndex = 67;
             lblMCH.Text = "MCH";
             // 
             // txtMCV
             // 
-            txtMCV.Location = new Point(192, 299);
-            txtMCV.Margin = new Padding(3, 2, 3, 2);
+            txtMCV.Location = new Point(221, 399);
             txtMCV.Name = "txtMCV";
-            txtMCV.Size = new Size(205, 23);
+            txtMCV.Size = new Size(234, 27);
             txtMCV.TabIndex = 66;
             // 
             // lblMCV
             // 
             lblMCV.AutoSize = true;
             lblMCV.Font = new Font("Segoe UI", 12F);
-            lblMCV.Location = new Point(78, 300);
+            lblMCV.Location = new Point(89, 400);
             lblMCV.Name = "lblMCV";
-            lblMCV.Size = new Size(44, 21);
+            lblMCV.Size = new Size(54, 28);
             lblMCV.TabIndex = 65;
             lblMCV.Text = "MCV";
             // 
             // txtLeucocitos
             // 
-            txtLeucocitos.Location = new Point(194, 237);
-            txtLeucocitos.Margin = new Padding(3, 2, 3, 2);
+            txtLeucocitos.Location = new Point(221, 316);
             txtLeucocitos.Name = "txtLeucocitos";
-            txtLeucocitos.Size = new Size(205, 23);
+            txtLeucocitos.Size = new Size(234, 27);
             txtLeucocitos.TabIndex = 64;
             // 
             // lblLeucocitos
             // 
             lblLeucocitos.AutoSize = true;
             lblLeucocitos.Font = new Font("Segoe UI", 12F);
-            lblLeucocitos.Location = new Point(59, 235);
+            lblLeucocitos.Location = new Point(66, 313);
             lblLeucocitos.Name = "lblLeucocitos";
-            lblLeucocitos.Size = new Size(83, 21);
+            lblLeucocitos.Size = new Size(104, 28);
             lblLeucocitos.TabIndex = 63;
             lblLeucocitos.Text = "Leucocitos";
             // 
             // txtHemoglobina
             // 
-            txtHemoglobina.Location = new Point(194, 182);
-            txtHemoglobina.Margin = new Padding(3, 2, 3, 2);
+            txtHemoglobina.Location = new Point(221, 243);
             txtHemoglobina.Name = "txtHemoglobina";
-            txtHemoglobina.Size = new Size(205, 23);
+            txtHemoglobina.Size = new Size(234, 27);
             txtHemoglobina.TabIndex = 62;
             // 
             // lblHemoglobina
             // 
             lblHemoglobina.AutoSize = true;
             lblHemoglobina.Font = new Font("Segoe UI", 12F);
-            lblHemoglobina.Location = new Point(59, 183);
+            lblHemoglobina.Location = new Point(66, 244);
             lblHemoglobina.Name = "lblHemoglobina";
-            lblHemoglobina.Size = new Size(104, 21);
+            lblHemoglobina.Size = new Size(132, 28);
             lblHemoglobina.TabIndex = 61;
             lblHemoglobina.Text = "Hemoglobina";
             // 
             // txtHematocrito
             // 
-            txtHematocrito.Location = new Point(193, 88);
-            txtHematocrito.Margin = new Padding(3, 2, 3, 2);
+            txtHematocrito.Location = new Point(221, 117);
             txtHematocrito.Name = "txtHematocrito";
-            txtHematocrito.Size = new Size(205, 23);
+            txtHematocrito.Size = new Size(234, 27);
             txtHematocrito.TabIndex = 60;
             // 
             // lblHematocrito
             // 
             lblHematocrito.AutoSize = true;
             lblHematocrito.Font = new Font("Segoe UI", 12F);
-            lblHematocrito.Location = new Point(67, 89);
+            lblHematocrito.Location = new Point(66, 119);
             lblHematocrito.Name = "lblHematocrito";
-            lblHematocrito.Size = new Size(96, 21);
+            lblHematocrito.Size = new Size(122, 28);
             lblHematocrito.TabIndex = 59;
             lblHematocrito.Text = "Hematocrito";
             // 
             // txtGlobulosRojos
             // 
-            txtGlobulosRojos.Location = new Point(193, 137);
-            txtGlobulosRojos.Margin = new Padding(3, 2, 3, 2);
+            txtGlobulosRojos.Location = new Point(221, 183);
             txtGlobulosRojos.Name = "txtGlobulosRojos";
-            txtGlobulosRojos.Size = new Size(205, 23);
+            txtGlobulosRojos.Size = new Size(234, 27);
             txtGlobulosRojos.TabIndex = 58;
             // 
             // lblGlobulosRojos
             // 
             lblGlobulosRojos.AutoSize = true;
             lblGlobulosRojos.Font = new Font("Segoe UI", 12F);
-            lblGlobulosRojos.Location = new Point(58, 135);
+            lblGlobulosRojos.Location = new Point(66, 180);
             lblGlobulosRojos.Name = "lblGlobulosRojos";
-            lblGlobulosRojos.Size = new Size(115, 21);
+            lblGlobulosRojos.Size = new Size(144, 28);
             lblGlobulosRojos.TabIndex = 57;
             lblGlobulosRojos.Text = "Globulos Rojos";
             // 
@@ -286,15 +274,15 @@
             // 
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 20F);
-            lblTitulo.Location = new Point(275, 26);
+            lblTitulo.Location = new Point(282, 26);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(447, 37);
+            lblTitulo.Size = new Size(560, 46);
             lblTitulo.TabIndex = 56;
             lblTitulo.Text = "Biometria Hematica Completa (BHC)";
             // 
             // BHCControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(lblDiferencial);
             Controls.Add(txtBasofilos);
@@ -322,8 +310,9 @@
             Controls.Add(txtGlobulosRojos);
             Controls.Add(lblGlobulosRojos);
             Controls.Add(lblTitulo);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "BHCControl";
-            Size = new Size(940, 474);
+            Size = new Size(1074, 632);
             ResumeLayout(false);
             PerformLayout();
         }

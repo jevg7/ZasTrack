@@ -28,33 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel2 = new Panel();
-            menuStrip1 = new MenuStrip();
+            pnlMenuStrip = new Panel();
+            mnsProyectos = new MenuStrip();
             agregarProyectoToolStripMenuItem = new ToolStripMenuItem();
             verProyectoToolStripMenuItem = new ToolStripMenuItem();
             pnlContenedor = new Panel();
-            panel2.SuspendLayout();
-            menuStrip1.SuspendLayout();
+            pnlMenuStrip.SuspendLayout();
+            mnsProyectos.SuspendLayout();
             SuspendLayout();
             // 
-            // panel2
+            // pnlMenuStrip
             // 
-            panel2.Controls.Add(menuStrip1);
-            panel2.Dock = DockStyle.Top;
-            panel2.Location = new Point(0, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(1561, 29);
-            panel2.TabIndex = 8;
+            pnlMenuStrip.Controls.Add(mnsProyectos);
+            pnlMenuStrip.Dock = DockStyle.Top;
+            pnlMenuStrip.Location = new Point(0, 0);
+            pnlMenuStrip.Name = "pnlMenuStrip";
+            pnlMenuStrip.Size = new Size(1561, 29);
+            pnlMenuStrip.TabIndex = 8;
             // 
-            // menuStrip1
+            // mnsProyectos
             // 
-            menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { agregarProyectoToolStripMenuItem, verProyectoToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1561, 28);
-            menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
+            mnsProyectos.ImageScalingSize = new Size(20, 20);
+            mnsProyectos.Items.AddRange(new ToolStripItem[] { agregarProyectoToolStripMenuItem, verProyectoToolStripMenuItem });
+            mnsProyectos.Location = new Point(0, 0);
+            mnsProyectos.Name = "mnsProyectos";
+            mnsProyectos.Size = new Size(1561, 28);
+            mnsProyectos.TabIndex = 0;
+            mnsProyectos.Text = "menuStrip1";
             // 
             // agregarProyectoToolStripMenuItem
             // 
@@ -84,23 +84,23 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1561, 1024);
             Controls.Add(pnlContenedor);
-            Controls.Add(panel2);
+            Controls.Add(pnlMenuStrip);
             FormBorderStyle = FormBorderStyle.None;
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = mnsProyectos;
             Margin = new Padding(3, 4, 3, 4);
             Name = "wProyectos";
             Text = "Proyectos";
             Load += wProyectos_Load;
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            pnlMenuStrip.ResumeLayout(false);
+            pnlMenuStrip.PerformLayout();
+            mnsProyectos.ResumeLayout(false);
+            mnsProyectos.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
-        private Panel panel2;
-        private MenuStrip menuStrip1;
+        private Panel pnlMenuStrip;
+        private MenuStrip mnsProyectos;
         private ToolStripMenuItem agregarProyectoToolStripMenuItem;
         private ToolStripMenuItem verProyectoToolStripMenuItem;
         private Panel pnlContenedor;

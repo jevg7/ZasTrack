@@ -29,169 +29,231 @@
         private void InitializeComponent()
         {
             pnlContenedor = new Panel();
+            tlpOrganizador = new TableLayoutPanel();
             pnlContProc = new Panel();
-            btnLimpiarFiltros = new Button();
-            btnActualizar = new Button();
-            panel1 = new Panel();
-            label2 = new Label();
-            cmbProyecto = new ComboBox();
+            tlpBotones = new TableLayoutPanel();
             btnVerRecepcionados = new Button();
             btnVerProcesados = new Button();
-            pnlPacientes = new Panel();
+            pnlProyectos = new Panel();
+            tlpProyecto = new TableLayoutPanel();
+            lblProyecto = new Label();
+            cmbProyecto = new ComboBox();
+            btnActualizar = new Button();
+            btnLimpiarFiltros = new Button();
             pnlSearchFiltro = new Panel();
-            dtpFechaRecepcion = new DateTimePicker();
+            tlpFiltrado = new TableLayoutPanel();
             gbFiltroTipo = new GroupBox();
             chkFiltroSangre = new CheckBox();
             chkFiltroHeces = new CheckBox();
             chkFiltroOrina = new CheckBox();
+            dtpFechaRecepcion = new DateTimePicker();
             txtSearch = new TextBox();
+            flpListaMuestras = new FlowLayoutPanel();
             pnlContenedor.SuspendLayout();
+            tlpOrganizador.SuspendLayout();
             pnlContProc.SuspendLayout();
-            panel1.SuspendLayout();
+            tlpBotones.SuspendLayout();
+            pnlProyectos.SuspendLayout();
+            tlpProyecto.SuspendLayout();
             pnlSearchFiltro.SuspendLayout();
+            tlpFiltrado.SuspendLayout();
             gbFiltroTipo.SuspendLayout();
             SuspendLayout();
             // 
             // pnlContenedor
             // 
-            pnlContenedor.Controls.Add(pnlContProc);
-            pnlContenedor.Controls.Add(pnlPacientes);
-            pnlContenedor.Controls.Add(pnlSearchFiltro);
+            pnlContenedor.Controls.Add(tlpOrganizador);
             pnlContenedor.Dock = DockStyle.Fill;
             pnlContenedor.Location = new Point(0, 0);
             pnlContenedor.Name = "pnlContenedor";
-            pnlContenedor.Size = new Size(1353, 881);
+            pnlContenedor.Size = new Size(1334, 753);
             pnlContenedor.TabIndex = 1;
             pnlContenedor.Paint += panel1_Paint;
+            // 
+            // tlpOrganizador
+            // 
+            tlpOrganizador.ColumnCount = 1;
+            tlpOrganizador.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tlpOrganizador.Controls.Add(pnlContProc, 0, 0);
+            tlpOrganizador.Controls.Add(pnlSearchFiltro, 0, 1);
+            tlpOrganizador.Controls.Add(flpListaMuestras, 0, 2);
+            tlpOrganizador.Dock = DockStyle.Fill;
+            tlpOrganizador.Location = new Point(0, 0);
+            tlpOrganizador.Name = "tlpOrganizador";
+            tlpOrganizador.RowCount = 3;
+            tlpOrganizador.RowStyles.Add(new RowStyle());
+            tlpOrganizador.RowStyles.Add(new RowStyle());
+            tlpOrganizador.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpOrganizador.Size = new Size(1334, 753);
+            tlpOrganizador.TabIndex = 0;
             // 
             // pnlContProc
             // 
             pnlContProc.BackColor = SystemColors.AppWorkspace;
-            pnlContProc.Controls.Add(btnLimpiarFiltros);
-            pnlContProc.Controls.Add(btnActualizar);
-            pnlContProc.Controls.Add(panel1);
-            pnlContProc.Controls.Add(btnVerRecepcionados);
-            pnlContProc.Controls.Add(btnVerProcesados);
+            pnlContProc.Controls.Add(tlpBotones);
             pnlContProc.Dock = DockStyle.Top;
-            pnlContProc.Location = new Point(0, 0);
+            pnlContProc.Location = new Point(3, 4);
             pnlContProc.Margin = new Padding(3, 4, 3, 4);
             pnlContProc.Name = "pnlContProc";
-            pnlContProc.Size = new Size(1353, 56);
+            pnlContProc.Size = new Size(1328, 56);
             pnlContProc.TabIndex = 2;
             // 
-            // btnLimpiarFiltros
+            // tlpBotones
             // 
-            btnLimpiarFiltros.Location = new Point(999, 8);
-            btnLimpiarFiltros.Margin = new Padding(3, 4, 3, 4);
-            btnLimpiarFiltros.Name = "btnLimpiarFiltros";
-            btnLimpiarFiltros.Size = new Size(86, 41);
-            btnLimpiarFiltros.TabIndex = 5;
-            btnLimpiarFiltros.Text = "Limpiar";
-            btnLimpiarFiltros.UseVisualStyleBackColor = true;
-            btnLimpiarFiltros.Click += btnLimpiarFiltros_Click;
-            // 
-            // btnActualizar
-            // 
-            btnActualizar.Location = new Point(899, 8);
-            btnActualizar.Margin = new Padding(3, 4, 3, 4);
-            btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(88, 41);
-            btnActualizar.TabIndex = 5;
-            btnActualizar.Text = "Actualizar";
-            btnActualizar.UseVisualStyleBackColor = true;
-            btnActualizar.Click += btnActualizar_Click_1;
-            // 
-            // panel1
-            // 
-            panel1.BackColor = SystemColors.ActiveCaptionText;
-            panel1.Controls.Add(label2);
-            panel1.Controls.Add(cmbProyecto);
-            panel1.Location = new Point(611, 8);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(281, 41);
-            panel1.TabIndex = 0;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.BackColor = SystemColors.ButtonHighlight;
-            label2.Location = new Point(11, 9);
-            label2.Name = "label2";
-            label2.Size = new Size(67, 20);
-            label2.TabIndex = 39;
-            label2.Text = "Proyecto";
-            // 
-            // cmbProyecto
-            // 
-            cmbProyecto.FormattingEnabled = true;
-            cmbProyecto.Location = new Point(99, 4);
-            cmbProyecto.Margin = new Padding(3, 4, 3, 4);
-            cmbProyecto.Name = "cmbProyecto";
-            cmbProyecto.Size = new Size(178, 28);
-            cmbProyecto.TabIndex = 38;
-            cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
+            tlpBotones.ColumnCount = 5;
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.6279068F));
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.069767F));
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.1616535F));
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.022556F));
+            tlpBotones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.398497F));
+            tlpBotones.Controls.Add(btnVerRecepcionados, 0, 0);
+            tlpBotones.Controls.Add(btnVerProcesados, 1, 0);
+            tlpBotones.Controls.Add(pnlProyectos, 2, 0);
+            tlpBotones.Controls.Add(btnActualizar, 3, 0);
+            tlpBotones.Controls.Add(btnLimpiarFiltros, 4, 0);
+            tlpBotones.Dock = DockStyle.Top;
+            tlpBotones.Location = new Point(0, 0);
+            tlpBotones.Name = "tlpBotones";
+            tlpBotones.RowCount = 1;
+            tlpBotones.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpBotones.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tlpBotones.Size = new Size(1328, 66);
+            tlpBotones.TabIndex = 0;
+            tlpBotones.Paint += tlpBotones_Paint;
             // 
             // btnVerRecepcionados
             // 
-            btnVerRecepcionados.Location = new Point(14, 9);
+            btnVerRecepcionados.AutoSize = true;
+            btnVerRecepcionados.Dock = DockStyle.Top;
+            btnVerRecepcionados.Location = new Point(3, 4);
             btnVerRecepcionados.Margin = new Padding(3, 4, 3, 4);
             btnVerRecepcionados.Name = "btnVerRecepcionados";
-            btnVerRecepcionados.Size = new Size(285, 40);
+            btnVerRecepcionados.Size = new Size(359, 38);
             btnVerRecepcionados.TabIndex = 2;
             btnVerRecepcionados.Text = "Recepcionados";
             btnVerRecepcionados.UseVisualStyleBackColor = true;
             // 
             // btnVerProcesados
             // 
-            btnVerProcesados.Location = new Point(322, 9);
+            btnVerProcesados.Dock = DockStyle.Top;
+            btnVerProcesados.Location = new Point(368, 4);
             btnVerProcesados.Margin = new Padding(3, 4, 3, 4);
             btnVerProcesados.Name = "btnVerProcesados";
-            btnVerProcesados.Size = new Size(275, 40);
+            btnVerProcesados.Size = new Size(352, 40);
             btnVerProcesados.TabIndex = 1;
             btnVerProcesados.Text = "Procesados";
             btnVerProcesados.UseVisualStyleBackColor = true;
             btnVerProcesados.Click += btnVerProcesados_Click_1;
             // 
-            // pnlPacientes
+            // pnlProyectos
             // 
-            pnlPacientes.AutoScroll = true;
-            pnlPacientes.Location = new Point(0, 123);
-            pnlPacientes.Margin = new Padding(3, 4, 3, 4);
-            pnlPacientes.Name = "pnlPacientes";
-            pnlPacientes.Size = new Size(1317, 759);
-            pnlPacientes.TabIndex = 1;
-            pnlPacientes.Paint += pnlPacientes_Paint;
+            pnlProyectos.BackColor = SystemColors.ActiveCaptionText;
+            pnlProyectos.Controls.Add(tlpProyecto);
+            pnlProyectos.Dock = DockStyle.Top;
+            pnlProyectos.Location = new Point(726, 3);
+            pnlProyectos.Name = "pnlProyectos";
+            pnlProyectos.Size = new Size(353, 41);
+            pnlProyectos.TabIndex = 0;
+            // 
+            // tlpProyecto
+            // 
+            tlpProyecto.ColumnCount = 2;
+            tlpProyecto.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90F));
+            tlpProyecto.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tlpProyecto.Controls.Add(lblProyecto, 0, 0);
+            tlpProyecto.Controls.Add(cmbProyecto, 1, 0);
+            tlpProyecto.Dock = DockStyle.Top;
+            tlpProyecto.Location = new Point(0, 0);
+            tlpProyecto.Name = "tlpProyecto";
+            tlpProyecto.RowCount = 1;
+            tlpProyecto.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpProyecto.Size = new Size(353, 42);
+            tlpProyecto.TabIndex = 40;
+            // 
+            // lblProyecto
+            // 
+            lblProyecto.AutoSize = true;
+            lblProyecto.BackColor = SystemColors.ButtonHighlight;
+            lblProyecto.Dock = DockStyle.Top;
+            lblProyecto.Location = new Point(10, 10);
+            lblProyecto.Margin = new Padding(10);
+            lblProyecto.Name = "lblProyecto";
+            lblProyecto.Size = new Size(70, 20);
+            lblProyecto.TabIndex = 39;
+            lblProyecto.Text = "Proyecto";
+            lblProyecto.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // cmbProyecto
+            // 
+            cmbProyecto.Dock = DockStyle.Top;
+            cmbProyecto.Location = new Point(95, 5);
+            cmbProyecto.Margin = new Padding(5);
+            cmbProyecto.Name = "cmbProyecto";
+            cmbProyecto.Size = new Size(253, 28);
+            cmbProyecto.TabIndex = 38;
+            cmbProyecto.SelectedIndexChanged += cmbProyecto_SelectedIndexChanged;
+            // 
+            // btnActualizar
+            // 
+            btnActualizar.Dock = DockStyle.Top;
+            btnActualizar.Location = new Point(1085, 4);
+            btnActualizar.Margin = new Padding(3, 4, 3, 4);
+            btnActualizar.Name = "btnActualizar";
+            btnActualizar.Size = new Size(113, 41);
+            btnActualizar.TabIndex = 5;
+            btnActualizar.Text = "Actualizar";
+            btnActualizar.UseVisualStyleBackColor = true;
+            btnActualizar.Click += btnActualizar_Click_1;
+            // 
+            // btnLimpiarFiltros
+            // 
+            btnLimpiarFiltros.Dock = DockStyle.Top;
+            btnLimpiarFiltros.Location = new Point(1204, 4);
+            btnLimpiarFiltros.Margin = new Padding(3, 4, 3, 4);
+            btnLimpiarFiltros.Name = "btnLimpiarFiltros";
+            btnLimpiarFiltros.Size = new Size(121, 41);
+            btnLimpiarFiltros.TabIndex = 5;
+            btnLimpiarFiltros.Text = "Limpiar";
+            btnLimpiarFiltros.UseVisualStyleBackColor = true;
+            btnLimpiarFiltros.Click += btnLimpiarFiltros_Click;
             // 
             // pnlSearchFiltro
             // 
-            pnlSearchFiltro.Controls.Add(dtpFechaRecepcion);
-            pnlSearchFiltro.Controls.Add(gbFiltroTipo);
-            pnlSearchFiltro.Controls.Add(txtSearch);
-            pnlSearchFiltro.Location = new Point(0, 57);
+            pnlSearchFiltro.Controls.Add(tlpFiltrado);
+            pnlSearchFiltro.Dock = DockStyle.Top;
+            pnlSearchFiltro.Location = new Point(3, 68);
             pnlSearchFiltro.Margin = new Padding(3, 4, 3, 4);
             pnlSearchFiltro.Name = "pnlSearchFiltro";
-            pnlSearchFiltro.Size = new Size(1353, 57);
+            pnlSearchFiltro.Size = new Size(1328, 57);
             pnlSearchFiltro.TabIndex = 0;
             // 
-            // dtpFechaRecepcion
+            // tlpFiltrado
             // 
-            dtpFechaRecepcion.Location = new Point(14, 15);
-            dtpFechaRecepcion.Margin = new Padding(3, 4, 3, 4);
-            dtpFechaRecepcion.Name = "dtpFechaRecepcion";
-            dtpFechaRecepcion.Size = new Size(291, 27);
-            dtpFechaRecepcion.TabIndex = 4;
-            dtpFechaRecepcion.ValueChanged += dtpFechaRecepcion_ValueChanged_1;
+            tlpFiltrado.ColumnCount = 3;
+            tlpFiltrado.ColumnStyles.Add(new ColumnStyle());
+            tlpFiltrado.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tlpFiltrado.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 257F));
+            tlpFiltrado.Controls.Add(gbFiltroTipo, 2, 0);
+            tlpFiltrado.Controls.Add(dtpFechaRecepcion, 0, 0);
+            tlpFiltrado.Controls.Add(txtSearch, 1, 0);
+            tlpFiltrado.Dock = DockStyle.Fill;
+            tlpFiltrado.Location = new Point(0, 0);
+            tlpFiltrado.Name = "tlpFiltrado";
+            tlpFiltrado.RowCount = 1;
+            tlpFiltrado.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpFiltrado.Size = new Size(1328, 57);
+            tlpFiltrado.TabIndex = 0;
             // 
             // gbFiltroTipo
             // 
             gbFiltroTipo.Controls.Add(chkFiltroSangre);
             gbFiltroTipo.Controls.Add(chkFiltroHeces);
             gbFiltroTipo.Controls.Add(chkFiltroOrina);
-            gbFiltroTipo.Location = new Point(974, 7);
+            gbFiltroTipo.Location = new Point(1074, 4);
             gbFiltroTipo.Margin = new Padding(3, 4, 3, 4);
             gbFiltroTipo.Name = "gbFiltroTipo";
             gbFiltroTipo.Padding = new Padding(3, 4, 3, 4);
-            gbFiltroTipo.Size = new Size(266, 47);
+            gbFiltroTipo.Size = new Size(249, 49);
             gbFiltroTipo.TabIndex = 2;
             gbFiltroTipo.TabStop = false;
             gbFiltroTipo.Text = "Filtrar por Tipo Requerido:";
@@ -229,30 +291,57 @@
             chkFiltroOrina.Text = "Orina";
             chkFiltroOrina.UseVisualStyleBackColor = true;
             // 
+            // dtpFechaRecepcion
+            // 
+            dtpFechaRecepcion.Dock = DockStyle.Left;
+            dtpFechaRecepcion.Location = new Point(3, 4);
+            dtpFechaRecepcion.Margin = new Padding(3, 4, 3, 4);
+            dtpFechaRecepcion.Name = "dtpFechaRecepcion";
+            dtpFechaRecepcion.Size = new Size(295, 27);
+            dtpFechaRecepcion.TabIndex = 4;
+            dtpFechaRecepcion.ValueChanged += dtpFechaRecepcion_ValueChanged_1;
+            // 
             // txtSearch
             // 
-            txtSearch.Location = new Point(322, 15);
+            txtSearch.Dock = DockStyle.Top;
+            txtSearch.Location = new Point(304, 4);
             txtSearch.Margin = new Padding(3, 4, 3, 4);
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "Buscar por Codigo o por Nombre";
-            txtSearch.Size = new Size(644, 27);
+            txtSearch.Size = new Size(764, 27);
             txtSearch.TabIndex = 1;
+            // 
+            // flpListaMuestras
+            // 
+            flpListaMuestras.AutoScroll = true;
+            flpListaMuestras.Dock = DockStyle.Fill;
+            flpListaMuestras.FlowDirection = FlowDirection.TopDown;
+            flpListaMuestras.Location = new Point(3, 132);
+            flpListaMuestras.Name = "flpListaMuestras";
+            flpListaMuestras.Size = new Size(1328, 618);
+            flpListaMuestras.TabIndex = 3;
+            flpListaMuestras.WrapContents = false;
             // 
             // wExamenes
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1353, 881);
+            ClientSize = new Size(1334, 753);
             Controls.Add(pnlContenedor);
             FormBorderStyle = FormBorderStyle.None;
             Name = "wExamenes";
             Text = "wExamenesTest";
             pnlContenedor.ResumeLayout(false);
+            tlpOrganizador.ResumeLayout(false);
             pnlContProc.ResumeLayout(false);
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            tlpBotones.ResumeLayout(false);
+            tlpBotones.PerformLayout();
+            pnlProyectos.ResumeLayout(false);
+            tlpProyecto.ResumeLayout(false);
+            tlpProyecto.PerformLayout();
             pnlSearchFiltro.ResumeLayout(false);
-            pnlSearchFiltro.PerformLayout();
+            tlpFiltrado.ResumeLayout(false);
+            tlpFiltrado.PerformLayout();
             gbFiltroTipo.ResumeLayout(false);
             gbFiltroTipo.PerformLayout();
             ResumeLayout(false);
@@ -261,12 +350,8 @@
         #endregion
         private Panel pnlContenedor;
         private Panel pnlContProc;
-        private Panel panel1;
-        private Label label2;
         private ComboBox cmbProyecto;
-        private Button btnVerRecepcionados;
         private Button btnVerProcesados;
-        private Panel pnlPacientes;
         private Panel pnlSearchFiltro;
         private TextBox txtSearch;
         private Button btnActualizar;
@@ -276,5 +361,13 @@
         private CheckBox chkFiltroOrina;
         private DateTimePicker dtpFechaRecepcion;
         private Button btnLimpiarFiltros;
+        private TableLayoutPanel tlpOrganizador;
+        private TableLayoutPanel tlpBotones;
+        private Button btnVerRecepcionados;
+        private TableLayoutPanel tlpFiltrado;
+        private Panel pnlProyectos;
+        private Label lblProyecto;
+        private TableLayoutPanel tlpProyecto;
+        private FlowLayoutPanel flpListaMuestras;
     }
 }

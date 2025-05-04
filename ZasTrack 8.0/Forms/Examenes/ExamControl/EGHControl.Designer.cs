@@ -43,9 +43,9 @@
             // 
             lblExamenMicro.AutoSize = true;
             lblExamenMicro.Font = new Font("Segoe UI", 20F);
-            lblExamenMicro.Location = new Point(441, 61);
+            lblExamenMicro.Location = new Point(554, 89);
             lblExamenMicro.Name = "lblExamenMicro";
-            lblExamenMicro.Size = new Size(274, 37);
+            lblExamenMicro.Size = new Size(346, 46);
             lblExamenMicro.TabIndex = 67;
             lblExamenMicro.Text = "Examen Microscopico";
             // 
@@ -53,9 +53,9 @@
             // 
             lblExamenFis.AutoSize = true;
             lblExamenFis.Font = new Font("Segoe UI", 20F);
-            lblExamenFis.Location = new Point(34, 67);
+            lblExamenFis.Location = new Point(39, 89);
             lblExamenFis.Name = "lblExamenFis";
-            lblExamenFis.Size = new Size(182, 37);
+            lblExamenFis.Size = new Size(228, 46);
             lblExamenFis.TabIndex = 66;
             lblExamenFis.Text = "Examen Fisico";
             // 
@@ -63,69 +63,66 @@
             // 
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 20F);
-            lblTitulo.Location = new Point(258, 19);
+            lblTitulo.Location = new Point(219, 24);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(397, 37);
+            lblTitulo.Size = new Size(499, 46);
             lblTitulo.TabIndex = 65;
             lblTitulo.Text = "Examen General de Heces (EGH)";
             // 
             // txtParasito
             // 
-            txtParasito.Location = new Point(599, 110);
-            txtParasito.Margin = new Padding(3, 2, 3, 2);
+            txtParasito.Location = new Point(685, 147);
             txtParasito.Name = "txtParasito";
-            txtParasito.Size = new Size(208, 23);
+            txtParasito.Size = new Size(237, 27);
             txtParasito.TabIndex = 64;
             // 
             // lblParasito
             // 
             lblParasito.AutoSize = true;
             lblParasito.Font = new Font("Segoe UI", 12F);
-            lblParasito.Location = new Point(441, 106);
+            lblParasito.Location = new Point(554, 143);
             lblParasito.Name = "lblParasito";
-            lblParasito.Size = new Size(65, 21);
+            lblParasito.Size = new Size(81, 28);
             lblParasito.TabIndex = 63;
             lblParasito.Text = "Parasito";
             // 
             // txtConsistencia
             // 
-            txtConsistencia.Location = new Point(192, 184);
-            txtConsistencia.Margin = new Padding(3, 2, 3, 2);
+            txtConsistencia.Location = new Point(219, 245);
             txtConsistencia.Name = "txtConsistencia";
-            txtConsistencia.Size = new Size(219, 23);
+            txtConsistencia.Size = new Size(250, 27);
             txtConsistencia.TabIndex = 62;
             // 
             // lblConsistencia
             // 
             lblConsistencia.AutoSize = true;
             lblConsistencia.Font = new Font("Segoe UI", 12F);
-            lblConsistencia.Location = new Point(34, 181);
+            lblConsistencia.Location = new Point(39, 241);
             lblConsistencia.Name = "lblConsistencia";
-            lblConsistencia.Size = new Size(97, 21);
+            lblConsistencia.Size = new Size(120, 28);
             lblConsistencia.TabIndex = 61;
             lblConsistencia.Text = "Consistencia";
             // 
             // txtColor
             // 
-            txtColor.Location = new Point(192, 116);
-            txtColor.Margin = new Padding(3, 2, 3, 2);
+            txtColor.Location = new Point(219, 147);
             txtColor.Name = "txtColor";
-            txtColor.Size = new Size(219, 23);
+            txtColor.Size = new Size(250, 27);
             txtColor.TabIndex = 60;
             // 
             // lblColor
             // 
             lblColor.AutoSize = true;
             lblColor.Font = new Font("Segoe UI", 12F);
-            lblColor.Location = new Point(34, 112);
+            lblColor.Location = new Point(39, 149);
             lblColor.Name = "lblColor";
-            lblColor.Size = new Size(48, 21);
+            lblColor.Size = new Size(60, 28);
             lblColor.TabIndex = 59;
             lblColor.Text = "Color";
             // 
             // EGHControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(lblExamenMicro);
             Controls.Add(lblExamenFis);
@@ -136,8 +133,9 @@
             Controls.Add(lblConsistencia);
             Controls.Add(txtColor);
             Controls.Add(lblColor);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "EGHControl";
-            Size = new Size(863, 404);
+            Size = new Size(986, 539);
             Load += EGHControl_Load;
             ResumeLayout(false);
             PerformLayout();
