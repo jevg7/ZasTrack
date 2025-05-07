@@ -28,24 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
+            mnsPacientes = new MenuStrip();
             importarPacientesToolStripMenuItem = new ToolStripMenuItem();
             agregarEstudiantesToolStripMenuItem = new ToolStripMenuItem();
             verEstudiantesToolStripMenuItem = new ToolStripMenuItem();
             pnlCntEstudiantes = new Panel();
-            menuStrip1.SuspendLayout();
+            mnsPacientes.SuspendLayout();
             SuspendLayout();
             // 
-            // menuStrip1
+            // mnsPacientes
             // 
-            menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { importarPacientesToolStripMenuItem, agregarEstudiantesToolStripMenuItem, verEstudiantesToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Padding = new Padding(8, 3, 0, 3);
-            menuStrip1.Size = new Size(1066, 30);
-            menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
+            mnsPacientes.ImageScalingSize = new Size(20, 20);
+            mnsPacientes.Items.AddRange(new ToolStripItem[] { importarPacientesToolStripMenuItem, agregarEstudiantesToolStripMenuItem, verEstudiantesToolStripMenuItem });
+            mnsPacientes.Location = new Point(0, 0);
+            mnsPacientes.Name = "mnsPacientes";
+            mnsPacientes.Padding = new Padding(8, 3, 0, 3);
+            mnsPacientes.Size = new Size(1066, 30);
+            mnsPacientes.TabIndex = 0;
+            mnsPacientes.Text = "menuStrip1";
             // 
             // importarPacientesToolStripMenuItem
             // 
@@ -70,10 +70,11 @@
             // 
             // pnlCntEstudiantes
             // 
-            pnlCntEstudiantes.Location = new Point(0, 41);
+            pnlCntEstudiantes.Dock = DockStyle.Fill;
+            pnlCntEstudiantes.Location = new Point(0, 30);
             pnlCntEstudiantes.Margin = new Padding(5, 4, 5, 4);
             pnlCntEstudiantes.Name = "pnlCntEstudiantes";
-            pnlCntEstudiantes.Size = new Size(1353, 1056);
+            pnlCntEstudiantes.Size = new Size(1066, 662);
             pnlCntEstudiantes.TabIndex = 1;
             pnlCntEstudiantes.Paint += pnlCntEstudiantes_Paint;
             // 
@@ -83,22 +84,22 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1066, 692);
             Controls.Add(pnlCntEstudiantes);
-            Controls.Add(menuStrip1);
+            Controls.Add(mnsPacientes);
             FormBorderStyle = FormBorderStyle.None;
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = mnsPacientes;
             Margin = new Padding(5, 4, 5, 4);
             Name = "wPaciente";
             Text = "wEstudiantes";
             Load += wPaciente_Load;
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            mnsPacientes.ResumeLayout(false);
+            mnsPacientes.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip mnsPacientes;
         private System.Windows.Forms.ToolStripMenuItem agregarEstudiantesToolStripMenuItem;
         private System.Windows.Forms.Panel pnlCntEstudiantes;
         private ToolStripMenuItem verEstudiantesToolStripMenuItem;

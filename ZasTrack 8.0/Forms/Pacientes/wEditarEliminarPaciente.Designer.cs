@@ -189,7 +189,7 @@
             // txtEdad
             // 
             txtEdad.Enabled = false;
-            txtEdad.Location = new Point(562, 309);
+            txtEdad.Location = new Point(559, 283);
             txtEdad.Margin = new Padding(5, 4, 5, 4);
             txtEdad.Name = "txtEdad";
             txtEdad.ReadOnly = true;
@@ -219,7 +219,7 @@
             // lblEdadCalculada
             // 
             lblEdadCalculada.AutoSize = true;
-            lblEdadCalculada.Location = new Point(562, 285);
+            lblEdadCalculada.Location = new Point(559, 259);
             lblEdadCalculada.Margin = new Padding(5, 0, 5, 0);
             lblEdadCalculada.Name = "lblEdadCalculada";
             lblEdadCalculada.Size = new Size(46, 20);

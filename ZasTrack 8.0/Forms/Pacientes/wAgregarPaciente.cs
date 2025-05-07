@@ -25,7 +25,7 @@ namespace ZasTrack
             pacienteRepository = new PacienteRepository();
             proyectoRepository = new ProyectoRepository();
         }
-        
+
         private void wAgregarPaciente_Load(object sender, EventArgs e) // Nombre actualizado
         {
             // --- Validación de Fecha ---
@@ -115,7 +115,7 @@ namespace ZasTrack
         private void btnGuardarPaciente_Click(object sender, EventArgs e)
         {
             guardarPaciente();
-        }      
+        }
 
         #region Metodos
         private void LimpiarCampos()
@@ -261,5 +261,10 @@ namespace ZasTrack
 
         }
         #endregion
+
+        private void tlpContenido_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

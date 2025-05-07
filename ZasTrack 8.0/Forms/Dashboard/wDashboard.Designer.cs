@@ -123,7 +123,7 @@
             tlpIndices.Name = "tlpIndices";
             tlpIndices.RowCount = 1;
             tlpIndices.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpIndices.Size = new Size(1038, 179);
+            tlpIndices.Size = new Size(966, 179);
             tlpIndices.TabIndex = 4;
             // 
             // pnlAccionRapida
@@ -132,10 +132,10 @@
             pnlAccionRapida.Controls.Add(pnlBotonesAcciones);
             pnlAccionRapida.Controls.Add(pnlAccionRapidalbl);
             pnlAccionRapida.Dock = DockStyle.Fill;
-            pnlAccionRapida.Location = new Point(833, 5);
+            pnlAccionRapida.Location = new Point(777, 5);
             pnlAccionRapida.Margin = new Padding(5, 5, 10, 5);
             pnlAccionRapida.Name = "pnlAccionRapida";
-            pnlAccionRapida.Size = new Size(195, 169);
+            pnlAccionRapida.Size = new Size(179, 169);
             pnlAccionRapida.TabIndex = 7;
             pnlAccionRapida.Paint += pnlAccionRapida_Paint;
             // 
@@ -147,14 +147,14 @@
             pnlBotonesAcciones.Dock = DockStyle.Fill;
             pnlBotonesAcciones.Location = new Point(0, 37);
             pnlBotonesAcciones.Name = "pnlBotonesAcciones";
-            pnlBotonesAcciones.Size = new Size(195, 132);
+            pnlBotonesAcciones.Size = new Size(179, 132);
             pnlBotonesAcciones.TabIndex = 4;
             // 
             // btnAccionVerPendientes
             // 
             btnAccionVerPendientes.Anchor = AnchorStyles.None;
             btnAccionVerPendientes.AutoSize = true;
-            btnAccionVerPendientes.Location = new Point(25, 53);
+            btnAccionVerPendientes.Location = new Point(17, 53);
             btnAccionVerPendientes.Margin = new Padding(3, 4, 3, 4);
             btnAccionVerPendientes.Name = "btnAccionVerPendientes";
             btnAccionVerPendientes.Size = new Size(141, 38);
@@ -167,7 +167,7 @@
             // 
             btnAccionNuevaMuestra.Anchor = AnchorStyles.None;
             btnAccionNuevaMuestra.AutoSize = true;
-            btnAccionNuevaMuestra.Location = new Point(25, 7);
+            btnAccionNuevaMuestra.Location = new Point(17, 7);
             btnAccionNuevaMuestra.Margin = new Padding(3, 4, 3, 4);
             btnAccionNuevaMuestra.Name = "btnAccionNuevaMuestra";
             btnAccionNuevaMuestra.Size = new Size(141, 38);
@@ -183,7 +183,7 @@
             pnlAccionRapidalbl.Dock = DockStyle.Top;
             pnlAccionRapidalbl.Location = new Point(0, 0);
             pnlAccionRapidalbl.Name = "pnlAccionRapidalbl";
-            pnlAccionRapidalbl.Size = new Size(195, 37);
+            pnlAccionRapidalbl.Size = new Size(179, 37);
             pnlAccionRapidalbl.TabIndex = 1;
             // 
             // lblAccionRapida
@@ -191,7 +191,7 @@
             lblAccionRapida.Anchor = AnchorStyles.None;
             lblAccionRapida.AutoSize = true;
             lblAccionRapida.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblAccionRapida.Location = new Point(25, 8);
+            lblAccionRapida.Location = new Point(17, 8);
             lblAccionRapida.Name = "lblAccionRapida";
             lblAccionRapida.Size = new Size(147, 23);
             lblAccionRapida.TabIndex = 0;
@@ -206,7 +206,7 @@
             pnlPacientesTotal.Location = new Point(10, 5);
             pnlPacientesTotal.Margin = new Padding(10, 5, 5, 5);
             pnlPacientesTotal.Name = "pnlPacientesTotal";
-            pnlPacientesTotal.Size = new Size(192, 169);
+            pnlPacientesTotal.Size = new Size(178, 169);
             pnlPacientesTotal.TabIndex = 5;
             // 
             // lblPacientesTotal
@@ -224,10 +224,10 @@
             pnlExamenesRev.BackColor = SystemColors.MenuBar;
             pnlExamenesRev.Controls.Add(lblExamenesRev);
             pnlExamenesRev.Dock = DockStyle.Fill;
-            pnlExamenesRev.Location = new Point(419, 5);
+            pnlExamenesRev.Location = new Point(391, 5);
             pnlExamenesRev.Margin = new Padding(5);
             pnlExamenesRev.Name = "pnlExamenesRev";
-            pnlExamenesRev.Size = new Size(197, 169);
+            pnlExamenesRev.Size = new Size(183, 169);
             pnlExamenesRev.TabIndex = 6;
             // 
             // lblExamenesRev
@@ -245,10 +245,10 @@
             pnlInformes.BackColor = SystemColors.MenuBar;
             pnlInformes.Controls.Add(lblInfomes);
             pnlInformes.Dock = DockStyle.Fill;
-            pnlInformes.Location = new Point(626, 5);
+            pnlInformes.Location = new Point(584, 5);
             pnlInformes.Margin = new Padding(5);
             pnlInformes.Name = "pnlInformes";
-            pnlInformes.Size = new Size(197, 169);
+            pnlInformes.Size = new Size(183, 169);
             pnlInformes.TabIndex = 6;
             // 
             // lblInfomes
@@ -267,10 +267,10 @@
             pnlMuestrasDia.BackColor = SystemColors.MenuBar;
             pnlMuestrasDia.Controls.Add(lblMuestrasDia);
             pnlMuestrasDia.Dock = DockStyle.Fill;
-            pnlMuestrasDia.Location = new Point(212, 5);
+            pnlMuestrasDia.Location = new Point(198, 5);
             pnlMuestrasDia.Margin = new Padding(5);
             pnlMuestrasDia.Name = "pnlMuestrasDia";
-            pnlMuestrasDia.Size = new Size(197, 169);
+            pnlMuestrasDia.Size = new Size(183, 169);
             pnlMuestrasDia.TabIndex = 6;
             pnlMuestrasDia.Paint += pnlMuestrasDia_Paint;
             // 
@@ -306,7 +306,7 @@
             tlpGraficas.Name = "tlpGraficas";
             tlpGraficas.RowCount = 1;
             tlpGraficas.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpGraficas.Size = new Size(1038, 180);
+            tlpGraficas.Size = new Size(966, 180);
             tlpGraficas.TabIndex = 6;
             // 
             // pnlGraficoEstadoDia
@@ -318,7 +318,7 @@
             pnlGraficoEstadoDia.Location = new Point(10, 4);
             pnlGraficoEstadoDia.Margin = new Padding(10, 4, 3, 4);
             pnlGraficoEstadoDia.Name = "pnlGraficoEstadoDia";
-            pnlGraficoEstadoDia.Size = new Size(1025, 172);
+            pnlGraficoEstadoDia.Size = new Size(953, 172);
             pnlGraficoEstadoDia.TabIndex = 0;
             // 
             // chartEstadoDia
@@ -335,7 +335,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             chartEstadoDia.Series.Add(series1);
-            chartEstadoDia.Size = new Size(1025, 136);
+            chartEstadoDia.Size = new Size(953, 136);
             chartEstadoDia.TabIndex = 2;
             // 
             // pnlMuestrasProclbl
@@ -345,7 +345,7 @@
             pnlMuestrasProclbl.Dock = DockStyle.Top;
             pnlMuestrasProclbl.Location = new Point(0, 0);
             pnlMuestrasProclbl.Name = "pnlMuestrasProclbl";
-            pnlMuestrasProclbl.Size = new Size(1025, 36);
+            pnlMuestrasProclbl.Size = new Size(953, 36);
             pnlMuestrasProclbl.TabIndex = 1;
             // 
             // lblMuestrasProcesadas
@@ -370,7 +370,7 @@
             tlpUltimos.Name = "tlpUltimos";
             tlpUltimos.RowCount = 1;
             tlpUltimos.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpUltimos.Size = new Size(1038, 179);
+            tlpUltimos.Size = new Size(966, 179);
             tlpUltimos.TabIndex = 7;
             // 
             // pnlExamenesUltimos
@@ -379,10 +379,10 @@
             pnlExamenesUltimos.BackColor = SystemColors.ControlLight;
             pnlExamenesUltimos.Controls.Add(lblExamenesUltimos);
             pnlExamenesUltimos.Dock = DockStyle.Fill;
-            pnlExamenesUltimos.Location = new Point(522, 4);
+            pnlExamenesUltimos.Location = new Point(486, 4);
             pnlExamenesUltimos.Margin = new Padding(3, 4, 10, 4);
             pnlExamenesUltimos.Name = "pnlExamenesUltimos";
-            pnlExamenesUltimos.Size = new Size(506, 171);
+            pnlExamenesUltimos.Size = new Size(470, 171);
             pnlExamenesUltimos.TabIndex = 1;
             // 
             // lblExamenesUltimos
@@ -404,7 +404,7 @@
             pnlMuestrasUltimas.Location = new Point(10, 4);
             pnlMuestrasUltimas.Margin = new Padding(10, 4, 3, 4);
             pnlMuestrasUltimas.Name = "pnlMuestrasUltimas";
-            pnlMuestrasUltimas.Size = new Size(506, 171);
+            pnlMuestrasUltimas.Size = new Size(470, 171);
             pnlMuestrasUltimas.TabIndex = 0;
             // 
             // lblMuestrasUltimas
@@ -433,7 +433,7 @@
             pnltitulo.Dock = DockStyle.Fill;
             pnltitulo.Location = new Point(3, 3);
             pnltitulo.Name = "pnltitulo";
-            pnltitulo.Size = new Size(1038, 107);
+            pnltitulo.Size = new Size(966, 107);
             pnltitulo.TabIndex = 9;
             // 
             // pnlProyecto
@@ -443,7 +443,7 @@
             pnlProyecto.Dock = DockStyle.Fill;
             pnlProyecto.Location = new Point(3, 116);
             pnlProyecto.Name = "pnlProyecto";
-            pnlProyecto.Size = new Size(1038, 107);
+            pnlProyecto.Size = new Size(966, 107);
             pnlProyecto.TabIndex = 10;
             // 
             // tlpDashBoard
@@ -464,7 +464,7 @@
             tlpDashBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tlpDashBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tlpDashBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tlpDashBoard.Size = new Size(1044, 788);
+            tlpDashBoard.Size = new Size(972, 788);
             tlpDashBoard.TabIndex = 12;
             tlpDashBoard.Paint += tableLayoutPanel1_Paint;
             // 
@@ -472,7 +472,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1044, 788);
+            ClientSize = new Size(972, 788);
             Controls.Add(tlpDashBoard);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(3, 4, 3, 4);

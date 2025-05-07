@@ -42,47 +42,45 @@ namespace ZasTrack.Forms.Estudiantes // O tu namespace correcto (ej: Estudiantes
             // Carga inicial opcional (ej: todos los pacientes)
         }
 
-        // --- Carga inicial de ComboBoxes de Filtro ---
         private void CargarFiltrosIniciales()
         {
-            // Definir IDs especiales según tu nueva propuesta
-            const int ID_SELECCIONE = 0;  // Valor para "Seleccione..."
-            const int ID_TODOS = 1;       // Valor para "(Todos)"
-                                          // Los IDs reales de la DB deben ser > 1
+            const int ID_TODOS_PROYECTOS_CMB = 0; // ID especial para "(Todos los Proyectos)" en el ComboBox
 
             var listaParaCombo = new List<Proyecto>();
             bool proyectosCargadosOk = false;
 
+            cmbProyectoVer.SelectedIndexChanged -= FiltroCambiado; // Desconectar evento temporalmente
+            cmbProyectoVer.DataSource = null;
+            cmbProyectoVer.Items.Clear();
+
             try
             {
                 if (proyectoRepository == null) proyectoRepository = new ProyectoRepository();
-                Console.WriteLine("DEBUG: [CargarFiltrosIniciales] Cargando proyectos...");
+                Console.WriteLine("DEBUG: [CargarFiltrosIniciales] Iniciando...");
 
-                // 1. Añadir opción "Seleccione..." con ID 0
-                listaParaCombo.Add(new Proyecto { id_proyecto = ID_SELECCIONE, nombre = "Seleccione proyecto..." });
-                // 2. Añadir opción "(Todos)" con ID 1
-                listaParaCombo.Add(new Proyecto { id_proyecto = ID_TODOS, nombre = "(Todos los Proyectos)" });
+                // 1. Añadir opción "(Todos los Proyectos)" con ID especial 0
+                listaParaCombo.Add(new Proyecto { id_proyecto = ID_TODOS_PROYECTOS_CMB, nombre = "(Todos los Proyectos)" });
 
-                // 3. Obtener y añadir proyectos activos (cuyos IDs deben ser > 1)
-                var proyectos = proyectoRepository.ObtenerProyectos(incluirArchivados: false);
-                listaParaCombo.AddRange(proyectos);
+                // 2. Obtener y añadir proyectos activos (sus IDs reales de la BD)
+                var proyectosActivos = proyectoRepository.ObtenerProyectos(incluirArchivados: false);
+                if (proyectosActivos != null)
+                {
+                    listaParaCombo.AddRange(proyectosActivos);
+                }
 
-                // Asignar al ComboBox (Desconectando/Reconectando evento para seguridad)
-                cmbProyectoVer.SelectedIndexChanged -= FiltroCambiado;
-                cmbProyectoVer.DataSource = null;
-                cmbProyectoVer.Items.Clear();
+                // Asignar al ComboBox
                 cmbProyectoVer.DataSource = listaParaCombo;
                 cmbProyectoVer.DisplayMember = "nombre";
                 cmbProyectoVer.ValueMember = "id_proyecto";
 
-                // 4. Seleccionar "Seleccione..." (ID=0) por defecto
-                cmbProyectoVer.SelectedValue = ID_SELECCIONE;
+                // --- INICIO: Lógica para Placeholder ---
+                cmbProyectoVer.SelectedIndex = -1; // No seleccionar nada por defecto
+                cmbProyectoVer.Text = "Seleccione un proyecto..."; // Mostrar este texto como placeholder
+                                                                   // --- FIN: Lógica para Placeholder ---
 
                 cmbProyectoVer.Enabled = true;
                 proyectosCargadosOk = true;
-                Console.WriteLine($"DEBUG: [CargarFiltrosIniciales] Proyectos cargados. Default: {cmbProyectoVer.Text}");
-                cmbProyectoVer.SelectedIndexChanged += FiltroCambiado; // Reconectar
-
+                Console.WriteLine($"DEBUG: [CargarFiltrosIniciales] Proyectos cargados. Placeholder: '{cmbProyectoVer.Text}'");
             }
             catch (Exception ex)
             {
@@ -95,6 +93,13 @@ namespace ZasTrack.Forms.Estudiantes // O tu namespace correcto (ej: Estudiantes
                 cmbProyectoVer.SelectedIndex = 0;
                 cmbProyectoVer.Enabled = false;
                 proyectosCargadosOk = false; // Marcar como fallo
+            }
+            finally
+            {
+                cmbProyectoVer.SelectedIndexChanged += FiltroCambiado; // Reconectar evento
+                                                                       // NO llamamos a RealizarBusqueda aquí, esperamos selección del usuario
+                dgvPacientes.DataSource = null; // Asegurar que el grid esté vacío inicialmente
+                ActualizarVisibilidadColumnasCondicionales(null); // Ocultar columnas condicionales
             }
 
             // --- Cargar Género ---
@@ -128,7 +133,6 @@ namespace ZasTrack.Forms.Estudiantes // O tu namespace correcto (ej: Estudiantes
 
             Console.WriteLine("DEBUG: [CargarFiltrosIniciales] Finalizado.");
         }
-        // --- Configuración del DataGridView mediante Código ---
         private void ConfigurarGridViaCodigo()
         {
             try
@@ -261,94 +265,136 @@ namespace ZasTrack.Forms.Estudiantes // O tu namespace correcto (ej: Estudiantes
                 Console.WriteLine($"ERROR ConfigurarGridViaCodigo: {ex.ToString()}");
             }
         }
-
-        // --- Event Handlers que llaman a la búsqueda ---
-        private void FiltroCambiado(object sender, EventArgs e) { RealizarBusqueda(); }
+        private void FiltroCambiado(object sender, EventArgs e)
+        {
+            if (cmbProyectoVer.SelectedIndex != -1 || sender != cmbProyectoVer) // Si cambió un filtro que no es el combo, o si el combo tiene algo seleccionado
+            {
+                RealizarBusqueda();
+            }
+            else if (cmbProyectoVer.SelectedIndex == -1 && sender == cmbProyectoVer)
+            {
+                // Si el ComboBox de Proyecto se pone en "Seleccione..." (placeholder), limpiar el grid
+                dgvPacientes.DataSource = null;
+                ActualizarVisibilidadColumnasCondicionales(null); // Ocultar columnas opcionales
+                Console.WriteLine("DEBUG: Placeholder seleccionado en cmbProyectoVer, grid limpiado.");
+            }
+        }
         private void btnBuscar_Click(object sender, EventArgs e) { RealizarBusqueda(); }
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Enter) { RealizarBusqueda(); e.SuppressKeyPress = true; } }
 
-        // --- Método Central de Búsqueda ---
-        // --- MÉTODO ACTUALIZADO: RealizarBusqueda con chequeo inicial ---
-        // --- MÉTODO ACTUALIZADO: RealizarBusqueda con chequeo inicial CORREGIDO ---
-        // --- MÉTODO ACTUALIZADO: RealizarBusqueda (SIN chequeo inicial) ---
         private async void RealizarBusqueda()
         {
             Console.WriteLine($"DEBUG: ***** RealizarBusqueda() llamada a las {DateTime.Now:HH:mm:ss.fff} *****");
-
-            // Definir IDs especiales (igual que en CargarFiltrosIniciales)
-            const int ID_SELECCIONE = 0;
-            const int ID_TODOS = 1;
+            const int ID_TODOS_PROYECTOS_CMB = 0; // Debe coincidir con CargarFiltrosIniciales
 
             // --- Leer filtros actuales ---
-            int? idProyectoFiltrar = null; // Null significa buscar en TODOS
-            int selectedValue = ID_SELECCIONE; // Default a "Seleccione"
-            if (cmbProyectoVer.SelectedValue is int val)
-            {
-                selectedValue = val;
-            }
+            int? idProyectoFiltrar = null;
 
-            // *** NUEVA LÓGICA DE FILTRO PROYECTO ***
-            if (selectedValue == ID_SELECCIONE)
+            // Verificar si hay algo seleccionado
+            if (cmbProyectoVer.SelectedIndex == -1 || cmbProyectoVer.SelectedValue == null)
             {
-                Console.WriteLine("DEBUG: [RealizarBusqueda] 'Seleccione proyecto...' elegido. Limpiando grid.");
+                Console.WriteLine("DEBUG: [RealizarBusqueda] No hay proyecto seleccionado (placeholder activo). No se buscará.");
                 dgvPacientes.DataSource = null; // Limpiar tabla
-                                                // Actualizar visibilidad de columnas por si acaso
-                if (dgvPacientes.Columns["colProyecto"] != null) dgvPacientes.Columns["colProyecto"].Visible = false;
-                if (dgvPacientes.Columns["colResumenMuestras"] != null) dgvPacientes.Columns["colResumenMuestras"].Visible = false;
-                if (dgvPacientes.Columns["colResumenExamenes"] != null) dgvPacientes.Columns["colResumenExamenes"].Visible = false;
-                return; // No hacer nada más
+                ActualizarVisibilidadColumnasCondicionales(null);
+                return; // No hacer nada si está el placeholder
             }
-            else if (selectedValue == ID_TODOS)
-            {
-                idProyectoFiltrar = null; // Buscar en todos
-                Console.WriteLine("DEBUG: [RealizarBusqueda] Buscando en (Todos los Proyectos).");
-            }
-            else if (selectedValue > ID_TODOS)
-            { // Mayor que 1 (ID real de proyecto)
-                idProyectoFiltrar = selectedValue; // Buscar en proyecto específico
-                Console.WriteLine($"DEBUG: [RealizarBusqueda] Buscando en Proyecto ID: {idProyectoFiltrar}.");
-            }
-            // **************************************
 
-            // Leer otros filtros (igual que antes)
+            // Obtener el valor seleccionado
+            if (cmbProyectoVer.SelectedValue is int selectedValue)
+            {
+                if (selectedValue == ID_TODOS_PROYECTOS_CMB) // Si es "Todos los Proyectos"
+                {
+                    idProyectoFiltrar = null; // Null significa buscar en TODOS los proyectos ACTIVOS
+                    Console.WriteLine("DEBUG: [RealizarBusqueda] Buscando en (Todos los Proyectos Activos).");
+                }
+                else // Es un ID de proyecto específico (debe ser > 0)
+                {
+                    idProyectoFiltrar = selectedValue;
+                    Console.WriteLine($"DEBUG: [RealizarBusqueda] Buscando en Proyecto ID: {idProyectoFiltrar}.");
+                }
+            }
+            else
+            {
+                // Caso inesperado, tratar como si no hubiera selección
+                Console.WriteLine("DEBUG: [RealizarBusqueda] SelectedValue no es un int. Limpiando grid.");
+                dgvPacientes.DataSource = null;
+                ActualizarVisibilidadColumnasCondicionales(null);
+                return;
+            }
+
+            // Leer otros filtros
             string? filtroGenero = (cmbFiltroGenero.SelectedIndex > 0) ? cmbFiltroGenero.SelectedItem.ToString() : null;
             bool? filtroConMuestras = chkFiltroConMuestras.Checked ? true : (bool?)null;
             bool? filtroConExamenes = chkFiltroConExamenes.Checked ? true : (bool?)null;
             string? criterio = string.IsNullOrWhiteSpace(txtBuscar.Text) ? null : txtBuscar.Text.Trim();
 
-            // --- UI de carga (igual) ---
+            // --- UI de carga ---
             this.Cursor = Cursors.WaitCursor;
             dgvPacientes.DataSource = null;
-
             List<PacienteViewModel> resultados = new List<PacienteViewModel>();
 
             try
             {
-                // Llamada al Repositorio (la firma no cambia, solo el valor de idProyectoFiltrar)
-                Console.WriteLine($"DEBUG: Buscando con criterio='{criterio}', idProyecto={idProyectoFiltrar}, genero={filtroGenero}, conMuestras={filtroConMuestras}, conExamenes={filtroConExamenes}");
+                Console.WriteLine($"DEBUG: Buscando con criterio='{criterio}', idProyecto={idProyectoFiltrar?.ToString() ?? "NULL"}, genero={filtroGenero}, conMuestras={filtroConMuestras}, conExamenes={filtroConExamenes}");
                 if (pacienteRepository == null) pacienteRepository = new PacienteRepository();
 
-                // >>> ¡¡¡ ASEGÚRATE QUE EL MÉTODO DEL REPO ESTÉ IMPLEMENTADO !!! <<<
+                // Llamada al repositorio
                 resultados = await Task.Run(() =>
                     pacienteRepository.BuscarPacientesCompleto(criterio, idProyectoFiltrar, filtroGenero, filtroConMuestras, filtroConExamenes)
                 );
-                // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
                 dgvPacientes.DataSource = resultados;
-
-                // Actualizar Visibilidad Columnas (La lógica no cambia)
-                bool mostrarColumnaProyecto = (idProyectoFiltrar == null); // Mostrar si se buscaron TODOS
-                bool mostrarColumnaMuestras = chkFiltroConMuestras.Checked;
-                bool mostrarColumnaExamenes = chkFiltroConExamenes.Checked;
-                // ... (código para poner .Visible = ... a las columnas) ...
-                if (dgvPacientes.Columns["colProyecto"] != null) dgvPacientes.Columns["colProyecto"].Visible = mostrarColumnaProyecto;
-                if (dgvPacientes.Columns["colResumenMuestras"] != null) dgvPacientes.Columns["colResumenMuestras"].Visible = mostrarColumnaMuestras;
-                if (dgvPacientes.Columns["colResumenExamenes"] != null) dgvPacientes.Columns["colResumenExamenes"].Visible = mostrarColumnaExamenes;
-
+                ActualizarVisibilidadColumnasCondicionales(idProyectoFiltrar); // Pasa el id para lógica de columnas
                 Console.WriteLine($"DEBUG: Búsqueda completada. {resultados?.Count ?? 0} resultados encontrados.");
             }
-            catch (Exception ex) { /* ... manejo error ... */ MessageBox.Show($"Error buscando: {ex.Message}"); }
-            finally { this.Cursor = Cursors.Default; /* ... mensaje si no hay resultados ... */ }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error buscando: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"ERROR RealizarBusqueda: {ex}");
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+        // En wVerPaciente.cs
+
+        private void ActualizarVisibilidadColumnasCondicionales(int? idProyectoSeleccionado)
+        {
+            try
+            {
+                // Columna Proyecto: Visible solo si se seleccionó "(Todos los Proyectos)"
+                if (dgvPacientes.Columns["colProyecto"] != null)
+                {
+                    // idProyectoSeleccionado será null cuando "(Todos los Proyectos)" (ID 0) esté elegido.
+                    dgvPacientes.Columns["colProyecto"].Visible = (idProyectoSeleccionado == null);
+                    Console.WriteLine($"DEBUG: colProyecto.Visible = {(idProyectoSeleccionado == null)}");
+                }
+                else { Console.WriteLine("WARN: Columna 'colProyecto' no encontrada en dgvPacientes."); }
+
+                // Columna Resumen Muestras: Visible si el CheckBox está marcado
+                if (dgvPacientes.Columns["colResumenMuestras"] != null)
+                {
+                    dgvPacientes.Columns["colResumenMuestras"].Visible = chkFiltroConMuestras.Checked;
+                    Console.WriteLine($"DEBUG: colResumenMuestras.Visible = {chkFiltroConMuestras.Checked}");
+                }
+                else { Console.WriteLine("WARN: Columna 'colResumenMuestras' no encontrada en dgvPacientes."); }
+
+
+                // Columna Resumen Exámenes: Visible si el CheckBox está marcado
+                if (dgvPacientes.Columns["colResumenExamenes"] != null)
+                {
+                    dgvPacientes.Columns["colResumenExamenes"].Visible = chkFiltroConExamenes.Checked;
+                    Console.WriteLine($"DEBUG: colResumenExamenes.Visible = {chkFiltroConExamenes.Checked}");
+                }
+                else { Console.WriteLine("WARN: Columna 'colResumenExamenes' no encontrada en dgvPacientes."); }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en ActualizarVisibilidadColumnasCondicionales: {ex.Message}");
+                // No mostrar MessageBox aquí para no ser intrusivo
+            }
         }
         private void dgvPacientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -391,11 +437,10 @@ namespace ZasTrack.Forms.Estudiantes // O tu namespace correcto (ej: Estudiantes
             // --- La lógica para la columna "colEliminar" se quitó ---
             // else if (dgvPacientes.Columns[e.ColumnIndex].Name == "colEliminar") { ... }
         }
-        // --- Definición del ViewModel (Poner fuera de la clase wVerPaciente) ---
-       
+
         #region Windows Form Designer generated code
 
-      
+
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
 

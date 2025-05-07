@@ -14,15 +14,8 @@ using ExcelDataReader; // NuGet: ExcelDataReader, ExcelDataReader.DataSet
 using Npgsql; // Para NpgsqlException si la usas en el repo
 using ZasTrack.Models;
 using ZasTrack.Repositories;
-using static System.Net.WebRequestMethods;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-// Necesario para ExcelDataReader en .NET Core / .NET 5+
-// Añadir paquete NuGet: System.Text.Encoding.CodePages
-// Y añadir esta línea UNA SOLA VEZ al inicio de tu aplicación (ej. en Program.cs o constructor principal)
-// System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-// Si ya la tienes en otro lado, no la repitas. La pongo en ProcesarArchivoExcel por si acaso.
 
 namespace ZasTrack.Forms.Pacientes
 {
@@ -66,8 +59,7 @@ namespace ZasTrack.Forms.Pacientes
             // Habilitar/Deshabilitar botones basado en estado inicial
             ActualizarEstadoBotonImportar(); // Esto lo deshabilitará inicialmente
         }
-
-        // --- Cargar Proyectos Activos ---
+        #region Metodos
         private void CargarProyectos()
         {
             // Usar el repositorio miembro
@@ -115,28 +107,7 @@ namespace ZasTrack.Forms.Pacientes
                 Console.WriteLine("DEBUG: [CargarProyectos] Finalizado.");
             }
         }
-
-        // --- Seleccionar Archivo Excel ---
-        private void btnSeleccionarArchivo_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Title = "Seleccionar archivo Excel con pacientes";
-                openFileDialog.Filter = "Archivos Excel (*.xlsx;*.xls)|*.xlsx;*.xls"; // Solo Excel
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtRutaArchivo.Text = openFileDialog.FileName;
-                    CargarNombresDeHojas(openFileDialog.FileName); // Cargar hojas al seleccionar
-                }
-                // No limpiamos si cancela, para que pueda reintentar importar si ya tenía archivo
-                ActualizarEstadoBotonImportar(); // Actualizar estado botón importar
-            }
-        }
-
-        // --- Cargar Nombres de Hojas del Excel ---
+        
         private void CargarNombresDeHojas(string rutaArchivo)
         {
             List<string> nombresHojas = new List<string>();
@@ -179,19 +150,7 @@ namespace ZasTrack.Forms.Pacientes
                 ActualizarEstadoBotonImportar(); // Actualizar botón importar al final
             }
         }
-
-        // --- Eventos para actualizar estado del botón Importar ---
-        private void cmbHojas_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActualizarEstadoBotonImportar();
-        }
-
-        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActualizarEstadoBotonImportar();
-        }
-
-        // --- Habilitar/Deshabilitar Botón Importar ---
+      
         private void ActualizarEstadoBotonImportar()
         {
             bool archivoOk = !string.IsNullOrEmpty(txtRutaArchivo.Text) && System.IO.File.Exists(txtRutaArchivo.Text);
@@ -201,7 +160,291 @@ namespace ZasTrack.Forms.Pacientes
             btnImportar.Enabled = archivoOk && hojaOk && proyectoOk;
         }
 
-        // --- BOTÓN IMPORTAR: Inicia el proceso ---
+       
+        private ResultadoImportacion ProcesarArchivoExcel(string rutaArchivo, string nombreHoja, bool tieneEncabezado, int idProyecto)
+        {
+          
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+
+            ResultadoImportacion resultado = new ResultadoImportacion();
+            int filaExcelActual = 0; // Inicia en 0, la primera fila leída será la 1 (o 2 si hay encabezado)
+            int filasLeidasDelExcel = 0; // Contador de filas realmente leídas del DataRow
+
+            // Asegurar que el repositorio esté instanciado (ya lo haces en el constructor, está bien)
+            if (pacienteRepository == null) pacienteRepository = new PacienteRepository();
+
+            try
+            {
+                using (var stream = File.Open(rutaArchivo, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) // Usar System.IO.File
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    var dataset = reader.AsDataSet(new ExcelDataSetConfiguration()
+                    {
+                        ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                        {
+                            UseHeaderRow = tieneEncabezado // Usa el valor del CheckBox
+                        }
+                    });
+
+                    DataTable tabla;
+                    if (dataset.Tables.Contains(nombreHoja))
+                    {
+                        tabla = dataset.Tables[nombreHoja];
+                    }
+                    else if (dataset.Tables.Count > 0)
+                    {
+                        // Si no encuentra la hoja por nombre, toma la primera (podrías avisar al usuario)
+                        tabla = dataset.Tables[0];
+                        Console.WriteLine($"WARN: Hoja '{nombreHoja}' no encontrada. Usando primera hoja: '{tabla.TableName}'.");
+                        // Podrías incluso actualizar el cmbHojas aquí si quisieras.
+                    }
+                    else
+                    {
+                        throw new Exception("El archivo Excel no contiene hojas o no se pudo leer ninguna.");
+                    }
+
+
+                    foreach (DataRow fila in tabla.Rows)
+                    {
+                        filasLeidasDelExcel++; // Este contador es para las filas leídas del DataTable 'tabla'
+                        filaExcelActual = tieneEncabezado ? filasLeidasDelExcel + 1 : filasLeidasDelExcel; // Número de fila en el archivo Excel
+
+                        // --- AÑADIR ESTA VALIDACIÓN PARA OMITIR ENCABEZADO ---
+                        // Si el usuario marcó "Tiene Encabezado" Y esta es la primera fila que estamos leyendo
+                        // del DataTable (que ExcelDataReader pudo haber incluido erróneamente), la saltamos.
+                        if (tieneEncabezado && filasLeidasDelExcel == 1)
+                        {
+                            Console.WriteLine($"DEBUG: Omitiendo fila de encabezado detectada en DataTable (Fila Excel: {filaExcelActual})");
+                            continue; // Saltar al siguiente DataRow
+                        }
+
+                        string codigo = fila.Field<string>(1)?.Trim();         // Código de la columna B
+                        string nombreCompleto = fila.Field<string>(2)?.Trim(); // Nombre de la columna C
+                        object fechaObj = fila[3];                             // Fecha de la columna D
+                        string generoChar = fila.Field<string>(4)?.Trim().ToUpper(); // Género de la columna E
+
+
+                        // Omitir filas completamente vacías (basado en código y nombre)
+                        if (string.IsNullOrWhiteSpace(codigo) && string.IsNullOrWhiteSpace(nombreCompleto))
+                        {
+                            Console.WriteLine($"DEBUG: Fila Excel {filaExcelActual} omitida por estar vacía (código y nombre).");
+                            continue; // Saltar a la siguiente fila
+                        }
+
+                        bool esFilaValida = true;
+                        List<string> erroresFila = new List<string>();
+                        DateTime fechaNac = DateTime.MinValue;
+
+                        // --- Validaciones ---
+                        // Código
+                        if (string.IsNullOrWhiteSpace(codigo))
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Código de beneficiario está vacío.");
+                        }
+                        else
+                        {
+                            try
+                            {
+                                // *** OJO: Asumimos que tu PacienteRepository tiene el método ExisteCodigoBeneficiario ***
+                                if (pacienteRepository.ExisteCodigoBeneficiario(codigo)) // Valida contra la BD
+                                {
+                                    esFilaValida = false;
+                                    erroresFila.Add($"El código de beneficiario '{codigo}' ya existe en la base de datos.");
+                                }
+                            }
+                            catch (Exception exValCod)
+                            {
+                                esFilaValida = false;
+                                erroresFila.Add($"Error al validar código contra BD: {exValCod.Message}");
+                                Console.WriteLine($"ERROR validando código {codigo}: {exValCod}");
+                            }
+                        }
+
+                        // Nombre Completo
+                        string nombres = "";
+                        string apellidos = "";
+                        if (string.IsNullOrWhiteSpace(nombreCompleto))
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Nombre completo está vacío.");
+                        }
+                        else
+                        {
+                            // --- LÓGICA DE DIVISIÓN DE NOMBRE MEJORADA ---
+                            string[] palabras = nombreCompleto.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (palabras.Length == 1)
+                            {
+                                nombres = palabras[0];
+                                apellidos = ""; // O marcar como error si se requieren apellidos
+                                erroresFila.Add("Solo se encontró una palabra en Nombre Completo (asignado a Nombres).");
+                            }
+                            else if (palabras.Length == 2)
+                            {
+                                nombres = palabras[0];
+                                apellidos = palabras[1];
+                            }
+                            else if (palabras.Length > 2)
+                            {
+                                apellidos = $"{palabras[palabras.Length - 2]} {palabras[palabras.Length - 1]}";
+                                nombres = string.Join(" ", palabras.Take(palabras.Length - 2));
+                            }
+                            // --- FIN LÓGICA DE DIVISIÓN ---
+
+                            if (string.IsNullOrWhiteSpace(nombres)) { esFilaValida = false; erroresFila.Add("Nombres (después de dividir) está vacío."); }
+                            if (string.IsNullOrWhiteSpace(apellidos) && palabras.Length > 1) { esFilaValida = false; erroresFila.Add("Apellidos (después de dividir) está vacío."); }
+                        }
+
+
+                        // Fecha Nacimiento
+                        if (fechaObj == null || string.IsNullOrWhiteSpace(fechaObj.ToString()))
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Fecha de Nacimiento está vacía.");
+                        }
+                        else
+                        {
+                            // ExcelDataReader a veces devuelve fechas como double (OADate) o ya como DateTime
+                            if (fechaObj is double d) { fechaNac = DateTime.FromOADate(d); }
+                            else if (fechaObj is DateTime dt) { fechaNac = dt; }
+                            else if (!DateTime.TryParse(fechaObj.ToString(), out fechaNac))
+                            {
+                                // Intenta otros formatos comunes si el TryParse directo falla
+                                string[] formatosFecha = { "dd/MM/yyyy", "d/M/yy", "d-M-yyyy", "yyyy-MM-dd" }; // Añade más si es necesario
+                                if (!DateTime.TryParseExact(fechaObj.ToString(), formatosFecha, CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaNac))
+                                {
+                                    esFilaValida = false;
+                                    erroresFila.Add($"Fecha Nac. '{fechaObj}' formato inválido.");
+                                }
+                            }
+
+                            if (esFilaValida && (fechaNac > DateTime.Today.AddYears(1) || fechaNac < new DateTime(1900, 1, 1))) // +1 año por si es un bebé recién nacido
+                            {
+                                esFilaValida = false;
+                                erroresFila.Add("Fecha Nac. fuera de rango (1900 - Hoy+1año).");
+                            }
+                        }
+
+                        // Género
+                        if (string.IsNullOrWhiteSpace(generoChar) || (generoChar != "F" && generoChar != "M"))
+                        {
+                            esFilaValida = false;
+                            erroresFila.Add("Género inválido (debe ser F o M).");
+                        }
+
+                        // --- Fin Validaciones ---
+
+                        if (esFilaValida)
+                        {
+                            int edadCalculada = DateTime.Today.Year - fechaNac.Year;
+                            if (fechaNac.Date > DateTime.Today.AddYears(-edadCalculada)) edadCalculada--; // Ajustar si aún no cumple años este año
+
+                            pacientes nuevoPaciente = new pacientes // *** OJO: usa el nombre de tu clase (pacientes o Paciente) ***
+                            {
+                                nombres = CapitalizarTexto(nombres),
+                                apellidos = CapitalizarTexto(apellidos),
+                                edad = edadCalculada,
+                                genero = generoChar == "F" ? "Femenino" : "Masculino",
+                                codigo_beneficiario = codigo.ToUpper(), // Guardar código en mayúsculas quizás
+                                fecha_nacimiento = fechaNac.Date, // Guardar solo la fecha
+                                id_proyecto = idProyecto,
+                                observacion = "" // Opcional: tomarlo del Excel si hay columna
+                            };
+
+                            try
+                            {
+                                // *** OJO: Asumimos que tu PacienteRepository tiene el método GuardarPaciente ***
+                                pacienteRepository.GuardarPaciente(nuevoPaciente);
+                                resultado.PacientesGuardados.Add(nuevoPaciente);
+                            }
+                            catch (Exception exSave)
+                            {
+                                Console.WriteLine($"ERROR al guardar Paciente con Código={codigo} de FilaExcel={filaExcelActual}: {exSave.Message}");
+                                resultado.Errores.Add(new ErrorImportacion
+                                {
+                                    Fila = filaExcelActual,
+                                    Mensaje = $"Error BD: {exSave.Message}",
+                                    CodigoIntentado = codigo,
+                                    NombreIntentado = nombreCompleto
+                                });
+                            }
+                        }
+                        else // Si la fila no es válida
+                        {
+                            resultado.Errores.Add(new ErrorImportacion
+                            {
+                                Fila = filaExcelActual,
+                                Mensaje = string.Join("; ", erroresFila),
+                                CodigoIntentado = codigo ?? "",
+                                NombreIntentado = nombreCompleto ?? ""
+                            });
+                        }
+
+                        // Actualizar progreso (ejemplo simple)
+                        // Necesitarías una forma de comunicar esto a la UI si ProcesarArchivoExcel
+                        // se ejecuta en un hilo diferente de verdad (con Task.Run como lo tenías antes).
+                        // Por ahora, lo pongo directo pero no actualizará la UI si este método
+                        // se llama desde un Task.Run sin un IProgress<T>.
+                        // int progreso = (int)(((double)filasLeidasDelExcel / tabla.Rows.Count) * 100);
+                        // this.Invoke((MethodInvoker)delegate {
+                        //     progressBarImportacion.Value = Math.Min(progreso, 100);
+                        //     lblProgreso.Text = $"Procesando fila {filasLeidasDelExcel} de {tabla.Rows.Count}... {progreso}%";
+                        // });
+
+                    } // Fin foreach
+                } // Fin using reader
+            } // Fin using stream
+            catch (IOException ioEx)
+            {
+                Console.WriteLine($"ERROR IO ProcesarArchivoExcel: {ioEx.ToString()}");
+                resultado.Errores.Add(new ErrorImportacion { Fila = 0, Mensaje = $"Error IO: {ioEx.Message}. Asegúrese de que el archivo no esté en uso." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR General ProcesarArchivoExcel: {ex.ToString()}");
+                resultado.Errores.Add(new ErrorImportacion { Fila = filasLeidasDelExcel, Mensaje = $"Error General al procesar: {ex.Message}" });
+            }
+
+            return resultado;
+        }
+
+        private string CapitalizarTexto(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return texto;
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(texto.ToLower());
+        }
+        #endregion
+
+
+        #region Eventos
+        private void lblUbicacionArc_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btnSeleccionarArchivo_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Title = "Seleccionar archivo Excel con pacientes";
+                openFileDialog.Filter = "Archivos Excel (*.xlsx;*.xls)|*.xlsx;*.xls"; // Solo Excel
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    txtRutaArchivo.Text = openFileDialog.FileName;
+                    CargarNombresDeHojas(openFileDialog.FileName); // Cargar hojas al seleccionar
+                }
+                // No limpiamos si cancela, para que pueda reintentar importar si ya tenía archivo
+                ActualizarEstadoBotonImportar(); // Actualizar estado botón importar
+            }
+        }
+        private void cmbHojas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarEstadoBotonImportar();
+        }
         private async void btnImportar_Click(object sender, EventArgs e)
         {
             // --- 1. Validaciones Iniciales ---
@@ -312,190 +555,13 @@ namespace ZasTrack.Forms.Pacientes
                 ActualizarEstadoBotonImportar();
             }
         }
-
-        // --- MÉTODO ACTUALIZADO: ProcesarArchivoExcel con Validaciones y Guardado 1x1 ---
-        private ResultadoImportacion ProcesarArchivoExcel(string rutaArchivo, string nombreHoja, bool tieneEncabezado, int idProyecto)
+        private void cmbProyecto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResultadoImportacion resultado = new ResultadoImportacion();
-            int filaExcelActual = tieneEncabezado ? 1 : 0; // Inicia antes de la primera fila a leer
-            int filasProcesadas = 0;
-
-            if (pacienteRepository == null) pacienteRepository = new PacienteRepository();
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            try
-            {
-                using (var stream = System.IO.File.Open(rutaArchivo, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
-                {
-                    var dataset = reader.AsDataSet(new ExcelDataSetConfiguration()
-                    {
-                        ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
-                        {
-                            UseHeaderRow = tieneEncabezado
-                        }
-                    });
-
-                    DataTable tabla = dataset.Tables[nombreHoja] ?? dataset.Tables[0];
-                    if (tabla == null) throw new Exception("No se encontró la hoja especificada o el archivo Excel está vacío.");
-
-                    foreach (DataRow fila in tabla.Rows)
-                    {
-                        filaExcelActual++;
-                        filasProcesadas++;
-
-                        if (tieneEncabezado && filasProcesadas == 1) continue;
-
-                        string codigo = fila.Field<string>(1)?.Trim();
-                        string nombreCompleto = fila.Field<string>(2)?.Trim();
-                        object fechaObj = fila[3];
-                        string generoChar = fila.Field<string>(4)?.Trim().ToUpper();
-
-                        if (string.IsNullOrWhiteSpace(codigo) && string.IsNullOrWhiteSpace(nombreCompleto)) continue;
-
-                        bool esFilaValida = true;
-                        List<string> erroresFila = new List<string>();
-                        DateTime fechaNac = DateTime.MinValue;
-
-                        if (string.IsNullOrWhiteSpace(codigo))
-                        {
-                            esFilaValida = false;
-                            erroresFila.Add("Código vacío.");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                if (pacienteRepository.ExisteCodigoBeneficiario(codigo))
-                                {
-                                    esFilaValida = false;
-                                    erroresFila.Add($"Código '{codigo}' ya existe.");
-                                }
-                            }
-                            catch
-                            {
-                                esFilaValida = false;
-                                erroresFila.Add("Error validando código.");
-                            }
-                        }
-
-                        if (string.IsNullOrWhiteSpace(nombreCompleto))
-                        {
-                            esFilaValida = false;
-                            erroresFila.Add("Nombre vacío.");
-                        }
-
-                        if (fechaObj == null || string.IsNullOrWhiteSpace(fechaObj.ToString()))
-                        {
-                            esFilaValida = false;
-                            erroresFila.Add("Fecha Nac. vacía.");
-                        }
-                        else
-                        {
-                            if (!DateTime.TryParse(fechaObj.ToString(), out fechaNac) || fechaNac > DateTime.Today || fechaNac < new DateTime(1900, 1, 1))
-                            {
-                                esFilaValida = false;
-                                erroresFila.Add("Fecha Nac. inválida.");
-                            }
-                        }
-
-                        if (generoChar != "F" && generoChar != "M")
-                        {
-                            esFilaValida = false;
-                            erroresFila.Add("Género inválido (F/M).");
-                        }
-
-                        if (esFilaValida)
-                        {
-                            string nombres = "", apellidos = "";
-                            int firstSpace = nombreCompleto.IndexOf(' ');
-                            if (firstSpace > 0)
-                            {
-                                nombres = nombreCompleto.Substring(0, firstSpace).Trim();
-                                apellidos = nombreCompleto.Substring(firstSpace + 1).Trim();
-                            }
-                            else
-                            {
-                                nombres = nombreCompleto.Trim();
-                            }
-
-                            pacientes nuevoPaciente = new pacientes
-                            {
-                                nombres = CapitalizarTexto(nombres),
-                                apellidos = CapitalizarTexto(apellidos),
-                                edad = DateTime.Today.Year - fechaNac.Year,
-                                genero = generoChar == "F" ? "Femenino" : "Masculino",
-                                codigo_beneficiario = codigo,
-                                fecha_nacimiento = fechaNac,
-                                id_proyecto = idProyecto,
-                                observacion = ""
-                            };
-
-                            try
-                            {
-                                pacienteRepository.GuardarPaciente(nuevoPaciente);
-                                resultado.PacientesGuardados.Add(nuevoPaciente);
-                            }
-                            catch (Exception exSave)
-                            {
-                                Console.WriteLine($"ERROR al guardar Cod={codigo}, FilaExcel={filaExcelActual}: {exSave.Message}");
-
-                                resultado.Errores.Add(new ErrorImportacion
-                                {
-                                    Fila = filaExcelActual,
-                                    Mensaje = $"Error al guardar BD: {exSave.Message}",
-                                    CodigoIntentado = codigo,
-                                    NombreIntentado = nombreCompleto
-                                });
-
-                            }
-                        }
-                        else
-                        {
-                            resultado.Errores.Add(new ErrorImportacion
-                            {
-                                Fila = filaExcelActual,
-                                Mensaje = string.Join("; ", erroresFila),
-                                CodigoIntentado = codigo ?? "",
-                                NombreIntentado = nombreCompleto ?? ""
-                            });
-                        }
-                    }
-                }
-            }
-            catch (IOException ioEx)
-            {
-                resultado.Errores.Add(new ErrorImportacion { Fila = 0, Mensaje = $"Error IO: {ioEx.Message}" });
-            }
-            catch (Exception ex)
-            {
-                resultado.Errores.Add(new ErrorImportacion { Fila = filaExcelActual, Mensaje = $"Error General: {ex.Message}" });
-            }
-
-            return resultado;
+            ActualizarEstadoBotonImportar();
         }
 
+        #endregion
 
-        // --- Método auxiliar para capitalizar ---
-        private string CapitalizarTexto(string texto)
-        {
-            if (string.IsNullOrWhiteSpace(texto)) return texto;
-            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-            return textInfo.ToTitleCase(texto.ToLower());
-        }
-
-        // --- Clases auxiliares para resultado y error ---
-        // FUERA de la clase wImportarPacientes, DENTRO del namespace
-
-       
-        // --- Handlers vacíos (puedes quitarlos si no los usas) ---
-        private void cmbProyectoImportar_SelectedIndexChanged(object sender, EventArgs e)
-        { /* No necesita lógica si ActualizarEstado lo maneja todo */ }
-
-        private void wImportarPacientes_Load_1
-            (object sender, EventArgs e)
-        { /* Probablemente redundante, usa el otro Load */ }
     } // Fin clase wImportarPacientes
     public class ResultadoImportacion
     {

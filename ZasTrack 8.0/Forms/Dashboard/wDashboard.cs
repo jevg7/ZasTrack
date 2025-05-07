@@ -180,7 +180,7 @@ namespace ZasTrack.Forms.Dashboard
             chart.Palette = ChartColorPalette.Pastel; // Elige una paleta de colores
 
             // Añadir un título al gráfico
-            chart.Titles.Add("Estado Exámenes (Hoy)");
+            chart.Titles.Add("Estado Exámenes");
             chart.Titles[0].Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 
             // Crear la serie de datos para el gráfico Pie
