@@ -420,22 +420,21 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
             // --- CAMBIO 1: Usar SaveFileDialog en lugar de una ruta temporal ---
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                // --- CAMBIO 2: Crear el nombre de archivo personalizado ---
                 string nombreCompleto = $"{viewModel.NombrePaciente} {viewModel.ApellidoPaciente}".Trim();
                 string fechaArchivo = viewModel.FechaInforme.ToString("yyyy-MM-dd");
-                saveFileDialog.FileName = $"Informe - {nombreCompleto} - {fechaArchivo}.pdf"; // Nombre sugerido
+
+                // --- CAMBIO: El nombre del archivo ahora dice "Examen" ---
+                saveFileDialog.FileName = $"Examen - {nombreCompleto} - {fechaArchivo}.pdf";
 
                 saveFileDialog.Filter = "Archivo PDF (*.pdf)|*.pdf";
-                saveFileDialog.Title = "Guardar Informe PDF";
+                saveFileDialog.Title = "Guardar Examen PDF";
 
-                // Si el usuario selecciona una ubicación y hace clic en "Guardar"
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string rutaGuardar = saveFileDialog.FileName;
 
                     try
                     {
-                        // 2. Generar el documento PDF (sin cambios en la lógica de QuestPDF)
                         var document = Document.Create(container =>
                         {
                             container.Page(page =>
@@ -448,14 +447,9 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
                             });
                         });
 
-                        // Guardar el PDF en la ruta elegida por el usuario
                         await Task.Run(() => document.GeneratePdf(rutaGuardar));
                         Console.WriteLine($"DEBUG: PDF guardado en: {rutaGuardar}");
-
-                        MessageBox.Show($"El informe se ha guardado correctamente en:\n{rutaGuardar}", "Guardado Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // --- CAMBIO 3: Abrir el archivo en lugar de imprimirlo ---
-                        // Esto le da al usuario la opción de verlo, imprimirlo o cerrarlo.
+                        MessageBox.Show($"El examen se ha guardado correctamente en:\n{rutaGuardar}", "Guardado Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Process.Start(new ProcessStartInfo(rutaGuardar) { UseShellExecute = true });
                     }
                     catch (Exception ex)
@@ -465,7 +459,6 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
                     }
                 }
             }
-
             this.Cursor = Cursors.Default;
         }
 
@@ -473,26 +466,43 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         //     (Sin cambios, permanecen en wInformes.cs ya que son parte de la UI/Presentación)
         void ComposeHeader(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
+            // --- CAMBIO: Ruta del logo ---
+            string logoPath = @"C:\Users\alexj\OneDrive\Documentos\DevWorkspace\Work\ZasTrack\ZasTrack 8.0\Resources\Zas-log.ico";
+            byte[]? logoData = null;
+            if (File.Exists(logoPath))
+            {
+                try
+                {
+                    logoData = File.ReadAllBytes(logoPath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"WARN: No se pudo cargar el logo. {ex.Message}");
+                }
+            }
+
             container.Row(row =>
             {
-                // Logo Placeholder
-                // row.ConstantItem(80).Height(40).Placeholder("Logo");
-                row.RelativeItem().Column(col =>
+                // --- CAMBIO: Columna para el Logo ---
+                if (logoData != null)
                 {
-                    col.Item().Text(model.NombreLaboratorio ?? "Laboratorio").Bold().FontSize(14); // Manejar null
-                    col.Item().Text(model.DireccionLaboratorio ?? "").FontSize(9);
-                    col.Item().Text(model.ContactoLaboratorio ?? "").FontSize(9);
+                    row.ConstantItem(80).Image(logoData);
+                }
+                else
+                {
+                    row.ConstantItem(80).Height(40).Placeholder("Logo no encontrado");
+                }
+
+                row.RelativeItem().PaddingLeft(10).Column(col =>
+                {
+                    // --- CAMBIO: Se usa tu información de contacto directamente ---
+                    col.Item().Text(model.NombreLaboratorio ?? "Laboratorio Clínico ZasTrack").Bold().FontSize(14);
+                    col.Item().Text("Barrio San Luis, Centro de Salud Francisco Bultrago, 1c. al Norte. Managua, Nicaragua. CP: 11097").FontSize(9);
+                    col.Item().Text("Tel: +505 8660 2341 | Correo: info@grupo-zas.com | Web: grupo-zas.com").FontSize(9);
                 });
-                row.ConstantItem(100).Placeholder("Barcode"); // Espacio código barras
+
+                // --- CAMBIO: Se eliminó el espacio para el código de barras ---
             });
-            /*     container // Contenedor principal del Header
-          .PaddingTop(10) // Aplica padding arriba
-          .Element(lineContainer => // Coloca el siguiente elemento DENTRO del padding
-          {
-              lineContainer
-                  .LineHorizontal(1) // Define la línea horizontal
-                  .LineColor(Colors.Grey.Lighten1); // Aplica el color A LA LÍNEA
-          });*/
         }
 
         // Dibuja el Contenido Principal (Info Paciente + Secciones Examen)
@@ -503,52 +513,90 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
                 col.Spacing(15);
                 col.Item().Element(c => ComposePatientInfo(c, model));
 
-                // Secciones de Resultados (Usa las listas del ViewModel)
-                // El helper ComposeExamSection determinará si muestra tabla o "NO SE REALIZO"
-                col.Item().Element(c => ComposeExamSection(c, "HEMATOLOGÍA COMPLETA (BHC)", model.SeRealizoBHC, model.ResultadosBHC));
-                col.Item().Element(c => ComposeExamSection(c, "EXAMEN GENERAL DE ORINA (EGO) - FÍSICO QUÍMICO", model.SeRealizoOrinaFQ, model.ResultadosOrinaFQ));
-                col.Item().Element(c => ComposeExamSection(c, "EXAMEN GENERAL DE ORINA (EGO) - MICROSCÓPICO", model.SeRealizoOrinaMicro, model.ResultadosOrinaMicro));
-                col.Item().Element(c => ComposeExamSection(c, "EXAMEN GENERAL DE HECES (EGH)", model.SeRealizoHeces, model.ResultadosHeces));
-                // Añadir más secciones...
+                // --- CAMBIO: Solo se dibujan las secciones si el flag SeRealizo es true ---
+                if (model.SeRealizoBHC)
+                    col.Item().Element(c => ComposeExamSection(c, "HEMATOLOGÍA COMPLETA (BHC)", model.ResultadosBHC));
+
+                if (model.SeRealizoOrinaFQ)
+                    col.Item().Element(c => ComposeExamSection(c, "EXAMEN GENERAL DE ORINA (EGO) - FÍSICO QUÍMICO", model.ResultadosOrinaFQ));
+
+                if (model.SeRealizoOrinaMicro)
+                    col.Item().Element(c => ComposeExamSection(c, "EXAMEN GENERAL DE ORINA (EGO) - MICROSCÓPICO", model.ResultadosOrinaMicro));
+
+                if (model.SeRealizoHeces)
+                    col.Item().Element(c => ComposeExamSection(c, "EXAMEN GENERAL DE HECES (EGH)", model.ResultadosHeces));
+
+                // Añadir más secciones con la misma lógica 'if'...
 
                 col.Item().Element(c => ComposeObservations(c, model));
-                // Línea y Firma ... (Añadir si es necesario)
                 col.Item().PaddingTop(30).Text("_________________________").AlignCenter();
                 col.Item().Text("Firma y Sello").AlignCenter();
             });
         }
         // Dibuja la Información del Paciente
+        // Dibuja la Información del Paciente
         void ComposePatientInfo(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
+            // --- CAMBIO: Se usa el compositor de texto para combinar negrita y texto normal ---
             container.Grid(grid =>
             {
-                grid.Columns(12); // Dividir en 12 columnas para flexibilidad
-                grid.Item(2).Text("Paciente:").FontSize(9).Bold(); grid.Item(10).Text($"{model.NombrePaciente} {model.ApellidoPaciente}").FontSize(9);
-                grid.Item(2).Text("Edad:").FontSize(9).Bold(); grid.Item(4).Text($"{model.EdadPaciente} años").FontSize(9); // Asumiendo años
-                grid.Item(2).Text("Fecha Muestra:").FontSize(9).Bold(); grid.Item(4).Text(model.FechaToma.ToString("dd/MM/yyyy HH:mm")).FontSize(9);
-                grid.Item(2).Text("Género:").FontSize(9).Bold(); grid.Item(4).Text(model.GeneroPaciente).FontSize(9);
-                grid.Item(2).Text("Fecha Informe:").FontSize(9).Bold(); grid.Item(4).Text(model.FechaInforme.ToString("dd/MM/yyyy HH:mm")).FontSize(9);
-                grid.Item(2).Text("Código:").FontSize(9).Bold(); grid.Item(4).Text(model.CodigoBeneficiario).FontSize(9);
-                grid.Item(2).Text("Proyecto:").FontSize(9).Bold(); grid.Item(4).Text(model.NombreProyecto).FontSize(9);
+                grid.Columns(12); // Dividir en 12 columnas
+
+                // Fila 1
+                grid.Item(12).Text(text =>
+                {
+                    text.Span("Paciente: ").FontSize(9).Bold();
+                    text.Span($"{model.NombrePaciente} {model.ApellidoPaciente}").FontSize(9);
+                });
+
+                // Fila 2
+                // ASUMO que agregaste 'FechaNacimiento' a tu 'InformeCompletoViewModel'
+                // Si no lo has hecho, debes agregarlo para que esto funcione.
+                grid.Item(6).Text(text =>
+                {
+                    text.Span("Fecha de Nacimiento: ").FontSize(9).Bold();
+                    text.Span($"{model.FechaNacimiento:dd/MM/yyyy} ({model.EdadPaciente} años)").FontSize(9);
+                });
+                grid.Item(6).Text(text =>
+                {
+                    text.Span("Género: ").FontSize(9).Bold();
+                    text.Span(model.GeneroPaciente).FontSize(9);
+                });
+
+                // Fila 3
+                grid.Item(6).Text(text =>
+                {
+                    text.Span("Fecha Muestra: ").FontSize(9).Bold();
+                    text.Span(model.FechaToma.ToString("dd/MM/yyyy HH:mm")).FontSize(9);
+                });
+                grid.Item(6).Text(text =>
+                {
+                    text.Span("Fecha Informe: ").FontSize(9).Bold();
+                    text.Span(model.FechaInforme.ToString("dd/MM/yyyy HH:mm")).FontSize(9);
+                });
+
+                // --- CAMBIO: Se eliminaron las líneas de Código y Proyecto ---
             });
         }
 
         // Dibuja UNA Sección de Examen (Tabla de resultados o "NO SE REALIZO")
-        void ComposeExamSection(QuestPDF.Infrastructure.IContainer container, string tituloSeccion, bool seRealizo, List<ResultadoParametroVm> resultados)
+        // El parámetro 'seRealizo' se eliminó porque la verificación ahora se hace antes de llamar a este método
+        void ComposeExamSection(QuestPDF.Infrastructure.IContainer container, string tituloSeccion, List<ResultadoParametroVm> resultados)
         {
             container.Column(col =>
             {
                 col.Spacing(5);
                 col.Item().Background(Colors.Grey.Lighten3).PaddingLeft(5).PaddingVertical(2).Text(tituloSeccion).Bold();
 
-                // Verifica si la lista de resultados NO es nula Y tiene elementos
-                if (seRealizo && resultados != null && resultados.Any())
+                // Ya sabemos que se realizó, solo verificamos que haya resultados para dibujar la tabla
+                if (resultados != null && resultados.Any())
                 {
                     col.Item().PaddingLeft(5).Table(table =>
                     {
+                        // ... el resto de la lógica de la tabla no cambia ...
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.RelativeColumn(3); columns.RelativeColumn(2); columns.RelativeColumn(1); columns.RelativeColumn(3);
+                            columns.RelativeColumn(3); columns.RelativeColumn(2);
                         });
                         table.Header(header =>
                         {
@@ -558,14 +606,14 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
                         foreach (var item in resultados)
                         {
                             table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(9);
-                            table.Cell().Text(item.Resultado).FontSize(9); // Ya viene formateado desde el mapeo
+                            table.Cell().Text(item.Resultado).FontSize(9);
                         }
                     });
                 }
                 else
                 {
-                    // Muestra "NO SE REALIZO" si el flag es false O si la lista es null/vacía
-                    col.Item().PaddingLeft(5).PaddingTop(2).Text("NO SE REALIZO").Italic().FontSize(9);
+                    // Opcional: si la lista está vacía, puedes poner un mensaje o dejarlo en blanco.
+                    col.Item().PaddingLeft(5).PaddingTop(2).Text("Resultados no disponibles.").Italic().FontSize(9);
                 }
             });
         }

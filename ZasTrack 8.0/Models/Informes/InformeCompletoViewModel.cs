@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq; // Necesario para .Any()
+using Microsoft.Identity.Client;
 using ZasTrack.Models; // Necesitas acceso a los modelos de resultados? Revisa si es necesario.
 
 namespace ZasTrack.Models.Informes // O el namespace que prefieras
@@ -38,6 +39,8 @@ namespace ZasTrack.Models.Informes // O el namespace que prefieras
         public string NombrePaciente { get; set; } = string.Empty;
         public string ApellidoPaciente { get; set; } = string.Empty;
         public int EdadPaciente { get; set; } // O string formateado "N años (X meses)"
+
+        public DateTime FechaNacimiento { get; set; }
         public string GeneroPaciente { get; set; } = string.Empty;
         public string CodigoBeneficiario { get; set; } = string.Empty;
         public string NombreProyecto { get; set; } = string.Empty;

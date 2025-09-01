@@ -7,11 +7,23 @@
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\models\\informes\\informecompletoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\informes\\informecompletoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\models\\informes\\informedocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\informes\\informedocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\models\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -22,8 +34,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 320,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 13,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "InformeDocument.cs",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
+              "RelativeDocumentMoniker": "Models\\Informes\\InformeDocument.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
+              "RelativeToolTip": "Models\\Informes\\InformeDocument.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T21:16:31.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InformeCompletoViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeCompletoViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\Informes\\InformeCompletoViewModel.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeCompletoViewModel.cs*",
+              "RelativeToolTip": "Models\\Informes\\InformeCompletoViewModel.cs*",
+              "ViewState": "AgIAABQAAAAAAAAAAAAjwCoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T21:15:18.212Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
@@ -66,20 +104,33 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Pacientes.cs",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Pacientes.cs",
+              "RelativeDocumentMoniker": "Models\\Pacientes.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Pacientes.cs",
+              "RelativeToolTip": "Models\\Pacientes.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T21:14:44.313Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "wInformes.cs",
               "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
               "RelativeDocumentMoniker": "Forms\\Informes\\wInformes.cs",
               "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs*",
               "RelativeToolTip": "Forms\\Informes\\wInformes.cs*",
-              "ViewState": "AgIAAJ0BAAAAAAAAAAAmwNUBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABECAAAAAAAAAAAkwCECAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-01T19:39:14.918Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "wInformes.cs [Design]",
               "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
               "RelativeDocumentMoniker": "Forms\\Informes\\wInformes.cs",
@@ -91,15 +142,14 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "wMuestras.cs [Design]",
               "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs",
               "RelativeDocumentMoniker": "Forms\\Muestras\\wMuestras.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs [Design]*",
-              "RelativeToolTip": "Forms\\Muestras\\wMuestras.cs [Design]*",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs [Design]",
+              "RelativeToolTip": "Forms\\Muestras\\wMuestras.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T19:37:54.943Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-09-01T19:37:54.943Z"
             }
           ]
         },
