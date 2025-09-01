@@ -49,7 +49,7 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         }
 
         // --- Carga Proyectos ACTIVOS en el ComboBox (SIN "Todos") ---
-        private void CargarProyectosInformes()   
+        private void CargarProyectosInformes()
         {
             List<Proyecto> proyectosActivos = null;
             try
@@ -393,95 +393,78 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         // --- MÉTODO PARA GENERAR/IMPRIMIR UN Informe (Usa informeRepository) ---
         private async void GenerarEImprimirInformeIndividual(int id_Muestra)
         {
-            Console.WriteLine($"DEBUG: Iniciando generación/impresión para Muestra ID: {id_Muestra}");
+            Console.WriteLine($"DEBUG: Iniciando generación de informe para Muestra ID: {id_Muestra}");
             this.Cursor = Cursors.WaitCursor;
             InformeCompletoViewModel? viewModel = null;
 
-            // 1. Obtener datos completos usando informeRepository
+            // 1. Obtener datos completos (sin cambios)
             try
             {
-                // --- CAMBIO: Llamar a informeRepository ---
                 viewModel = await Task.Run(() => informeRepository.ObtenerDatosCompletosInforme(id_Muestra));
             }
-            catch (Exception exRepo) // Captura errores del repositorio
+            catch (Exception exRepo)
             {
-                MessageBox.Show($"Error al obtener datos del informe desde el repositorio: {exRepo.Message}", "Error Repositorio", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener datos del informe: {exRepo.Message}", "Error de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Console.WriteLine($"ERROR Repositorio ObtenerDatosCompletosInforme: {exRepo.ToString()}");
-                this.Cursor = Cursors.Default; return; // Salir si no se pueden obtener datos
+                this.Cursor = Cursors.Default;
+                return;
             }
-                
 
             if (viewModel == null)
             {
-                // El repositorio ya debería haber logueado el WARN si no encontró datos
-                MessageBox.Show($"No se pudieron generar los datos para el informe (Muestra ID: {id_Muestra}). Verifique la consola de depuración.", "Sin Datos / Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.Cursor = Cursors.Default; return;
+                MessageBox.Show($"No se encontraron datos para el informe (Muestra ID: {id_Muestra}).", "Sin Datos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.Cursor = Cursors.Default;
+                return;
             }
 
-
-
-            // 2. Generar PDF temporal (sin cambios en la lógica de QuestPDF)
-            string tempPdfPath = string.Empty;
-            try
+            // --- CAMBIO 1: Usar SaveFileDialog en lugar de una ruta temporal ---
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                var document = Document.Create(container => {
-                    container.Page(page => {
-                        page.Margin(30);
-                        page.DefaultTextStyle(ts => ts.FontSize(10).FontFamily(Fonts.Calibri));
-                        page.Header().Element(c => ComposeHeader(c, viewModel)); // Usa helpers locales
-                        page.Content().Element(c => ComposeContent(c, viewModel)); // Usa helpers locales
-                        page.Footer().AlignCenter().Text(text => { text.Span("Página "); text.CurrentPageNumber(); });
-                    });
-                });
+                // --- CAMBIO 2: Crear el nombre de archivo personalizado ---
+                string nombreCompleto = $"{viewModel.NombrePaciente} {viewModel.ApellidoPaciente}".Trim();
+                string fechaArchivo = viewModel.FechaInforme.ToString("yyyy-MM-dd");
+                saveFileDialog.FileName = $"Informe - {nombreCompleto} - {fechaArchivo}.pdf"; // Nombre sugerido
 
-                tempPdfPath = Path.Combine(Path.GetTempPath(), $"Informe_{id_Muestra}_{Guid.NewGuid()}.pdf");
-                Console.WriteLine($"DEBUG: Generando PDF temporal en: {tempPdfPath}");
-                await Task.Run(() => document.GeneratePdf(tempPdfPath)); // Genera en hilo aparte
-                Console.WriteLine($"DEBUG: PDF temporal generado.");
-            }
-            catch (NpgsqlException ex)
-            {
-                Console.WriteLine($"Error de PostgreSQL al guardar paciente: {ex.Message} (SQLState: {ex.SqlState})");
-                // Mostrar un mensaje más amigable al usuario
-                MessageBox.Show($"No se pudo guardar el paciente debido a un error de base de datos.\nDetalle técnico: {ex.SqlState}", "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // No relanzar (throw) aquí usualmente, manejar el error mostrando mensaje.
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error general al guardar paciente: {ex.ToString()}");
-                MessageBox.Show($"Ocurrió un error inesperado al guardar el paciente:\n{ex.Message}", "Error General", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // No relanzar (throw) aquí usualmente.
-            }
+                saveFileDialog.Filter = "Archivo PDF (*.pdf)|*.pdf";
+                saveFileDialog.Title = "Guardar Informe PDF";
 
-            // 3. Intentar Imprimir (sin cambios)
-            if (!string.IsNullOrEmpty(tempPdfPath) && System.IO.File.Exists(tempPdfPath))
-            {
-                Console.WriteLine("DEBUG: Intentando imprimir PDF temporal...");
-                try
+                // Si el usuario selecciona una ubicación y hace clic en "Guardar"
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    ProcessStartInfo info = new ProcessStartInfo(tempPdfPath) { Verb = "Print", CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, UseShellExecute = true };
-                    Process.Start(info);
-                    Console.WriteLine("DEBUG: Comando 'Print' enviado.");
-                }
-                catch (Win32Exception exWin32) when (exWin32.Message.Contains("No application is associated"))
-                {
-                    MessageBox.Show("No hay aplicación PDF predeterminada para imprimir. Abriendo para impresión manual...", "Impresión", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    try { Process.Start(new ProcessStartInfo(tempPdfPath) { UseShellExecute = true }); } catch { /* Ignorar error al abrir */ }
-                }
-                
-                catch (NpgsqlException ex)
-                {
-                    Console.WriteLine($"Error de PostgreSQL al guardar paciente: {ex.Message} (SQLState: {ex.SqlState})");
-                    // Mostrar un mensaje más amigable al usuario
-                    MessageBox.Show($"No se pudo guardar el paciente debido a un error de base de datos.\nDetalle técnico: {ex.SqlState}", "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    // No relanzar (throw) aquí usualmente, manejar el error mostrando mensaje.
+                    string rutaGuardar = saveFileDialog.FileName;
+
+                    try
+                    {
+                        // 2. Generar el documento PDF (sin cambios en la lógica de QuestPDF)
+                        var document = Document.Create(container =>
+                        {
+                            container.Page(page =>
+                            {
+                                page.Margin(30);
+                                page.DefaultTextStyle(ts => ts.FontSize(10).FontFamily(Fonts.Calibri));
+                                page.Header().Element(c => ComposeHeader(c, viewModel));
+                                page.Content().Element(c => ComposeContent(c, viewModel));
+                                page.Footer().AlignCenter().Text(text => { text.Span("Página "); text.CurrentPageNumber(); });
+                            });
+                        });
+
+                        // Guardar el PDF en la ruta elegida por el usuario
+                        await Task.Run(() => document.GeneratePdf(rutaGuardar));
+                        Console.WriteLine($"DEBUG: PDF guardado en: {rutaGuardar}");
+
+                        MessageBox.Show($"El informe se ha guardado correctamente en:\n{rutaGuardar}", "Guardado Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // --- CAMBIO 3: Abrir el archivo en lugar de imprimirlo ---
+                        // Esto le da al usuario la opción de verlo, imprimirlo o cerrarlo.
+                        Process.Start(new ProcessStartInfo(rutaGuardar) { UseShellExecute = true });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ocurrió un error al generar o guardar el PDF:\n{ex.Message}", "Error de Guardado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Console.WriteLine($"ERROR generando PDF individual: {ex.ToString()}");
+                    }
                 }
             }
-            else
-            {
-                MessageBox.Show("No se pudo generar el PDF temporal para imprimir.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
 
             this.Cursor = Cursors.Default;
         }
@@ -490,30 +473,33 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         //     (Sin cambios, permanecen en wInformes.cs ya que son parte de la UI/Presentación)
         void ComposeHeader(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
-            container.Row(row => {
+            container.Row(row =>
+            {
                 // Logo Placeholder
                 // row.ConstantItem(80).Height(40).Placeholder("Logo");
-                row.RelativeItem().Column(col => {
+                row.RelativeItem().Column(col =>
+                {
                     col.Item().Text(model.NombreLaboratorio ?? "Laboratorio").Bold().FontSize(14); // Manejar null
                     col.Item().Text(model.DireccionLaboratorio ?? "").FontSize(9);
                     col.Item().Text(model.ContactoLaboratorio ?? "").FontSize(9);
                 });
                 row.ConstantItem(100).Placeholder("Barcode"); // Espacio código barras
             });
-       /*     container // Contenedor principal del Header
-     .PaddingTop(10) // Aplica padding arriba
-     .Element(lineContainer => // Coloca el siguiente elemento DENTRO del padding
-     {
-         lineContainer
-             .LineHorizontal(1) // Define la línea horizontal
-             .LineColor(Colors.Grey.Lighten1); // Aplica el color A LA LÍNEA
-     });*/
+            /*     container // Contenedor principal del Header
+          .PaddingTop(10) // Aplica padding arriba
+          .Element(lineContainer => // Coloca el siguiente elemento DENTRO del padding
+          {
+              lineContainer
+                  .LineHorizontal(1) // Define la línea horizontal
+                  .LineColor(Colors.Grey.Lighten1); // Aplica el color A LA LÍNEA
+          });*/
         }
 
         // Dibuja el Contenido Principal (Info Paciente + Secciones Examen)
         void ComposeContent(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
-            container.Column(col => {
+            container.Column(col =>
+            {
                 col.Spacing(15);
                 col.Item().Element(c => ComposePatientInfo(c, model));
 
@@ -534,7 +520,8 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         // Dibuja la Información del Paciente
         void ComposePatientInfo(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
-            container.Grid(grid => {
+            container.Grid(grid =>
+            {
                 grid.Columns(12); // Dividir en 12 columnas para flexibilidad
                 grid.Item(2).Text("Paciente:").FontSize(9).Bold(); grid.Item(10).Text($"{model.NombrePaciente} {model.ApellidoPaciente}").FontSize(9);
                 grid.Item(2).Text("Edad:").FontSize(9).Bold(); grid.Item(4).Text($"{model.EdadPaciente} años").FontSize(9); // Asumiendo años
@@ -549,29 +536,29 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         // Dibuja UNA Sección de Examen (Tabla de resultados o "NO SE REALIZO")
         void ComposeExamSection(QuestPDF.Infrastructure.IContainer container, string tituloSeccion, bool seRealizo, List<ResultadoParametroVm> resultados)
         {
-            container.Column(col => {
+            container.Column(col =>
+            {
                 col.Spacing(5);
                 col.Item().Background(Colors.Grey.Lighten3).PaddingLeft(5).PaddingVertical(2).Text(tituloSeccion).Bold();
 
                 // Verifica si la lista de resultados NO es nula Y tiene elementos
                 if (seRealizo && resultados != null && resultados.Any())
                 {
-                    col.Item().PaddingLeft(5).Table(table => {
-                        table.ColumnsDefinition(columns => {
+                    col.Item().PaddingLeft(5).Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
                             columns.RelativeColumn(3); columns.RelativeColumn(2); columns.RelativeColumn(1); columns.RelativeColumn(3);
                         });
-                        table.Header(header => {
+                        table.Header(header =>
+                        {
                             header.Cell().Text("Parámetro").Bold().FontSize(9);
                             header.Cell().Text("Resultado").Bold().FontSize(9);
-                            header.Cell().Text("Unidad").Bold().FontSize(9);
-                            header.Cell().Text("Referencia").Bold().FontSize(9);
                         });
                         foreach (var item in resultados)
                         {
                             table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(9);
                             table.Cell().Text(item.Resultado).FontSize(9); // Ya viene formateado desde el mapeo
-                            table.Cell().Text(item.Unidad).FontSize(9);
-                            table.Cell().Text(item.Referencia).FontSize(9);
                         }
                     });
                 }
@@ -586,12 +573,17 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         // Dibuja las Observaciones
         void ComposeObservations(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
-            container.PaddingTop(10).Column(col => { // Añadido PaddingTop
+            container.PaddingTop(10).Column(col =>
+            { // Añadido PaddingTop
                 col.Item().Text("Observación General:").Bold().FontSize(9); // Ajustado texto y tamaño
                 col.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten2)
                     .PaddingBottom(2).Text(string.IsNullOrWhiteSpace(model.ObservacionesGenerales) ? "Ninguna." : model.ObservacionesGenerales).FontSize(9);
             });
         }
 
+        private void btnExportarTodoPdf_Click_1(object sender, EventArgs e)
+        {
+
+        }
     } // Fin clase wInformes
 } // Fin namespace

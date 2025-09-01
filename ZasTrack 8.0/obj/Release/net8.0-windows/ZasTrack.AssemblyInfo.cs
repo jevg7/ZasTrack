@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZasTrack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d973cb98ba9712af3a3c338c5b13216138b42e87")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3568f447761522e0338600eecca4b67a41b400f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZasTrack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZasTrack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

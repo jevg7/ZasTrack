@@ -97,7 +97,7 @@
             dgvResultadosBusqueda.ReadOnly = true;
             dgvResultadosBusqueda.RowHeadersWidth = 51;
             dgvResultadosBusqueda.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvResultadosBusqueda.Size = new Size(446, 138);
+            dgvResultadosBusqueda.Size = new Size(650, 376);
             dgvResultadosBusqueda.TabIndex = 23;
             dgvResultadosBusqueda.TabStop = false;
             dgvResultadosBusqueda.Visible = false;

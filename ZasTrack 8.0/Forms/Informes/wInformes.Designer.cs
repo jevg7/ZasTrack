@@ -59,6 +59,7 @@
             btnExportarTodoPdf.TabIndex = 2;
             btnExportarTodoPdf.Text = "Exportar todo a PDF";
             btnExportarTodoPdf.UseVisualStyleBackColor = true;
+            btnExportarTodoPdf.Click += btnExportarTodoPdf_Click_1;
             // 
             // wInformes
             // 
