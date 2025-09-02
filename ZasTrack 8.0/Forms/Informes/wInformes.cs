@@ -466,54 +466,117 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
         //     (Sin cambios, permanecen en wInformes.cs ya que son parte de la UI/Presentación)
         void ComposeHeader(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
-            // --- CAMBIO: Ruta del logo ---
-            string logoPath = @"C:\Users\alexj\OneDrive\Documentos\DevWorkspace\Work\ZasTrack\ZasTrack 8.0\Resources\Zas-log.ico";
             byte[]? logoData = null;
-            if (File.Exists(logoPath))
+
+            // Carga el logo como un recurso incrustado para que funcione después de instalar la app.
+            try
             {
-                try
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+                // El nombre del recurso es: "TuNamespace.NombreDeLaCarpeta.NombreDelArchivo"
+                // Asegúrate de que "ZasTrack" es tu namespace principal.
+                string resourceName = "ZasTrack.Resources.Zas-log.ico";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 {
-                    logoData = File.ReadAllBytes(logoPath);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"WARN: No se pudo cargar el logo. {ex.Message}");
+                    if (stream != null)
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            stream.CopyTo(ms);
+                            logoData = ms.ToArray();
+                        }
+                    }
                 }
             }
-
-            container.Row(row =>
+            catch (Exception ex)
             {
-                // --- CAMBIO: Columna para el Logo ---
-                if (logoData != null)
-                {
-                    row.ConstantItem(80).Image(logoData);
-                }
-                else
-                {
-                    row.ConstantItem(80).Height(40).Placeholder("Logo no encontrado");
-                }
+                // Si falla, se mostrará un error en la consola de depuración.
+                Console.WriteLine($"ERROR: No se pudo cargar el recurso del logo. {ex.Message}");
+            }
 
-                row.RelativeItem().PaddingLeft(10).Column(col =>
+            // Se envuelve todo en una columna principal para evitar el error de "múltiples hijos".
+            container.Column(col =>
+            {
+                // El primer elemento de la columna es una fila que contiene todo el diseño.
+                col.Item().Row(row =>
                 {
-                    // --- CAMBIO: Se usa tu información de contacto directamente ---
-                    col.Item().Text(model.NombreLaboratorio ?? "Laboratorio Clínico ZasTrack").Bold().FontSize(14);
-                    col.Item().Text("Barrio San Luis, Centro de Salud Francisco Bultrago, 1c. al Norte. Managua, Nicaragua. CP: 11097").FontSize(9);
-                    col.Item().Text("Tel: +505 8660 2341 | Correo: info@grupo-zas.com | Web: grupo-zas.com").FontSize(9);
+                    // Columna 1: Logo (ocupa un ancho fijo de 80)
+                    // Columna 1: Logo
+                    row.ConstantItem(80).Column(logoCol =>
+                    {
+                        if (logoData != null)
+                            // CAMBIO A .FitArea() PARA ASEGURAR QUE LA IMAGEN QUEPA
+                            logoCol.Item().Image(logoData).FitArea();
+                        else
+                            logoCol.Item().Height(40).Placeholder("Logo");
+                    });
+
+                    // Columna 2: Información del Laboratorio (ocupa 4 partes del espacio restante)
+                    row.RelativeItem(4).Shrink().PaddingLeft(10).Column(labCol =>
+                    {
+                        labCol.Item().Text("Barrio San Luis, Centro de Salud Francisco Bultrago, 1c. al Norte. Managua, Nicaragua. CP: 11097").FontSize(7);
+                        labCol.Item().Text("Tel: +505 8660 2341 | Correo: info@grupo-zas.com | Web: grupo-zas.com").FontSize(7);
+                    });
+
+                    // Columna 3: Información del Paciente (ocupa 3 partes del espacio restante)
+                    row.RelativeItem(3).Shrink().PaddingLeft(10).AlignRight().Column(pacienteCol =>
+                    {
+                        pacienteCol.Item().Text(text =>
+                        {
+                            text.Span("Paciente: ").FontSize(8).Bold();
+                            text.Span($"{model.NombrePaciente} {model.ApellidoPaciente}").FontSize(8);
+                        });
+
+                        // Muestra la fecha de nacimiento si está disponible, si no, solo la edad.
+                        if (model.FechaNacimiento != default(DateTime))
+                        {
+                            pacienteCol.Item().Text(text =>
+                            {
+                                text.Span("Fecha Nacimiento: ").FontSize(8).Bold();
+                                text.Span($"{model.FechaNacimiento:dd/MM/yyyy} ({model.EdadPaciente} años)").FontSize(8);
+                            });
+                        }
+                        else
+                        {
+                            pacienteCol.Item().Text(text =>
+                            {
+                                text.Span("Edad: ").FontSize(8).Bold();
+                                text.Span($"{model.EdadPaciente} años").FontSize(8);
+                            });
+                        }
+
+                        pacienteCol.Item().Text(text =>
+                        {
+                            text.Span("Género: ").FontSize(8).Bold();
+                            text.Span(model.GeneroPaciente).FontSize(8);
+                        });
+                        pacienteCol.Item().Text(text =>
+                        {
+                            text.Span("Fecha Muestra: ").FontSize(8).Bold();
+                            text.Span(model.FechaToma.ToString("dd/MM/yyyy HH:mm")).FontSize(8);
+                        });
+                        pacienteCol.Item().Text(text =>
+                        {
+                            text.Span("Fecha Informe: ").FontSize(8).Bold();
+                            text.Span(model.FechaInforme.ToString("dd/MM/yyyy HH:mm")).FontSize(8);
+                        });
+                    });
                 });
 
-                // --- CAMBIO: Se eliminó el espacio para el código de barras ---
+                // El segundo elemento de la columna es la línea separadora.
+                col.Item().PaddingTop(5).LineHorizontal(1).LineColor(Colors.Grey.Lighten1);
             });
         }
-
-        // Dibuja el Contenido Principal (Info Paciente + Secciones Examen)
         void ComposeContent(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {
             container.Column(col =>
             {
                 col.Spacing(15);
-                col.Item().Element(c => ComposePatientInfo(c, model));
+                // --- CAMBIO: Se eliminó la línea que llamaba a ComposePatientInfo ---
+                // col.Item().Element(c => ComposePatientInfo(c, model)); // ¡Eliminar esta línea!
 
-                // --- CAMBIO: Solo se dibujan las secciones si el flag SeRealizo es true ---
+                // Secciones de Resultados (Usa las listas del ViewModel)
                 if (model.SeRealizoBHC)
                     col.Item().Element(c => ComposeExamSection(c, "HEMATOLOGÍA COMPLETA (BHC)", model.ResultadosBHC));
 

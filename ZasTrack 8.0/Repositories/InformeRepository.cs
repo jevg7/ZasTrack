@@ -116,7 +116,6 @@ WHERE m.id_muestra = @idMuestra";// Misma query
                             informeVM.GeneroPaciente = readerInfo.GetString(readerInfo.GetOrdinal("genero"));
                             informeVM.CodigoBeneficiario = readerInfo.GetString(readerInfo.GetOrdinal("codigo_beneficiario"));
                             informeVM.NombreProyecto = readerInfo.GetString(readerInfo.GetOrdinal("NombreProyecto"));
-                            informeVM.NombreLaboratorio = "Laboratorio Clínico ZasTrack"; // O leer de config
                             informeVM.DireccionLaboratorio = "Dirección Ejemplo, Ciudad"; // O leer de config
                             informeVM.ContactoLaboratorio = "Tel: 123-4567"; // O leer de config
 
