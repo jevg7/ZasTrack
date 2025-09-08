@@ -17,6 +17,8 @@ namespace ZasTrack
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             QuestPDF.Settings.License = LicenseType.Community;
+            // Habilitar diagnóstico de layout para encontrar conflictos de tamaño en PDF
+            QuestPDF.Settings.EnableDebugging = true;
 
             ApplicationConfiguration.Initialize();
             Application.Run(new wMain());

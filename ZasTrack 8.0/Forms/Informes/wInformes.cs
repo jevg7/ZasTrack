@@ -346,12 +346,7 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
                                         page.DefaultTextStyle(ts => ts.FontSize(10).FontFamily(Fonts.Calibri));
                                         page.Header().Element(c => ComposeHeader(c, vmInforme));
                                         page.Content().Element(c => ComposeContent(c, vmInforme));
-                                        page.Footer().AlignCenter().Text(text =>
-                                        {
-                                            // Actualiza el texto del footer si quieres
-                                            text.Span($"Informe {informeNum} / {lista.Count} - Página ");
-                                            text.CurrentPageNumber();
-                                        });
+                                        // Quitar numeración de página - no se define footer
                                     });
                                     Console.WriteLine($"DEBUG: Contenido añadido para Muestra ID: {item.id_Muestra}");
                                 }
@@ -443,7 +438,7 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
                                 page.DefaultTextStyle(ts => ts.FontSize(10).FontFamily(Fonts.Calibri));
                                 page.Header().Element(c => ComposeHeader(c, viewModel));
                                 page.Content().Element(c => ComposeContent(c, viewModel));
-                                page.Footer().AlignCenter().Text(text => { text.Span("Página "); text.CurrentPageNumber(); });
+                                // Quitar numeración de página - no se define footer    
                             });
                         });
 
@@ -644,43 +639,79 @@ namespace ZasTrack.Forms.Informes // O tu namespace preferido
 
         // Dibuja UNA Sección de Examen (Tabla de resultados o "NO SE REALIZO")
         // El parámetro 'seRealizo' se eliminó porque la verificación ahora se hace antes de llamar a este método
+        // Dibuja UNA Sección de Examen (Tabla de resultados)
+
         void ComposeExamSection(QuestPDF.Infrastructure.IContainer container, string tituloSeccion, List<ResultadoParametroVm> resultados)
         {
             container.Column(col =>
             {
                 col.Spacing(5);
-                col.Item().Background(Colors.Grey.Lighten3).PaddingLeft(5).PaddingVertical(2).Text(tituloSeccion).Bold();
 
-                // Ya sabemos que se realizó, solo verificamos que haya resultados para dibujar la tabla
+                bool tieneFondoGris = tituloSeccion.Contains("HEMATOLOGÍA") || tituloSeccion.Contains("FÍSICO QUÍMICO") || tituloSeccion.Contains("HECES");
+
+                if (tieneFondoGris)
+                {
+                    col.Item().Background(Colors.Grey.Lighten3).PaddingLeft(5).PaddingVertical(2).Text(tituloSeccion).Bold();
+                }
+                else
+                {
+                    col.Item().PaddingLeft(5).PaddingVertical(2).Text(tituloSeccion).Bold();
+                }
+
                 if (resultados != null && resultados.Any())
                 {
                     col.Item().PaddingLeft(5).Table(table =>
                     {
-                        // ... el resto de la lógica de la tabla no cambia ...
+                        // Dejamos las proporciones que ya tenías, son correctas.
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.RelativeColumn(3); columns.RelativeColumn(2);
+                            columns.RelativeColumn(4);
+                            columns.RelativeColumn(2.5f);
+                            columns.RelativeColumn(2.5f);
+                            columns.RelativeColumn(1);
                         });
+
                         table.Header(header =>
                         {
-                            header.Cell().Text("Parámetro").Bold().FontSize(9);
-                            header.Cell().Text("Resultado").Bold().FontSize(9);
+                            string primerHeader = tituloSeccion.Contains("HEMATOLOGÍA") ? "Nombre del examen" : "Parámetro";
+
+                            header.Cell().Text(primerHeader).Bold().FontSize(9);
+                            header.Cell().AlignRight().Text("Resultado").Bold().FontSize(9);
+
+                            // --- AJUSTE #1: Añadir padding al encabezado ---
+                            header.Cell().PaddingLeft(10).Text("Valores normales").Bold().FontSize(9);
+
+                            header.Cell().Text("Unidad").Bold().FontSize(9);
                         });
+
+                        bool esHematologia = tituloSeccion.Contains("HEMATOLOGÍA");
+
                         foreach (var item in resultados)
                         {
                             table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(9);
-                            table.Cell().Text(item.Resultado).FontSize(9);
+                            table.Cell().AlignRight().Text(item.Resultado).FontSize(9);
+
+                            if (esHematologia)
+                            {
+                                // --- AJUSTE #2: Añadir padding a la celda de datos ---
+                                table.Cell().PaddingLeft(10).Text(item.Referencia).FontSize(9);
+                                table.Cell().Text(item.Unidad).FontSize(9);
+                            }
+                            else
+                            {
+                                // Estas celdas ya están vacías, no necesitan padding.
+                                table.Cell().Text(string.Empty);
+                                table.Cell().Text(string.Empty);
+                            }
                         }
                     });
                 }
                 else
                 {
-                    // Opcional: si la lista está vacía, puedes poner un mensaje o dejarlo en blanco.
                     col.Item().PaddingLeft(5).PaddingTop(2).Text("Resultados no disponibles.").Italic().FontSize(9);
                 }
             });
         }
-
         // Dibuja las Observaciones
         void ComposeObservations(QuestPDF.Infrastructure.IContainer container, InformeCompletoViewModel model)
         {

@@ -7,31 +7,12 @@
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\alexj\\AppData\\Local\\Temp\\.vsdbgsrc\\559c93e3188528b9de6aada21e43063759736ee359f3003d7558584466ddb1e4\\Control.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\models\\informes\\informecompletoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\informes\\informecompletoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\models\\informes\\informedocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\informes\\informedocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\repositories\\informerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:repositories\\informerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\models\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\muestras\\wmuestras.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -41,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 320,
-          "SelectedChildIndex": 15,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -86,66 +67,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Control.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\AppData\\Local\\Temp\\.vsdbgsrc\\559c93e3188528b9de6aada21e43063759736ee359f3003d7558584466ddb1e4\\Control.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\559c93e3188528b9de6aada21e43063759736ee359f3003d7558584466ddb1e4\\Control.cs",
-              "ToolTip": "C:\\Users\\alexj\\AppData\\Local\\Temp\\.vsdbgsrc\\559c93e3188528b9de6aada21e43063759736ee359f3003d7558584466ddb1e4\\Control.cs [Read Only]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\559c93e3188528b9de6aada21e43063759736ee359f3003d7558584466ddb1e4\\Control.cs [Read Only]",
-              "ViewState": "AgIAABcoAAAAAAAAAAAawC4oAAADAAAAAQAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T23:45:38.786Z",
-              "EditorCaption": " [Read Only]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "InformeRepository.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Repositories\\InformeRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\InformeRepository.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Repositories\\InformeRepository.cs",
-              "RelativeToolTip": "Repositories\\InformeRepository.cs",
-              "ViewState": "AgIAAG0AAAAAAAAAAAAkwHcAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T23:27:03.472Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "InformeDocument.cs",
               "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
               "RelativeDocumentMoniker": "Models\\Informes\\InformeDocument.cs",
               "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
               "RelativeToolTip": "Models\\Informes\\InformeDocument.cs",
-              "ViewState": "AgIAADcAAAAAAAAAAAA5wEEAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAA6wEYAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T21:16:31.299Z",
+              "WhenOpened": "2025-09-08T21:37:43.64Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "InformeCompletoViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeCompletoViewModel.cs",
-              "RelativeDocumentMoniker": "Models\\Informes\\InformeCompletoViewModel.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeCompletoViewModel.cs",
-              "RelativeToolTip": "Models\\Informes\\InformeCompletoViewModel.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAkwCAAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T21:15:18.212Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Pacientes.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Pacientes.cs",
-              "RelativeDocumentMoniker": "Models\\Pacientes.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Pacientes.cs",
-              "RelativeToolTip": "Models\\Pacientes.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T21:14:44.313Z"
             },
             {
               "$type": "Document",
@@ -155,32 +85,22 @@
               "RelativeDocumentMoniker": "Forms\\Informes\\wInformes.cs",
               "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
               "RelativeToolTip": "Forms\\Informes\\wInformes.cs",
-              "ViewState": "AgIAAKoBAAAAAAAAAAAawPcBAABCAAAAAAAAAA==",
+              "ViewState": "AgIAAJkCAAAAAAAAAAAowMkCAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T19:39:14.918Z",
+              "WhenOpened": "2025-09-08T21:37:37.57Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "wInformes.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
-              "RelativeDocumentMoniker": "Forms\\Informes\\wInformes.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs [Design]",
-              "RelativeToolTip": "Forms\\Informes\\wInformes.cs [Design]",
+              "DocumentIndex": 2,
+              "Title": "wMain.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
+              "RelativeDocumentMoniker": "Forms\\wMain.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs [Design]",
+              "RelativeToolTip": "Forms\\wMain.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T19:39:07.98Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "wMuestras.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs",
-              "RelativeDocumentMoniker": "Forms\\Muestras\\wMuestras.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Muestras\\wMuestras.cs [Design]",
-              "RelativeToolTip": "Forms\\Muestras\\wMuestras.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T19:37:54.943Z"
+              "WhenOpened": "2025-09-04T21:21:45.696Z",
+              "EditorCaption": " [Design]"
             }
           ]
         },

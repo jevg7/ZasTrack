@@ -42,13 +42,8 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
                     page.Content().Element(ComposeContent);
 
                     // Pie de página (repetido en cada página)
-                    page.Footer().AlignCenter().Text(text =>
-                    {
-                        text.Span("Página ");
-                        text.CurrentPageNumber();
-                        text.Span(" de ");
-                        text.TotalPages();
-                    });
+                    // Se elimina numeración de páginas en el pie
+                    // No se define footer para que esté vacío
                 });
         }
 
@@ -126,7 +121,8 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
                 col.Spacing(2);
                 // Usar tabla o grid para alinear bien los datos
                 col.Item().Grid(grid => {
-                    grid.Columns(4); // 4 columnas: Label, Value, Label, Value
+                    // Ajuste: usar 12 columnas para permitir spans 2/10 y 2/4/2/4 por fila
+                    grid.Columns(12);
                     grid.Item(2).Text("Paciente:").FontSize(9).Bold();
                     grid.Item(10).Text($"{Model.NombrePaciente} {Model.ApellidoPaciente}").FontSize(9); // Ocupa 10 columnas para extenderse
 
@@ -154,45 +150,71 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
         {
             container.Column(col => {
                 col.Spacing(5);
+                
+                // Determinar si debe tener fondo gris y cuántas columnas usar
+                bool tieneFondoGris = tituloSeccion.Contains("HEMATOLOGÍA") || tituloSeccion.Contains("FÍSICO QUÍMICO") || tituloSeccion.Contains("HECES");
+                bool usar4Columnas = tituloSeccion.Contains("HEMATOLOGÍA");
+                
                 // Título de la Sección
-                col.Item().Background(Colors.Grey.Lighten3).PaddingLeft(5).PaddingVertical(2) // Fondo gris claro para título
-                   .Text(tituloSeccion).Bold();
+                if (tieneFondoGris)
+                {
+                    col.Item().Background(Colors.Grey.Lighten3).PaddingLeft(5).PaddingVertical(2).Text(tituloSeccion).Bold();
+                }
+                else
+                {
+                    col.Item().PaddingLeft(5).PaddingVertical(2).Text(tituloSeccion).Bold();
+                }
 
                 // Contenido: Tabla de resultados O el texto "NO SE REALIZO"
                 if (seRealizo && resultados != null && resultados.Any())
                 {
                     // Dibuja la tabla si hay resultados
                     col.Item().PaddingLeft(5).Table(table => {
-                        // Definir columnas de la tabla
-                        table.ColumnsDefinition(columns => {
-                            columns.RelativeColumn(3); // Columna Parámetro más ancha
-                            columns.RelativeColumn(2); // Columna Resultado
-                            columns.RelativeColumn(1); // Columna Unidad
-                            columns.RelativeColumn(3); // Columna Referencia
-                        });
-
-                        // Cabecera de la tabla (opcional, podría ir en el título)
-                        // table.Header(header => {
-                        //     header.Cell().Text("Parámetro").Bold();
-                        //     header.Cell().Text("Resultado").Bold();
-                        //     header.Cell().Text("Unidad").Bold();
-                        //     header.Cell().Text("Referencia").Bold();
-                        // });
-
-                        // Filas de datos
-                        foreach (var item in resultados)
+                        if (usar4Columnas)
                         {
-                            // Idealmente, ResultadoParametroVm tendría un flag 'FueraDeRango'
-                            // bool resaltar = item.FueraDeRango; // Determinar si resaltar
+                            // Definir columnas: Parámetro, Resultado, Valores normales, Unidad
+                            table.ColumnsDefinition(columns => {
+                                columns.RelativeColumn(1); // Parámetro (compacto)
+                                columns.RelativeColumn(1); // Resultado
+                                columns.RelativeColumn(1); // Valores normales (compacto)
+                                columns.RelativeColumn(1); // Unidad (compacto)
+                            });
 
-                            // Parámetro
-                            table.Cell().PaddingRight(5).Text(item.Parametro)/*.Bold(resaltar)*/.FontSize(9);
-                            // Resultado
-                            table.Cell().AlignCenter().Text(item.Resultado)/*.Bold(resaltar)*/.FontSize(9);
-                            // Unidad
-                            table.Cell().AlignCenter().Text(item.Unidad).FontSize(9);
-                            // Referencia
-                            table.Cell().Text(item.Referencia).FontSize(9);
+                            table.Header(header => {
+                                header.Cell().Text("Nombre del examen").Bold();
+                                header.Cell().AlignRight().Text("Resultado").Bold();
+                                header.Cell().Text("Valores normales").Bold();
+                                header.Cell().Text("Unidad").Bold();
+                            });
+
+                            // Filas de datos
+                            foreach (var item in resultados)
+                            {
+                                table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(9);
+                                table.Cell().AlignRight().Text(item.Resultado).FontSize(9);
+                                table.Cell().Text(item.Referencia).FontSize(9);
+                                table.Cell().Text(item.Unidad).FontSize(9);
+                            }
+                        }
+                        else
+                        {
+                            // Definir 2 columnas: Parámetro, Resultado (para microscópico y heces)
+                            table.ColumnsDefinition(columns => {
+                                columns.RelativeColumn(1); // Parámetro (compacto)
+                                columns.RelativeColumn(1); // Resultado (pegado al parámetro)
+                            });
+
+                            table.Header(header => {
+                                header.Cell().Text("Parámetro").Bold();
+                                header.Cell().AlignRight().Text("Resultado").Bold();
+                            });
+
+                            // Filas de datos
+                            foreach (var item in resultados)
+                            {
+                                table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(9);
+                                table.Cell().AlignRight().Text(item.Resultado).FontSize(9);
+                            }
                         }
                     });
                 }
