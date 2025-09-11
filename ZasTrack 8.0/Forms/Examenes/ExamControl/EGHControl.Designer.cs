@@ -31,12 +31,12 @@
             lblExamenMicro = new Label();
             lblExamenFis = new Label();
             lblTitulo = new Label();
-            txtParasito = new TextBox();
             lblParasito = new Label();
             txtConsistencia = new TextBox();
             lblConsistencia = new Label();
             txtColor = new TextBox();
             lblColor = new Label();
+            txtParasito = new ComboBox();
             SuspendLayout();
             // 
             // lblExamenMicro
@@ -68,13 +68,6 @@
             lblTitulo.Size = new Size(499, 46);
             lblTitulo.TabIndex = 65;
             lblTitulo.Text = "Examen General de Heces (EGH)";
-            // 
-            // txtParasito
-            // 
-            txtParasito.Location = new Point(685, 147);
-            txtParasito.Name = "txtParasito";
-            txtParasito.Size = new Size(237, 27);
-            txtParasito.TabIndex = 64;
             // 
             // lblParasito
             // 
@@ -120,14 +113,23 @@
             lblColor.TabIndex = 59;
             lblColor.Text = "Color";
             // 
+            // txtParasito
+            // 
+            txtParasito.FormattingEnabled = true;
+            txtParasito.Items.AddRange(new object[] { "Quiste de Entamoeba coli", "Quiste de Entamoeba histolytica", "Quiste de Blastocystis hominis", "Quiste de Gladia intestinal", "Quiste de Endolimax nana", "Quiste de lodamoeba butschlii" });
+            txtParasito.Location = new Point(659, 147);
+            txtParasito.Name = "txtParasito";
+            txtParasito.Size = new Size(284, 28);
+            txtParasito.TabIndex = 68;
+            // 
             // EGHControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(txtParasito);
             Controls.Add(lblExamenMicro);
             Controls.Add(lblExamenFis);
             Controls.Add(lblTitulo);
-            Controls.Add(txtParasito);
             Controls.Add(lblParasito);
             Controls.Add(txtConsistencia);
             Controls.Add(lblConsistencia);
@@ -146,11 +148,11 @@
         private Label lblExamenMicro;
         private Label lblExamenFis;
         private Label lblTitulo;
-        private TextBox txtParasito;
         private Label lblParasito;
         private TextBox txtConsistencia;
         private Label lblConsistencia;
         private TextBox txtColor;
         private Label lblColor;
+        private ComboBox txtParasito;
     }
 }

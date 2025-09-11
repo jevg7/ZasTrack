@@ -1,6 +1,7 @@
 using QuestPDF.Infrastructure;
 using ZasTrack.Forms;
 using ZasTrack.Forms.Examenes;
+using ZasTrack.Forms.Examenes.ExamWrite;
 using ZasTrack.Forms.Muestras;
 using ZasTrack.Forms.wProyectos;
 

@@ -254,12 +254,13 @@ StackTrace Completo:
 
         private List<ResultadoParametroVm> MapearResultadosHeces(examen_heces res)
         {
-            // (Sin cambios aquí)
             var lista = new List<ResultadoParametroVm>();
             if (res == null) return lista;
+            
+            // Mostrar los valores reales de la base de datos, o "-" si son null
             lista.Add(new ResultadoParametroVm { Parametro = "Color", Resultado = res.color ?? "-", Unidad = "", Referencia = "" });
             lista.Add(new ResultadoParametroVm { Parametro = "Consistencia", Resultado = res.consistencia ?? "-", Unidad = "", Referencia = "" });
-            lista.Add(new ResultadoParametroVm { Parametro = "Parásitos", Resultado = res.parasitos ?? "No se observan", Unidad = "", Referencia = "No se observan" });
+            lista.Add(new ResultadoParametroVm { Parametro = "Parásitos", Resultado = res.parasitos ?? "-", Unidad = "", Referencia = "" });
             return lista;
         }
 
