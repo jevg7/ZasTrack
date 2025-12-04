@@ -2062,23 +2062,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alexj\\.nuget\\packages\\": {},
+    "C:\\Users\\jairo\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
+      "projectUniqueName": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
       "projectName": "ZasTrack",
-      "projectPath": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
-      "packagesPath": "C:\\Users\\alexj\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\obj\\",
+      "projectPath": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\ZasTrack.csproj",
+      "packagesPath": "C:\\Users\\jairo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\alexj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jairo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2105,7 +2105,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -2159,7 +2159,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -6,9 +6,9 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using ZasTrack.Models.Informes;
-using ZasTrack.Models; // O donde esté InformeCompletoViewModel y ResultadoParametroVm
+using ZasTrack.Models;
 
-namespace ZasTrack.Models.Informes // O tu namespace preferido
+namespace ZasTrack.Models.Informes
 {
     public class InformeDocument : IDocument
     {
@@ -33,7 +33,10 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
                     // Configuración de la página (Tamaño A4 por defecto)
                     page.Margin(30); // Márgenes en puntos (1 pulgada = 72 puntos)
                     page.PageColor(Colors.White);
-                    page.DefaultTextStyle(ts => ts.FontSize(10).FontFamily(Fonts.Calibri)); // Fuente por defecto
+
+                    // --- PARCHE APLICADO AQUÍ ---
+                    // Usamos "Lato" (nombre de la fuente registrada en Program.cs) y tamaño base 12
+                    page.DefaultTextStyle(ts => ts.FontSize(12).FontFamily(Fonts.Arial));
 
                     // Cabecera de la página (repetida en cada página si hay más de una)
                     page.Header().Element(ComposeHeader);
@@ -58,9 +61,9 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
 
                 row.RelativeItem().Column(col =>
                 {
-                    col.Item().Text(Model.NombreLaboratorio).Bold().FontSize(14);
-                    col.Item().Text(Model.DireccionLaboratorio).FontSize(9);
-                    col.Item().Text(Model.ContactoLaboratorio).FontSize(9);
+                    col.Item().Text(Model.NombreLaboratorio).Bold().FontSize(16);
+                    col.Item().Text(Model.DireccionLaboratorio).FontSize(12);
+                    col.Item().Text(Model.ContactoLaboratorio).FontSize(12);
                 });
 
                 // Espacio si no hay logo
@@ -105,42 +108,40 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
 
                 // Línea y Firma al final (dentro del contenido o en un footer más complejo)
                 col.Item().PaddingTop(30).LineHorizontal(0.5f);
-                col.Item().AlignCenter().PaddingTop(5).Text("_________________________").FontSize(10);
-                col.Item().AlignCenter().Text("Bioanalista Clínico").Bold().FontSize(10);
-
-
+                col.Item().AlignCenter().PaddingTop(5).Text("_________________________").FontSize(12);
+                col.Item().AlignCenter().Text("Bioanalista Clínico").Bold().FontSize(12);
             });
         }
 
         // --- MÉTODO PARA DIBUJAR LA INFO DEL PACIENTE ---
         void ComposePatientInfo(IContainer container)
         {
-            container.ShowOnce().Column(col => // ShowOnce para que no se repita en multi-página si el contenido es largo
+            container.ShowOnce().Column(col => // ShowOnce para que no sex repita en multi-página si el contenido es largo
             {
+                col.Item().Text(">>> PRUEBA DE TAMAÑO <<<").Bold().FontSize(20).FontColor(Colors.Red.Medium);
                 col.Item().Text("Datos del Paciente").Bold().Underline();
                 col.Spacing(2);
                 // Usar tabla o grid para alinear bien los datos
                 col.Item().Grid(grid => {
                     // Ajuste: usar 12 columnas para permitir spans 2/10 y 2/4/2/4 por fila
                     grid.Columns(12);
-                    grid.Item(2).Text("Paciente:").FontSize(9).Bold();
-                    grid.Item(10).Text($"{Model.NombrePaciente} {Model.ApellidoPaciente}").FontSize(9); // Ocupa 10 columnas para extenderse
+                    grid.Item(2).Text("Paciente:").FontSize(12).Bold();
+                    grid.Item(10).Text($"{Model.NombrePaciente} {Model.ApellidoPaciente}").FontSize(12); // Ocupa 10 columnas para extenderse
 
-                    grid.Item(2).Text("Edad:").FontSize(9).Bold();
-                    grid.Item(4).Text($"{Model.EdadPaciente} años").FontSize(9); // O usa tu string formateado
-                    grid.Item(2).Text("Fecha Muestra:").FontSize(9).Bold();
-                    grid.Item(4).Text(Model.FechaToma.ToString("dd/MM/yyyy HH:mm")).FontSize(9); // Incluir hora si la tienes
+                    grid.Item(2).Text("Edad:").FontSize(12).Bold();
+                    grid.Item(4).Text($"{Model.EdadPaciente} años").FontSize(12); // O usa tu string formateado
+                    grid.Item(2).Text("Fecha Muestra:").FontSize(12).Bold();
+                    grid.Item(4).Text(Model.FechaToma.ToString("dd/MM/yyyy HH:mm")).FontSize(12); // Incluir hora si la tienes
 
-                    grid.Item(2).Text("Género:").FontSize(9).Bold();
-                    grid.Item(4).Text(Model.GeneroPaciente).FontSize(9);
-                    grid.Item(2).Text("Fecha Informe:").FontSize(9).Bold();
-                    grid.Item(4).Text(Model.FechaInforme.ToString("dd/MM/yyyy HH:mm")).FontSize(9);
+                    grid.Item(2).Text("Género:").FontSize(12).Bold();
+                    grid.Item(4).Text(Model.GeneroPaciente).FontSize(12);
+                    grid.Item(2).Text("Fecha Informe:").FontSize(12).Bold();
+                    grid.Item(4).Text(Model.FechaInforme.ToString("dd/MM/yyyy HH:mm")).FontSize(12);
 
-                    grid.Item(2).Text("Código:").FontSize(9).Bold();
-                    grid.Item(4).Text(Model.CodigoBeneficiario).FontSize(9);
-                    grid.Item(2).Text("Proyecto:").FontSize(9).Bold();
-                    grid.Item(4).Text(Model.NombreProyecto).FontSize(9);
-
+                    grid.Item(2).Text("Código:").FontSize(12).Bold();
+                    grid.Item(4).Text(Model.CodigoBeneficiario).FontSize(12);
+                    grid.Item(2).Text("Proyecto:").FontSize(12).Bold();
+                    grid.Item(4).Text(Model.NombreProyecto).FontSize(12);
                 });
             });
         }
@@ -150,11 +151,11 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
         {
             container.Column(col => {
                 col.Spacing(5);
-                
+
                 // Determinar si debe tener fondo gris y cuántas columnas usar
                 bool tieneFondoGris = tituloSeccion.Contains("HEMATOLOGÍA") || tituloSeccion.Contains("FÍSICO QUÍMICO") || tituloSeccion.Contains("HECES");
                 bool usar4Columnas = tituloSeccion.Contains("HEMATOLOGÍA");
-                
+
                 // Título de la Sección
                 if (tieneFondoGris)
                 {
@@ -190,10 +191,10 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
                             // Filas de datos
                             foreach (var item in resultados)
                             {
-                                table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(9);
-                                table.Cell().AlignRight().Text(item.Resultado).FontSize(9);
-                                table.Cell().Text(item.Referencia).FontSize(9);
-                                table.Cell().Text(item.Unidad).FontSize(9);
+                                table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(12);
+                                table.Cell().AlignRight().Text(item.Resultado).FontSize(12);
+                                table.Cell().Text(item.Referencia).FontSize(12);
+                                table.Cell().Text(item.Unidad).FontSize(12);
                             }
                         }
                         else
@@ -212,8 +213,8 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
                             // Filas de datos
                             foreach (var item in resultados)
                             {
-                                table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(9);
-                                table.Cell().AlignRight().Text(item.Resultado).FontSize(9);
+                                table.Cell().PaddingRight(5).Text(item.Parametro).FontSize(12);
+                                table.Cell().AlignRight().Text(item.Resultado).FontSize(12);
                             }
                         }
                     });
@@ -221,7 +222,7 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
                 else
                 {
                     // Mostrar "NO SE REALIZO" si no hay resultados
-                    col.Item().PaddingLeft(5).Text("NO SE REALIZO").Italic().FontSize(9);
+                    col.Item().PaddingLeft(5).Text("NO SE REALIZO").Italic().FontSize(12);
                 }
             });
         }
@@ -232,7 +233,7 @@ namespace ZasTrack.Models.Informes // O tu namespace preferido
             container.Column(col => {
                 col.Item().Text("Observación:").Bold();
                 col.Item().BorderBottom(1).BorderColor(Colors.Grey.Lighten2) // Línea debajo de "Observación:"
-                       .PaddingBottom(2).Text(string.IsNullOrWhiteSpace(Model.ObservacionesGenerales) ? "Ninguna." : Model.ObservacionesGenerales).FontSize(9);
+                       .PaddingBottom(2).Text(string.IsNullOrWhiteSpace(Model.ObservacionesGenerales) ? "Ninguna." : Model.ObservacionesGenerales).FontSize(12);
 
             });
         }

@@ -1,37 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\",
+  "WorkspaceRootPath": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo\\desktop\\zastrack\\zastrack 8.0\\forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\egocontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\egocontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\alexj\\onedrive\\documentos\\devworkspace\\work\\zastrack\\zastrack 8.0\\models\\informes\\informedocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo\\desktop\\zastrack\\zastrack 8.0\\models\\informes\\informedocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:models\\informes\\informedocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo\\desktop\\zastrack\\zastrack 8.0\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\informes\\winformes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|c:\\users\\jairo\\desktop\\zastrack\\zastrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\eghcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\forms\\examenes\\examcontrol\\egocontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\examenes\\examcontrol\\egocontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3C149D7A-7F9C-4FC7-9756-9500E41F8939}|ZasTrack.csproj|solutionrelative:forms\\wmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -42,55 +42,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 320,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "wInformes.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
               "RelativeDocumentMoniker": "Forms\\Informes\\wInformes.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs [Design]",
+              "ToolTip": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs [Design]",
               "RelativeToolTip": "Forms\\Informes\\wInformes.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-11T03:33:51.358Z",
@@ -98,12 +58,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "EGHControl.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
               "RelativeDocumentMoniker": "Forms\\Examenes\\ExamControl\\EGHControl.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs*",
-              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGHControl.cs*",
+              "ToolTip": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
+              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGHControl.cs",
               "ViewState": "AgIAABQAAAAAAAAAAIAwwCsAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-11T03:13:16.186Z",
@@ -111,63 +71,59 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Program.cs",
+              "ToolTip": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T03:12:45.721Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-11T03:12:45.721Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "EGHControl.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs",
               "RelativeDocumentMoniker": "Forms\\Examenes\\ExamControl\\EGHControl.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs [Design]*",
-              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGHControl.cs [Design]*",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs [Design]",
+              "RelativeToolTip": "..\\..\\..\\..\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGHControl.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T03:11:03.195Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EGOControl.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGOControl.cs",
-              "RelativeDocumentMoniker": "Forms\\Examenes\\ExamControl\\EGOControl.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGOControl.cs [Design]",
-              "RelativeToolTip": "Forms\\Examenes\\ExamControl\\EGOControl.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T03:10:33.728Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-09-11T03:11:03.195Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "InformeDocument.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
-              "RelativeDocumentMoniker": "Models\\Informes\\InformeDocument.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
-              "RelativeToolTip": "Models\\Informes\\InformeDocument.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAA6wEYAAAAFAAAAAAAAAA==",
+              "Title": "EGOControl.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGOControl.cs",
+              "RelativeDocumentMoniker": "Forms\\Examenes\\ExamControl\\EGOControl.cs",
+              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGOControl.cs [Design]",
+              "RelativeToolTip": "..\\..\\..\\..\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Examenes\\ExamControl\\EGOControl.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-08T21:37:43.64Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-11T03:10:33.728Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
+              "Title": "InformeDocument.cs",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
+              "RelativeDocumentMoniker": "Models\\Informes\\InformeDocument.cs",
+              "ToolTip": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Models\\Informes\\InformeDocument.cs",
+              "RelativeToolTip": "Models\\Informes\\InformeDocument.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAUwHYAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T21:37:43.64Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "wInformes.cs",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
               "RelativeDocumentMoniker": "Forms\\Informes\\wInformes.cs",
-              "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
+              "ToolTip": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\Informes\\wInformes.cs",
               "RelativeToolTip": "Forms\\Informes\\wInformes.cs",
-              "ViewState": "AgIAAE4BAAAAAAAAAAAMwL8CAABAAAAAAAAAAA==",
+              "ViewState": "AgIAACsCAAAAAAAAAAAIwDcCAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-08T21:37:37.57Z",
               "EditorCaption": ""
@@ -176,31 +132,12 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "wMain.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
+              "DocumentMoniker": "C:\\Users\\jairo\\Desktop\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs",
               "RelativeDocumentMoniker": "Forms\\wMain.cs",
               "ToolTip": "C:\\Users\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs [Design]",
-              "RelativeToolTip": "Forms\\wMain.cs [Design]",
+              "RelativeToolTip": "..\\..\\..\\..\\alexj\\OneDrive\\Documentos\\DevWorkspace\\Work\\ZasTrack\\ZasTrack 8.0\\Forms\\wMain.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-04T21:21:45.696Z",
-              "EditorCaption": " [Design]"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 504,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+              "WhenOpened": "2025-09-04T21:21:45.696Z"
             }
           ]
         }
